@@ -1,0 +1,473 @@
+// import var bootstrap
+// lighten() and darken()
+@import "../../bootstrap-4/scss/_functions.scss";
+@import "../../bootstrap-4/scss/_variables_custom.scss";
+@import "../../bootstrap-4/scss/_variables.scss";
+@import "../../bootstrap-4/scss/_mixins.scss";
+
+// customBP
+@import "model/custom_bp.scss";
+
+//// ******************** Les variable  *************************************
+$text_color_title: rgb(33, 33, 33);
+$text_color_body: rgb(103, 103, 103);
+$fontFamily: 'Rubik',
+sans-serif;
+$fontFamilyTitre: 'Rubik',
+sans-serif;
+$fontFamilySousTitre: 'AntennaCond-ExtraLight',
+Oswald;
+//$color_link: $link-color;
+//$clr_link_hv: $link-hover-color;//color link on haover and active
+$color_titre_carousel:#FFF;
+$color_txt_special:rgb(255, 115, 2);
+$font-size:15px;
+$color_site:rgba(228, 25, 43, 1);
+$color_link:$color_site;
+//space
+$space_bottom: 50px;
+$space_top: 50px;
+//
+$width_read: 750px;
+$width_small_read: 550px;
+//background
+$body_bg: $site_bg_gris_claire;
+/**
+ * color theme
+ */
+$color_info: rgba(255, 99, 71, 1);
+$color_breadcrumb: #e9ecef;
+$border-color:#ccc;
+
+/**
+* la police
+*/
+@mixin policeEcriture_AntennaCond() {
+  @font-face {
+    font-family: 'AntennaCond-Thin';
+    src: url('../scss/defaut/police/AntennaCond/AntennaCond-Thin.otf');
+    font-family: 'AntennaCond-ExtraLight';
+    src: url('../scss/defaut/police/AntennaCond/AntennaCond-ExtraLight.otf');
+  }
+}
+
+@mixin policeEcriture_BigNoodleTitling() {
+  @font-face {
+    font-family: 'BigNoodleTitling';
+    src: url('../scss/defaut/police/BigNoodleTitling/big_noodle_titling.eot');
+    src: url('../scss/defaut/police/BigNoodleTitling/big_noodle_titling.eot?#iefix') format('embedded-opentype'), url('../scss/defaut/police/BigNoodleTitling/big_noodle_titling.ttf') format('truetype'), url('../scss/defaut/police/BigNoodleTitling/big_noodle_titling.svg#LearningCurveProRegular') format('svg');
+  }
+}
+
+/**
+* Defzult style for drupal and bootstrap.
+*/
+
+//* alter space bootstrap */
+@mixin alterSpaceRowCol($padding_row-col-0:0px) {
+  margin-right: -$padding_row-col-0;
+  margin-left: -$padding_row-col-0;
+
+  .row {
+    margin-right: -$padding_row-col-0;
+    margin-left: -$padding_row-col-0;
+  }
+
+  [class*='col-'] {
+    padding-left: $padding_row-col-0;
+    padding-right: $padding_row-col-0;
+  }
+
+}
+
+//
+@mixin utilities() {
+  body.user-logged-in {
+
+    // decalage de la barre fixed, pour ne pas cacher le menu admin
+    .navbar.fixed-top {
+      top: 80px;
+    }
+
+    // metre le menu admin au dessus de tout le reste
+    #toolbar-administration {
+      position: relative;
+      z-index: 9999;
+    }
+  }
+
+  // limiter la taille du logo
+  .navbar-brand {
+    min-width: 150px;
+    white-space: normal;
+    text-align: center;
+
+    img.logo {
+      max-width: 150px;
+      max-height: 50px;
+    }
+
+    .site-name {
+      display: block;
+      font-size: 12px;
+    }
+  }
+
+  // les classs bootstrap ont une marge vers le bas qui altere le theme , donc on supprime cette marge dans certains conditions.
+  .views-element-container>.form-group {
+    margin-bottom: 0;
+  }
+
+  .collapse.navbar-collapse {
+    font-size: inherit !important;
+  }
+
+  @media (max-width : 609px) {
+    .toolbar-oriented .toolbar-bar {
+      bottom: 0;
+      top: auto;
+      position: absolute !important;
+    }
+  }
+
+  //when use mdbootstrap, allows to make a full screen
+  .modal-open {
+    overflow: hidden !important;
+  }
+
+  //
+  .input-group-append .btn {
+    margin: 0 !important;
+  }
+
+  /**
+  * Add new space for bootstrap
+  */
+  .row-col-7 {
+    @include alterSpaceRowCol($padding_row-col-0:7px);
+  }
+
+  .row-col-my-2 {
+    @include alterSpaceRowCol($padding_row-col-0:0.26rem);
+  }
+
+  .row-col-0 {
+    @include alterSpaceRowCol($padding_row-col-0:0px);
+  }
+}
+
+/**
+* translation on hover
+*/
+@mixin transition($propriete:all, $temps:0.3s, $style:ease-in-out) {
+  transition-property: $propriete;
+  transition-duration: $temps;
+  transition-timing-function: $style;
+}
+
+/**
+* Before cover
+*/
+@mixin beforeCover($bg_color: rgba(5, 12, 29, 0.4), $zindex: 0) {
+  z-index: 2;
+  position: relative;
+
+  &::before {
+    background-color: $bg_color;
+    z-index: $zindex;
+    right: 0;
+    bottom: 0;
+    display: block;
+    left: 0;
+    top: 0;
+    position: absolute;
+    content: '';
+  }
+}
+
+/**
+* Before cover
+*/
+@mixin afterCover($bg_color: rgba(5, 12, 29, 0.4)) {
+  z-index: 2;
+  position: relative;
+
+  &::after {
+    background-color: $bg_color;
+    z-index: 0;
+    right: 0;
+    bottom: 0;
+    display: block;
+    left: 0;
+    top: 0;
+    position: absolute;
+    content: '';
+  }
+}
+
+/**
+ *  pas de retour à la ligne
+ */
+@mixin notbackline($width:100px) {
+  height: auto;
+  width: $width;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/**
+ *  mixin for multiline limit text css
+ */
+@mixin multiLineEllipsis($lineHeight:1.2em, $lineCount: 1, $bgColor: white, $text-align:left) {
+  overflow: hidden;
+  display: block;
+  position: relative;
+  line-height: $lineHeight;
+  max-height: $lineHeight * $lineCount;
+  text-align: $text-align;
+  margin-right: -0.5em;
+  padding-right: 0.5em;
+
+  &:before {
+    content: '...';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    opacity: 0.5;
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    right: 0;
+    width: 1em;
+    height: 1em;
+    margin-top: 0.2em;
+    background: $bgColor;
+  }
+}
+
+/**
+ *
+ */
+// loadder , reference model https://codepen.io/AsLittleDesign/pen/ZbVVwa
+// https://steelkiwi.com/blog/30-most-captivating-preloaders-for-website/
+$loader--width: 250px;
+$loader-dot--size: 20px;
+
+.waitingmultiboule.load {
+  position: relative;
+  min-height: 140px;
+  background: #FFF;
+  border: 1px solid #eee;
+  margin: 25px 0;
+
+  .loader {
+    height: 20px;
+    width: 250px;
+    position: absolute;
+    top: 0;
+    bottom: 30px;
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
+
+  .loader--dot {
+    animation-name: loader;
+    animation-timing-function: ease-in-out;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    height: 20px;
+    width: 20px;
+    border-radius: 100%;
+    background-color: black;
+    position: absolute;
+    border: 2px solid white;
+  }
+
+  .loader--dot:first-child {
+    background-color: #8cc759;
+    animation-delay: 0.5s;
+  }
+
+  .loader--dot:nth-child(2) {
+    background-color: #8c6daf;
+    animation-delay: 0.4s;
+  }
+
+  .loader--dot:nth-child(3) {
+    background-color: #ef5d74;
+    animation-delay: 0.3s;
+  }
+
+  .loader--dot:nth-child(4) {
+    background-color: #f9a74b;
+    animation-delay: 0.2s;
+  }
+
+  .loader--dot:nth-child(5) {
+    background-color: #60beeb;
+    animation-delay: 0.1s;
+  }
+
+  .loader--dot:nth-child(6) {
+    background-color: #fbef5a;
+    animation-delay: 0s;
+  }
+
+  .loader--text {
+    position: absolute;
+    top: 200%;
+    left: 0;
+    right: 0;
+    width: 20rem;
+    margin: auto;
+  }
+
+  .loader--text:after {
+    content: "Chargement des données en cours";
+    font-weight: bold;
+    animation-name: loading-text;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes loader {
+    15% {
+      transform: translateX(0);
+    }
+
+    45% {
+      transform: translateX(230px);
+    }
+
+    65% {
+      transform: translateX(230px);
+    }
+
+    95% {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes loading-text {
+    0% {
+      content: "Chargement des données en cours";
+    }
+
+    25% {
+      content: "Chargement des données en cours.";
+    }
+
+    50% {
+      content: "Chargement des données en cours..";
+    }
+
+    75% {
+      content: "Chargement des données en cours...";
+    }
+  }
+}
+
+//https://codepen.io/wabeshew/pen/XdbBdM
+@mixin waitingboule() {
+  $width: 15px;
+  $height: 15px;
+  $bounce_height: 30px;
+
+  .bounceball {
+    position: relative;
+    display: inline-block;
+    height: 37px;
+    width: $width;
+
+    &:before {
+      position: absolute;
+      content: '';
+      display: block;
+      top: 0;
+      width: $width;
+      height: $height;
+      border-radius: 50%;
+      background-color: #fbae17;
+      transform-origin: 50%;
+      animation: bounce 500ms alternate infinite ease;
+    }
+  }
+
+  @keyframes bounce {
+    0% {
+      top: $bounce_height;
+      height: 5px;
+      border-radius: 60px 60px 20px 20px;
+      transform: scaleX(2);
+    }
+
+    35% {
+      height: $height;
+      border-radius: 50%;
+      transform: scaleX(1);
+    }
+
+    100% {
+      top: 0;
+    }
+  }
+
+}
+
+
+
+/**
+ * .list-element{@include list-element(($paddingY:10px, $paddingX:5px, $borderW:1px));}
+ */
+@mixin list-element($paddingT:10px, $paddingB:10px, $paddingL:5px, $paddingR:5px, $borderW:1px) {
+  margin: 0;
+  list-style: none;
+  padding: 0;
+  max-width: 600px;
+
+  li {
+    padding: $paddingT $paddingR $paddingB $paddingL;
+    display: flex;
+    margin: 0;
+    justify-content: space-between;
+    border-bottom: $borderW solid $border-color;
+
+    >*:first-child {
+      min-width: auto;
+    }
+
+    >*:first-child+* {
+      text-align: right;
+      min-width: 50px;
+    }
+  }
+}
+
+/**
+ *  Images area to preload,
+ *  on ajoute sur la div contenant l'image
+ */
+@mixin image-dpace-preload($space:70%) {
+  display: block;
+  position: relative;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  img {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  &::before {
+    content: "";
+    display: block;
+    padding-bottom: $space;
+  }
+}

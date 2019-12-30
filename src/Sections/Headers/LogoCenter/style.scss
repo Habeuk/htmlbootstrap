@@ -1,0 +1,15 @@
+.site-header {
+  background: #ffffff;
+  box-shadow: 1px 1px 5px #696969;
+  position: relative;
+  z-index: 10;
+
+  img.logo {
+    margin: 12px;
+  }
+
+  .navbar-brand {
+    margin: 0;
+    padding: 0;
+  }
+}

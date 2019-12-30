@@ -1,0 +1,44 @@
+{% if id_carousel %}
+<div id="{{ id_carousel }}" class="carousel {% if image_bg %}image-bg {% endif %}slide" data-ride="carousel" data-interval={{ interval }}>
+  {% if show_indicators %}
+  <ol class="carousel-indicators">
+      {% for carousel in carousels %}
+      	{% if loop.index0 == 0 %}
+      		<li data-target="#{{ id_carousel }}" data-slide-to="{{ loop.index0 }}" class="active"></li>
+      	{% else %}
+      		<li data-target="#{{ id_carousel }}" data-slide-to="{{ loop.index0 }}" ></li>
+      	{% endif %}
+      {% endfor %}
+  </ol>
+  {% endif %}
+  <div class="carousel-inner">
+  	  {% for carousel in carousels %}
+      	{% if loop.index0 == 0 %}
+      		<div class="carousel-item active" {% if image_bg %} style="background-image:url('{{ carousel.image.url }}')" {% endif %}>
+      			{% if image_bg %} {% else %} <img class="d-block w-100 img-fluid" src="{{ carousel.image.url }}" alt="{{ carousel.image.alt }}"> {% endif %}
+      			<div class="carousel-caption d-none d-md-block">
+      				{{ carousel.content }}
+      			</div>      			
+      		</div>
+      	{% else %}
+      		<div class="carousel-item" {% if image_bg %} style="background-image:url('{{ carousel.image.url }}')" {% endif %}>
+      			{% if image_bg %} {% else %} <img class="d-block w-100" src="{{ carousel.image.url }}" alt="{{ carousel.image.alt }}"> {% endif %}
+      			<div class="carousel-caption d-none d-md-block">
+      				{{ carousel.content }}
+      			</div>      			
+      		</div>
+      	{% endif %}
+      {% endfor %}
+  </div>
+  {% if show_control %}
+  <a class="carousel-control-prev" href="#{{ id_carousel }}" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#{{ id_carousel }}" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+  {% endif %}
+</div>
+{% endif %}
