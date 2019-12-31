@@ -45,7 +45,7 @@ class Headers {
         $rx_logo = $options['rx_logo'];
       }
       $rx_logo = $this->template_rx_logos($rx_logo, 'circle_animate');
-      LoaderDrupal::addStyle(\file_get_contents($this->BasePath . '/Sections/Headers/LogoCenter/style.scss'));
+      LoaderDrupal::addStyle(\file_get_contents($this->BasePath . '/Sections/Headers/LogoCenter/style.scss'), 'rx_logos_circle_animate');
       return [
         '#type' => 'inline_template',
         '#template' => \file_get_contents($this->BasePath . '/Sections/Headers/LogoCenter/Drupal.html.twig'),

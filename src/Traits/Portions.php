@@ -36,7 +36,7 @@ trait Portions {
   }
 
   /**
-   * Retourne le template.
+   * Retourne le template ou l'affichage pour les liens des rx.
    * Les differentes valeurs sont
    * - circle_animate
    * - ..
@@ -47,7 +47,7 @@ trait Portions {
   {
     $fileName = '';
     if ($template == 'circle_animate') {
-      LoaderDrupal::addStyle(\file_get_contents($this->BasePath . '/Utility/RxLogos/CircleAnimate/style.scss'));
+      LoaderDrupal::addStyle(\file_get_contents($this->BasePath . '/Utility/RxLogos/CircleAnimate/style.scss'), 'template_rx_logos');
       $fileName = \file_get_contents($this->BasePath . '/Utility/RxLogos/CircleAnimate/Drupal.html.twig');
     }
     return [
@@ -55,6 +55,20 @@ trait Portions {
       '#template' => $fileName,
       '#context' => [
         'rx_logos' => $rx_logos
+      ]
+    ];
+  }
+
+  /**
+   */
+  public function templateCenterVertHori($datas, $classe = null)
+  {
+    return [
+      '#type' => 'inline_template',
+      '#template' => '<div class="d-flex w-100 h-100 align-items-center justify-content-center {{classe}}">{{ datas }}</div>',
+      '#context' => [
+        'datas' => $datas,
+        'classe' => $classe
       ]
     ];
   }

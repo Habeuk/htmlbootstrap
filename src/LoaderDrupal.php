@@ -19,8 +19,9 @@ class LoaderDrupal {
   function __construct()
   {
     $this->BasePath = __DIR__;
-    $Session = new Session();
-    $Session->remove('theme_style');
+    // $Session = new Session();
+    // $Session->remove('theme_style');
+    $this->getDefautStyle();
   }
 
   /**
@@ -62,16 +63,24 @@ class LoaderDrupal {
   /**
    * ff
    */
-  public static function addStyle($style)
+  public static function addStyle($style, $key)
   {
     if (LOAD_SCSS_BY_SESSION) {
       // dump('addStyle');
       $Session = new Session();
       $styles = $Session->get('theme_style', []);
-      // dump($styles);
-      $styles[] = $style;
+      // dump($key);
+      $styles[$key] = $style;
       $Session->set('theme_style', $styles);
       // dump($styles);
     }
+  }
+
+  private function getDefautStyle()
+  {
+    $Session = new Session();
+    $styles = $Session->get('theme_style', []);
+    $styles['init'] = '@import "../scss/defaut/models.scss";';
+    $Session->set('theme_style', $styles);
   }
 }

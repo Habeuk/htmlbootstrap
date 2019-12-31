@@ -1,0 +1,39 @@
+.header-menu {
+  background-color: $color1;
+  padding: 0;
+
+  .navbar-nav {
+    .nav-item {
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .nav-link {
+      padding: 10px 15px;
+      font-size: 16px;
+      font-weight: 400;
+      color: #FFF;
+    }
+
+    .nav-link.is-active,
+    .nav-link:hover {
+      background: darken($color1, 15);
+      color: #FFF;
+    }
+
+    @include media-breakpoint-up(md) {
+      .nav-link {
+        padding: 25px 15px;
+        font-size: 18px;
+      }
+
+      .nav-link.is-active {
+        background: darken($color1, 15);
+      }
+    }
+  }
+
+  .navbar-toggler {
+    margin: 15px;
+  }
+}

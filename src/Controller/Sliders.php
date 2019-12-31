@@ -71,7 +71,7 @@ class Sliders {
     }
 
     if (isset($options['type']) && $options['type'] == 'CarouselBootstrap') {
-      LoaderDrupal::addStyle(\file_get_contents($this->BasePath . '/Sections/Sliders/CarouselBootstrap/style.scss'));
+      LoaderDrupal::addStyle(\file_get_contents($this->BasePath . '/Sections/Sliders/CarouselBootstrap/style.scss'), 'CarouselBootstrap');
       return [
         '#type' => 'inline_template',
         '#template' => \file_get_contents($this->BasePath . '/Sections/Sliders/CarouselBootstrap/Drupal.html.twig'),
@@ -91,25 +91,25 @@ class Sliders {
   {
     return [
       [
-        'content' => 'Slider 1',
+        'content' => $this->templateCenterVertHori('Slider 1', 'bg-cover'),
         'image' => [
           'url' => drupal_get_path('theme', 'theme_builder') . '/defaultfile/CarouselBootstrap/images/banner1.jpg'
         ]
       ],
       [
-        'content' => 'Slider 2',
+        'content' => $this->templateCenterVertHori('Slider 2', 'bg-cover'),
         'image' => [
           'url' => drupal_get_path('theme', 'theme_builder') . '/defaultfile/CarouselBootstrap/images/banner2.jpg'
         ]
       ],
       [
-        'content' => 'Slider 3',
+        'content' => $this->templateCenterVertHori('Slider 3', 'bg-cover'),
         'image' => [
           'url' => drupal_get_path('theme', 'theme_builder') . '/defaultfile/CarouselBootstrap/images/banner3.jpg'
         ]
       ],
       [
-        'content' => 'Slider 4',
+        'content' => $this->templateCenterVertHori('Slider 4', 'bg-cover'),
         'image' => [
           'url' => drupal_get_path('theme', 'theme_builder') . '/defaultfile/CarouselBootstrap/images/banner4.jpg'
         ]

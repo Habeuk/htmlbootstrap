@@ -1,5 +1,54 @@
 .carousel.image-bg {
   .carousel-item {
-    height: 42em;
+    height: 16em;
+    background-size: cover;
+  }
+
+  .carousel-caption {
+    font-size: 4em;
+    font-weight: 900;
+    top: 0;
+    bottom: 0;
+
+    .bg-cover {
+      background: rgba(0, 0, 0, 0.16);
+    }
+  }
+
+
+  @include media-min('XS') {
+    .carousel-item {
+      height: 19em;
+    }
+  }
+
+  @include media-min('SM') {
+    .carousel-item {
+      height: 21em;
+    }
+  }
+
+  @include media-min('MD') {
+    .carousel-item {
+      height: 25em;
+    }
+  }
+
+  @include media-min('DD') {
+    .carousel-item {
+      height: 30em;
+    }
+  }
+
+  @include media-min('M') {
+    .carousel-item {
+      height: 35em;
+    }
+  }
+
+  @include media-min('L') {
+    .carousel-item {
+      height: 42em;
+    }
   }
 }
