@@ -1,0 +1,34 @@
+.card-icone-model-flat {
+  .sectionspace {
+    margin-top: $margin_top;
+    margin-bottom: $margin_bottom;
+  }
+
+  .card {
+    border: none;
+    color: $text_normal;
+
+    &:hover {
+      .card-header i {
+        color: $link_color;
+      }
+    }
+  }
+
+  .card-title {
+    color: $text_dark;
+    font-weight: 400;
+  }
+
+  .card-header {
+    font-size: 1em;
+    background: transparent;
+    border: none;
+    padding: 1em;
+
+    i {
+      font-size: 4em;
+      color: $text_extra_light;
+    }
+  }
+}

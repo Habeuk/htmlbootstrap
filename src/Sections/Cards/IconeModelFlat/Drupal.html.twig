@@ -1,0 +1,21 @@
+<section class="card-icone-model-flat">
+	<div class="container sectionspace">
+		<div class="row">
+			{% for card in cards %}				
+				<div class="{{ card_class_block }}">
+					{% if card.link %}<a href="{{ card.link }}">{% endif %}
+					<div class="card">
+						<div class="card-header text-center">
+							{{ card.icone | raw }}
+						</div>
+						<div class="card-body text-center">
+							<h5 class="card-title">{{ card.title }}</h5>
+							<div class="card-text">{{ card.text }}</div>
+						</div>
+					</div>
+					{% if card.link %}</a>{% endif %}
+				</div>							
+			{% endfor %}
+		</div>
+	</div>
+</section>

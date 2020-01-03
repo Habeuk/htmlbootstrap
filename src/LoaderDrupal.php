@@ -2,11 +2,12 @@
 namespace Stephane888\HtmlBootstrap;
 
 use Symfony\Component\HttpFoundation\Session\Session;
-use Stephane888\HtmlBootstrap\Traits\Examples;
 use Stephane888\HtmlBootstrap\Controller\TopHeader;
 use Stephane888\HtmlBootstrap\Controller\Headers;
 use Stephane888\HtmlBootstrap\Controller\Sliders;
 use Stephane888\HtmlBootstrap\Controller\ImageTextRightLeft;
+use Stephane888\HtmlBootstrap\Controller\Cards;
+use Stephane888\HtmlBootstrap\Traits\Examples;
 use Stephane888\HtmlBootstrap\Traits\DrupalUtility;
 
 /**
@@ -51,6 +52,10 @@ class LoaderDrupal {
   }
 
   /**
+   * ||___________________ SECTION CONTENT _____________________||
+   */
+
+  /**
    * Section Sliders
    */
   public function getSectionSliders($options)
@@ -60,26 +65,21 @@ class LoaderDrupal {
   }
 
   /**
+   * get cards
+   */
+  public function getCards($options)
+  {
+    $Sliders = new Cards($this->BasePath);
+    return $Sliders->loadFile($options);
+  }
+
+  /**
    * load default slider
    */
   public function getImageTextRightLeft($options)
   {
     $ImageTextRightLeft = new ImageTextRightLeft($this->BasePath);
     return $ImageTextRightLeft->loadFile($options);
-  }
-
-  /**
-   */
-  public function putInHtmlTag($datas, $tag = 'div')
-  {
-    return [
-      '#type' => 'html_tag',
-      '#tag' => $tag,
-      '#attributes' => [
-        'class' => []
-      ],
-      '#value' => $datas
-    ];
   }
 
   /**

@@ -16,14 +16,14 @@
       	{% if loop.index0 == 0 %}
       		<div class="carousel-item active" {% if image_bg %} style="background-image:url('{{ carousel.image.url }}')" {% endif %}>
       			{% if image_bg %} {% else %} <img class="d-block w-100 img-fluid" src="{{ carousel.image.url }}" alt="{{ carousel.image.alt }}"> {% endif %}
-      			<div class="carousel-caption d-none d-md-block">
+      			<div class="carousel-caption d-none d-md-block ">
       				{{ carousel.content }}
       			</div>      			
       		</div>
       	{% else %}
       		<div class="carousel-item" {% if image_bg %} style="background-image:url('{{ carousel.image.url }}')" {% endif %}>
       			{% if image_bg %} {% else %} <img class="d-block w-100" src="{{ carousel.image.url }}" alt="{{ carousel.image.alt }}"> {% endif %}
-      			<div class="carousel-caption d-none d-md-block">
+      			<div class="carousel-caption d-none d-md-block ">
       				{{ carousel.content }}
       			</div>      			
       		</div>
