@@ -3,8 +3,11 @@ namespace Stephane888\HtmlBootstrap;
 
 use Symfony\Component\HttpFoundation\Session\Session;
 use Stephane888\HtmlBootstrap\Traits\Examples;
+use Stephane888\HtmlBootstrap\Controller\TopHeader;
 use Stephane888\HtmlBootstrap\Controller\Headers;
 use Stephane888\HtmlBootstrap\Controller\Sliders;
+use Stephane888\HtmlBootstrap\Controller\ImageTextRightLeft;
+use Stephane888\HtmlBootstrap\Traits\DrupalUtility;
 
 /**
  *
@@ -15,6 +18,7 @@ class LoaderDrupal {
 
   protected $BasePath = '';
   use Examples;
+  use DrupalUtility;
 
   function __construct()
   {
@@ -27,6 +31,15 @@ class LoaderDrupal {
   /**
    * ||___________________ SECTION HEADERS _____________________||
    */
+
+  /**
+   * get top headers
+   */
+  public function getSectionTopHeaders($options)
+  {
+    $Headers = new TopHeader($this->BasePath);
+    return $Headers->loadFile($options);
+  }
 
   /**
    * Section headers [logo center]
@@ -44,6 +57,15 @@ class LoaderDrupal {
   {
     $Sliders = new Sliders($this->BasePath);
     return $Sliders->loadSliderFile($options);
+  }
+
+  /**
+   * load default slider
+   */
+  public function getImageTextRightLeft($options)
+  {
+    $ImageTextRightLeft = new ImageTextRightLeft($this->BasePath);
+    return $ImageTextRightLeft->loadFile($options);
   }
 
   /**
@@ -76,11 +98,22 @@ class LoaderDrupal {
     }
   }
 
+  public static function addScript($style, $key)
+  {
+    if (LOAD_SCSS_BY_SESSION) {
+      $Session = new Session();
+      $styles = $Session->get('theme_script', []);
+      $styles[$key] = $style;
+      $Session->set('theme_script', $styles);
+    }
+  }
+
   private function getDefautStyle()
   {
     $Session = new Session();
     $styles = $Session->get('theme_style', []);
     $styles['init'] = '@import "../scss/defaut/models.scss";';
+    $styles['init2'] = '@import "../scss/defaut/defaultStyle.scss";';
     $Session->set('theme_style', $styles);
   }
 }

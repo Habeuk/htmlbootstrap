@@ -1,0 +1,41 @@
+.rx-logos {
+  padding: 0px 8px;
+
+  .rx-logo {
+    width: 27px;
+    height: 27px;
+    margin-left: 0px;
+  }
+
+  i {
+    color: $text_light;
+    font-weight: 600;
+  }
+
+  .facebook:hover {
+    i {
+      color: #3b5998;
+    }
+  }
+
+  .twitter:hover {
+    i {
+      color: #1da1f2;
+    }
+  }
+
+  .dribbble:hover {
+    i {
+      color: #ea4c89;
+    }
+  }
+
+  .pinterest:hover {
+    i {
+      color: #BD081C;
+    }
+  }
+
+
+
+}

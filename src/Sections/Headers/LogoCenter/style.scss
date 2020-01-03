@@ -6,10 +6,20 @@
 
   img.logo {
     margin: 12px;
+    max-height: calc(100% - 24px);
+  }
+
+  .container-logo {
+    max-height: 100px;
+
   }
 
   .navbar-brand {
     margin: 0;
     padding: 0;
+    white-space: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }

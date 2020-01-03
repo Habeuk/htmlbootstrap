@@ -1,0 +1,142 @@
+.site-header {
+  padding: 15px 0 15px 0;
+  -webkit-box-shadow: -2px 7px 11px -10px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: -2px 7px 11px -10px rgba(0, 0, 0, 0.25);
+  box-shadow: -2px 7px 11px -10px rgba(0, 0, 0, 0.25);
+  position: relative;
+  z-index: 1;
+
+  .containersearch {
+    margin-top: 15px;
+
+    form {
+      padding: 0 !important;
+
+      fieldset,
+      .form-actions {
+        padding: 0 0 0 60px;
+        margin: 0;
+        width: calc(100% - 5px);
+      }
+
+      fieldset {
+        position: relative;
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+
+        &::before {
+          position: absolute;
+          left: 10px;
+          top: auto;
+          bottom: auto;
+          color: lighten($text_light, 10);
+          font-size: 30px;
+          content: "\f002",
+        }
+      }
+
+      .form-actions {
+        display: none;
+      }
+
+      input,
+      input:focus {
+        font-size: 25px;
+        background: transparent;
+        background-color: transparent;
+        border: 0;
+        box-shadow: none;
+        font-weight: 600;
+        color: $text_light;
+      }
+
+
+
+    }
+
+    .container-inline {
+      display: block;
+    }
+  }
+
+  .iconesearch {
+    cursor: pointer;
+  }
+
+  .site-search {
+    background: lighten($text_light, 40);
+    padding: 10px 0;
+    display: none;
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    right: 0;
+    top: 100%;
+  }
+
+  .site-search.border-bottom {
+    border-bottom: 3px solid rgba(8, 8, 8, 0.36) !important;
+  }
+
+  .navbar-brand {
+    white-space: normal;
+    padding: 0;
+    max-height: 70px;
+    display: flex;
+    font-size: 16px;
+    max-width: 100%;
+    width: 100%;
+    justify-content: left;
+    align-items: center;
+    margin: 0;
+    max-width: 300px;
+    overflow: hidden;
+
+    img {
+      max-height: 70px;
+    }
+  }
+
+  .site-name {
+    font-weight: 900;
+    padding-left: 15px;
+    color: $text_normal;
+  }
+
+  .header-menu {
+    background-color: transparent;
+    margin-right: 30px;
+
+    .navbar-nav {
+      .nav-link {
+        color: $text_normal;
+        padding: 10px 15px;
+        font-size: 14px;
+        background-color: transparent;
+
+        &:hover {
+          color: $link_color;
+        }
+      }
+
+      .nav-link.is-active {
+        color: $link_color;
+      }
+
+      @include media-breakpoint-up(md) {
+        .nav-link {
+          padding: 25px 15px;
+          font-size: 16px;
+        }
+      }
+    }
+
+    .nav.navbar-nav {
+      margin-left: 0 !important;
+    }
+  }
+
+
+}
+
+.site-header.show-search {}

@@ -10,9 +10,12 @@ class Sliders {
 
   protected $BasePath = '';
 
+  protected $themeName = null;
+
   function __construct($path = null)
   {
     $this->BasePath = $path;
+    $this->themeName = \Drupal::theme()->getActiveTheme();
   }
 
   /**
@@ -93,25 +96,25 @@ class Sliders {
       [
         'content' => $this->templateCenterVertHori('Slider 1', 'bg-cover'),
         'image' => [
-          'url' => drupal_get_path('theme', 'theme_builder') . '/defaultfile/CarouselBootstrap/images/banner1.jpg'
+          'url' => drupal_get_path('theme', $this->themeName->getName()) . '/defaultfile/CarouselBootstrap/images/banner1.jpg'
         ]
       ],
       [
         'content' => $this->templateCenterVertHori('Slider 2', 'bg-cover'),
         'image' => [
-          'url' => drupal_get_path('theme', 'theme_builder') . '/defaultfile/CarouselBootstrap/images/banner2.jpg'
+          'url' => drupal_get_path('theme', $this->themeName->getName()) . '/defaultfile/CarouselBootstrap/images/banner2.jpg'
         ]
       ],
       [
         'content' => $this->templateCenterVertHori('Slider 3', 'bg-cover'),
         'image' => [
-          'url' => drupal_get_path('theme', 'theme_builder') . '/defaultfile/CarouselBootstrap/images/banner3.jpg'
+          'url' => drupal_get_path('theme', $this->themeName->getName()) . '/defaultfile/CarouselBootstrap/images/banner3.jpg'
         ]
       ],
       [
         'content' => $this->templateCenterVertHori('Slider 4', 'bg-cover'),
         'image' => [
-          'url' => drupal_get_path('theme', 'theme_builder') . '/defaultfile/CarouselBootstrap/images/banner4.jpg'
+          'url' => drupal_get_path('theme', $this->themeName->getName()) . '/defaultfile/CarouselBootstrap/images/banner4.jpg'
         ]
       ]
     ];

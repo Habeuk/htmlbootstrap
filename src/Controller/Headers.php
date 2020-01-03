@@ -40,12 +40,13 @@ class Headers {
       /**
        * Bloc rx logo
        */
-      $rx_logo = $this->getdefault_rx_logos();
       if (isset($options['rx_logo'])) {
         $rx_logo = $options['rx_logo'];
+      } else {
+        $rx_logo = $this->getdefault_rx_logos();
       }
       $rx_logo = $this->template_rx_logos($rx_logo, 'circle_animate');
-      LoaderDrupal::addStyle(\file_get_contents($this->BasePath . '/Sections/Headers/LogoCenter/style.scss'), 'rx_logos_circle_animate');
+      LoaderDrupal::addStyle(\file_get_contents($this->BasePath . '/Sections/Headers/LogoCenter/style.scss'), 'Header');
       return [
         '#type' => 'inline_template',
         '#template' => \file_get_contents($this->BasePath . '/Sections/Headers/LogoCenter/Drupal.html.twig'),
@@ -53,6 +54,39 @@ class Headers {
           'branding' => $branding,
           'account_menu' => $account_menu,
           'rx_logo' => $rx_logo
+        ]
+      ];
+    } elseif (isset($options['type']) && $options['type'] == 'LogoLeftMenu') {
+      /**
+       * Bloc branding
+       */
+      $branding = null;
+      if (isset($options['branding'])) {
+        $branding = $options['branding'];
+      }
+      /**
+       * Bloc main menu.
+       */
+      $main_menu = null;
+      if (isset($options['main_menu'])) {
+        $main_menu = $options['main_menu'];
+      }
+      /**
+       * Bloc de recherche
+       */
+      $search = null;
+      if (isset($options['search'])) {
+        $search = $options['search'];
+      }
+      LoaderDrupal::addStyle(\file_get_contents($this->BasePath . '/Sections/Headers/LogoLeftMenu/style.scss'), 'Header');
+      LoaderDrupal::addScript(\file_get_contents($this->BasePath . '/Sections/Headers/LogoLeftMenu/script.js'), 'Header');
+      return [
+        '#type' => 'inline_template',
+        '#template' => \file_get_contents($this->BasePath . '/Sections/Headers/LogoLeftMenu/Drupal.html.twig'),
+        '#context' => [
+          'branding' => $branding,
+          'main_menu' => $main_menu,
+          'search' => $search
         ]
       ];
     }

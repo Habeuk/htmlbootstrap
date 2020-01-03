@@ -1,0 +1,26 @@
+<section class="site-header">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-4">
+				<div class="d-flex h-100 align-items-center justify-content-center justify-content-sm-start  ">
+					{{ branding }}
+				</div>
+			</div>
+			<div class="col-md-8">
+				<div class="d-flex h-100 align-items-center">
+					{{ main_menu }}
+					{% if search %} 
+						<div class="d-inline-block iconesearch"><i class="fas fa-search"></i></div>
+					{% endif %}
+				</div>				
+			</div>
+		</div>		
+	</div>
+	<div class="site-search">
+		<div class="container">
+			<div class="containersearch">
+				{{ search }}
+			</div>
+		</div>
+	</div>
+</section>

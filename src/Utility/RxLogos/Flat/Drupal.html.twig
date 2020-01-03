@@ -1,0 +1,7 @@
+<div class="rx-logos d-flex h-100 align-items-center justify-content-center justify-content-sm-end">
+	{% for rx_logo in rx_logos %}
+		<span class="btn btn-sm rounded-circle rx-logo d-flex justify-content-center align-items-center {{ rx_logo.type }}">
+			<a href="{{ rx_logo.url }}">{{ rx_logo.icone|raw }}</a>
+		</span>
+	{% endfor %}
+</div>    
