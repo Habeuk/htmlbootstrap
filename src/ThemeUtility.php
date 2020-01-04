@@ -143,7 +143,7 @@ class ThemeUtility {
   /**
    * add textfield
    */
-  public function add_checkbox($name, $group, $form, $title = 'Affiche ce block', $default = 0)
+  public function add_checkbox($name, $group, &$form, $title = 'Affiche ce block', $default = 0)
   {
     $value = theme_get_setting($group . $name, 'multiservicem1');
     // text
@@ -152,7 +152,6 @@ class ThemeUtility {
       '#title' => t($title),
       '#default_value' => (isset($value)) ? $value : $default
     ];
-    return $form;
   }
 
   /**
@@ -243,7 +242,7 @@ class ThemeUtility {
   /**
    * add textfield
    */
-  public function add_select($name, $group, $form, $options = [], $title = 'title', $default = '')
+  public function add_select($name, $group, &$form, $options = [], $title = 'title', $default = '', $require = null)
   {
     $value = theme_get_setting($group . $name, 'multiservicem1');
     // text
@@ -253,7 +252,34 @@ class ThemeUtility {
       '#default_value' => (isset($value) && $value != '') ? $value : $default,
       '#options' => $options
     ];
-    return $form;
+  }
+
+  public function AddRequire($name, $group, &$form)
+  {
+    $form[$group . $name]['#required'] = true;
+  }
+
+  /**
+   * Api AJAX : https://api.drupal.org/api/drupal/core%21core.api.php/group/ajax
+   *
+   * @param string $name
+   * @param string $group
+   * @param object $form
+   * @param string $callback
+   */
+  public function AddAjax($name, $group, &$form, $callback, $wrapper, $event = 'change', $message = 'Verifying entry...')
+  {
+    $form[$group . $name]['#ajax'] = [
+      // 'callback' => '::' . $callback, // cette methode est utilisé si le formulaire provient d'une classe.
+      'callback' => $callback, // on va lire la fonction de return dans le THEMENAME.theme
+      'disable-refocus' => FALSE, // Or TRUE to prevent re-focusing on the triggering element.
+      'event' => $event,
+      'wrapper' => $wrapper, // This element is updated with this AJAX callback.
+      'progress' => [
+        'type' => 'throbber',
+        'message' => $message
+      ]
+    ];
   }
 
   /**

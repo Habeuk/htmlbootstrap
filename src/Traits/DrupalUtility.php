@@ -7,6 +7,14 @@ trait DrupalUtility {
 
   use Portions;
 
+  public function loadCardsDataInTheme(&$options, $group)
+  {
+    $provider = theme_get_setting($group . '_provider', 'multiservicem1');
+    if ($provider == 'theme') {
+      return false;
+    }
+  }
+
   /**
    *
    * @param object $variables
@@ -14,9 +22,13 @@ trait DrupalUtility {
    */
   public function loadSlideDataInTheme(&$options, $group)
   {
+    $results = [];
+    $provider = theme_get_setting($group . '_provider', 'multiservicem1');
+    if ($provider == 'theme') {
+      return false;
+    }
     $name = "nombre_slide";
     $index = intval(theme_get_setting($group . $name, 'multiservicem1'));
-    $results = [];
     for ($i = 1; $i <= $index; $i ++) {
       $name = $i . 'texte';
       $value = theme_get_setting($group . $name, 'multiservicem1');
