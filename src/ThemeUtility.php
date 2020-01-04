@@ -128,7 +128,7 @@ class ThemeUtility {
   /**
    * add textfield
    */
-  public function add_textfield($name, $group, $form, $title = 'title', $default = '')
+  public function add_textfield($name, $group, &$form, $title = 'title', $default = '')
   {
     $value = theme_get_setting($group . $name, 'multiservicem1');
     // text
@@ -137,7 +137,6 @@ class ThemeUtility {
       '#title' => t($title),
       '#default_value' => (isset($value) && $value != '') ? $value : $default
     ];
-    return $form;
   }
 
   /**

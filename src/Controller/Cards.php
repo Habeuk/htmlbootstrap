@@ -28,7 +28,8 @@ class Cards {
     if (isset($options['cards'])) {
       $cards = $options['cards'];
     } else {
-      $cards = $this->loadDefaultData();
+      $number = (isset($options['nombre_item'])) ? $options['nombre_item'] : 8;
+      $cards = $this->loadDefaultData($number);
     }
 
     /**
