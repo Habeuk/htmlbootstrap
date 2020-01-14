@@ -1,0 +1,15 @@
+.textactionmodele1 {
+  background-color: #f5f5f5;
+
+  .sectionspace {
+    margin-top: $margin_top;
+    margin-bottom: $margin_bottom;
+    padding-top: $margin_top/2;
+    padding-bottom: $margin_bottom/2;
+  }
+
+  .section-titre {
+    font-weight: 600;
+    color: $text_normal;
+  }
+}

@@ -101,11 +101,14 @@ trait Portions {
    */
   public function template_img($img_url, $alt = '', $classe = '')
   {
+    if (! $this->themeObject) {
+      die('');
+    }
     return [
       '#type' => 'inline_template',
       '#template' => '<img src="{{img_url}}" class="img-fluid {{classe}}" alt="{{alt}}" />',
       '#context' => [
-        'img_url' => drupal_get_path('theme', 'theme_builder') . $img_url,
+        'img_url' => '/' . drupal_get_path('theme', $this->themeObject->getName()) . $img_url,
         'alt' => $alt,
         'classe' => $classe
       ]
@@ -138,12 +141,19 @@ trait Portions {
    * @param string $tag
    * @return string[]
    */
-  public function template_htmltag($string, $tag = 'p')
+  public function template_htmltag($string, $tag = 'p', $class = null, $id = null)
   {
-    return [
+    $html = [
       '#type' => 'html_tag',
       '#tag' => $tag,
       '#value' => $string
     ];
+    if ($class) {
+      $html['#attributes']['class'][] = $class;
+    }
+    if ($id) {
+      $html['#attributes']['id'] = $id;
+    }
+    return $html;
   }
 }

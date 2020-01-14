@@ -8,9 +8,12 @@ class ImageTextRightLeft {
 
   protected $BasePath = '';
 
+  protected $themeObject = null;
+
   function __construct($path = null)
   {
     $this->BasePath = $path;
+    $this->themeObject = \Drupal::theme()->getActiveTheme();
   }
 
   /**

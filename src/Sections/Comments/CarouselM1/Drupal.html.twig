@@ -1,0 +1,29 @@
+<section class="comments-carouselm1">
+	<div class="container sectionspace">
+		{% if title %}
+		<header class="header text-center d-flex justify-content-center align-items-center" >
+				<span class="btn owl-prev d-flex justify-content-center align-items-center"><i class="fa fa-angle-left" aria-hidden="true"></i></span>
+				<div class="content mx-5">
+					<h2 class="section-title">{{ title }}</h2>
+				</div>
+				<span class="btn owl-next d-flex justify-content-center align-items-center"><i class="fa fa-angle-right" aria-hidden="true"></i></span>
+		</header>
+		{% endif %}
+		<div class="owl-carousel owl-theme" 
+		data-comments-carouselm1='{"items":1,"margin":15,"loop":true,"center":true,"autoplay":true,"dots":false,"autoplayTimeout":70000,"smartSpeed":250,"nav":false,"dotsEach":true}' >
+			{% for card in cards %}		
+					<div class="card " style="background-image:url('{{ img_bg }}')">
+						<div class="card-body">
+							<h5 class="card-title">{{ card.title }}</h5>
+							<div class="card-text">
+								{{ card.text }}
+							</div>
+							<div>
+								<a href="{{ link_user }}"><span class="name">{{ card.name }}</span></a>, <span class="function d-inline-block pl-2">{{ card.function }}</span> 
+							</div>
+						</div>
+					</div>			
+			{% endfor %}
+		</div>
+	</div>
+</section>

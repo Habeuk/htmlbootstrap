@@ -219,7 +219,7 @@ $border-color:#ccc;
 /**
  *  mixin for multiline limit text css
  */
-@mixin multiLineEllipsis($lineHeight:1.2em, $lineCount: 1, $bgColor: white, $text-align:left) {
+@mixin multiLineEllipsis($lineHeight:1.2em, $lineCount: 1, $bgColor: white, $text-align:left, $opacity:0.5) {
   overflow: hidden;
   display: block;
   position: relative;
@@ -234,7 +234,8 @@ $border-color:#ccc;
     position: absolute;
     right: 0;
     bottom: 0;
-    opacity: 0.5;
+    opacity: $opacity;
+    z-index: 1;
   }
 
   &:after {

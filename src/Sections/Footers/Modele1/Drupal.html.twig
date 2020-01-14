@@ -1,0 +1,18 @@
+<footer class="footers-modele1">
+	<div class="container sectionspace">
+		<div class="row">
+			{% for card in cards %}				
+				<div class="{{ card_class_block }}">					
+					<div class="card">
+						<div class="card-header p-0">
+							{{ card.title }}
+						</div>
+						<div class="card-body p-0">
+							<div class="card-text">{{ card.text }}</div>
+						</div>
+					</div>
+				</div>							
+			{% endfor %}
+		</div>
+	</div>
+</footer>

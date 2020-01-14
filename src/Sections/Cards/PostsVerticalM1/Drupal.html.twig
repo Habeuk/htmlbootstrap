@@ -1,0 +1,15 @@
+<section class="posts-vertical-m1">
+			{% for card in cards %}				
+					<div class="d-flex small-block">
+						<div class="img">
+							<a href="{{ card.link }}" title="{{ card.title }}">
+								<img alt="{{ card.img.alt }}" src="{{ card.img.src }}" class="img-fluid">
+							</a>
+						</div>
+						<div class="text">
+							<a href="{{ card.link }}"><h5 class="title" title="{{ card.title }}">{{ card.title }}</h5></a>
+							<div class="date"><i class="fas fa-user-clock pr-1"></i> {{ card.date }}</div>
+						</div>
+					</div>
+			{% endfor %}
+</section>

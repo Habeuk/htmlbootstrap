@@ -7,6 +7,10 @@ use Stephane888\HtmlBootstrap\Controller\Headers;
 use Stephane888\HtmlBootstrap\Controller\Sliders;
 use Stephane888\HtmlBootstrap\Controller\ImageTextRightLeft;
 use Stephane888\HtmlBootstrap\Controller\Cards;
+use Stephane888\HtmlBootstrap\Controller\CarouselCards;
+use Stephane888\HtmlBootstrap\Controller\CallActions;
+use Stephane888\HtmlBootstrap\Controller\Comments;
+use Stephane888\HtmlBootstrap\Controller\Footers;
 use Stephane888\HtmlBootstrap\Traits\Examples;
 use Stephane888\HtmlBootstrap\Traits\DrupalUtility;
 
@@ -74,6 +78,42 @@ class LoaderDrupal {
   }
 
   /**
+   * get CarouselCards
+   */
+  public function getCarouselCards($options)
+  {
+    $Sliders = new CarouselCards($this->BasePath);
+    return $Sliders->loadFile($options);
+  }
+
+  /**
+   * get CallActions
+   */
+  public function getCallActions($options)
+  {
+    $Sliders = new CallActions($this->BasePath);
+    return $Sliders->loadFile($options);
+  }
+
+  /**
+   * get Comments
+   */
+  public function getComments($options)
+  {
+    $Sliders = new Comments($this->BasePath);
+    return $Sliders->loadFile($options);
+  }
+
+  /**
+   * get Footers
+   */
+  public function getFooters($options)
+  {
+    $Sliders = new Footers($this->BasePath);
+    return $Sliders->loadFile($options);
+  }
+
+  /**
    * load default slider
    */
   public function getImageTextRightLeft($options)
@@ -106,6 +146,14 @@ class LoaderDrupal {
       $styles[$key] = $style;
       $Session->set('theme_script', $styles);
     }
+  }
+
+  /**
+   * filtre l'affichage en function de la nom de la route.
+   */
+  public function filterByRouteName()
+  {
+    return true;
   }
 
   private function getDefautStyle()

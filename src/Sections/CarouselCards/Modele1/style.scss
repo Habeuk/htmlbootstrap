@@ -1,0 +1,68 @@
+.carouselcards-modele1 {
+  position: relative;
+
+  .sectionspace {
+    margin-top: $margin_top;
+    margin-bottom: $margin_bottom;
+  }
+
+  .header {
+    margin-bottom: $margin_top/2;
+
+    .section-title {
+      margin-bottom: $margin_top/4;
+    }
+
+    .owl-prev,
+    .owl-next {
+      cursor: pointer;
+      background-color: $color1;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 26px;
+      color: #FFF;
+    }
+  }
+
+  .header+div {
+    owl-nav {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+    }
+  }
+
+  .owl-carousel .owl-stage {
+    display: flex;
+
+    .card {
+      border: 0;
+      background: #f5f5f5;
+      border-bottom: 2px solid $color1;
+      border-radius: 0;
+
+      .card-title {
+        text-transform: uppercase;
+        font-weight: 600;
+      }
+
+      a {
+        color: $text_normal;
+      }
+
+      &:hover {
+        a {
+          color: $link_color;
+        }
+      }
+    }
+
+    .card-body {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+  }
+}

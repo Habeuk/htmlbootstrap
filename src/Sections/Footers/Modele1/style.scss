@@ -1,0 +1,36 @@
+.footers-modele1 {
+  background-color: #262626;
+  color: $text_normal;
+  font-size: 1em;
+
+  .sectionspace {
+    padding-top: $margin_top*1;
+    padding-bottom: $margin_bottom*0.5;
+  }
+
+  .card {
+    background: transparent;
+    border-radius: 0;
+    border: none;
+
+    >* {
+      background: transparent;
+    }
+
+    .card-header {
+      margin-bottom: 25px;
+      font-size: 1.5em;
+      color: #FFF;
+      border: none;
+      font-weight: 400;
+      text-transform: uppercase;
+    }
+  }
+
+  .tag-cloud {
+    margin-bottom: 7px;
+    font-weight: 300;
+    font-size: 0.9em;
+    margin-right: 5px;
+  }
+}

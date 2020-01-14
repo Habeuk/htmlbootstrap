@@ -1,0 +1,68 @@
+.comments-carouselm1 {
+  background-color: #f5f5f5;
+
+  .sectionspace {
+    margin-top: $margin_top;
+    margin-bottom: $margin_bottom;
+    padding-top: $margin_top*1;
+    padding-bottom: $margin_bottom*0.5;
+  }
+
+  .section-titre {
+    font-weight: 600;
+    color: $text_normal;
+  }
+
+  .header {
+    margin-bottom: $margin_bottom*0.6;
+    position: relative;
+
+    .owl-prev,
+    .owl-next {
+      cursor: pointer;
+      background-color: #f5723d;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 26px;
+      color: #fff;
+    }
+
+    &::before {
+      position: absolute;
+      top: auto;
+      bottom: -20px;
+      left: auto;
+      right: auto;
+      width: 30px;
+      height: 1px;
+      background-color: #545252;
+      content: "";
+    }
+  }
+
+  .card {
+    border: none;
+    background: transparent;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    background-repeat: no-repeat;
+    padding-left: 100px;
+    background-size: 60px;
+    background-position: left 20px;
+
+    .card-title {
+      color: $text_normal;
+      font-weight: 600;
+    }
+
+    .card-text {
+      margin-bottom: $margin_bottom*0.3;
+    }
+
+
+  }
+
+
+}

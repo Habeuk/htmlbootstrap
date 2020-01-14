@@ -3,18 +3,19 @@ namespace Stephane888\HtmlBootstrap\Controller;
 
 use Stephane888\HtmlBootstrap\LoaderDrupal;
 use Stephane888\HtmlBootstrap\Traits\Portions;
+use Stephane888\HtmlBootstrap\Entity\ImageStyleTheme;
 
 class Cards {
   use Portions;
 
   protected $BasePath = '';
 
-  protected $themeName = null;
+  protected $themeObject = null;
 
   function __construct($path = null)
   {
     $this->BasePath = $path;
-    $this->themeName = \Drupal::theme()->getActiveTheme();
+    $this->themeObject = \Drupal::theme()->getActiveTheme();
   }
 
   /**
@@ -27,9 +28,6 @@ class Cards {
      */
     if (isset($options['cards'])) {
       $cards = $options['cards'];
-    } else {
-      $number = (isset($options['nombre_item'])) ? $options['nombre_item'] : 8;
-      $cards = $this->loadDefaultData($number);
     }
 
     /**
@@ -46,22 +44,69 @@ class Cards {
      */
     if (isset($options['type'])) {
       if ($options['type'] == 'IconeModelFlat') {
+        if (empty($cards)) {
+          $number = (isset($options['nombre_item'])) ? $options['nombre_item'] : 8;
+          $cards = $this->loadDefaultData($number);
+        }
         $fileName = \file_get_contents($this->BasePath . '/Sections/Cards/IconeModelFlat/Drupal.html.twig');
         LoaderDrupal::addStyle(\file_get_contents($this->BasePath . '/Sections/Cards/IconeModelFlat/style.scss'), 'IconeModelFlat');
+        return [
+          '#type' => 'inline_template',
+          '#template' => $fileName,
+          '#context' => [
+            'cards' => $cards,
+            'card_class_block' => $card_class_block
+          ]
+        ];
+      } elseif ($options['type'] == 'PostsVerticalM1') {
+        if (empty($cards)) {
+          $number = (isset($options['nombre_item'])) ? $options['nombre_item'] : 4;
+          $cards = $this->loadDefaultData__PostsVerticalM1($number);
+        }
+        $fileName = \file_get_contents($this->BasePath . '/Sections/Cards/PostsVerticalM1/Drupal.html.twig');
+        LoaderDrupal::addStyle(\file_get_contents($this->BasePath . '/Sections/Cards/PostsVerticalM1/style.scss'), 'PostsVerticalM1');
+        return [
+          '#type' => 'inline_template',
+          '#template' => $fileName,
+          '#context' => [
+            'cards' => $cards
+          ]
+        ];
       }
-    } else {
-      $fileName = \file_get_contents($this->BasePath . '/Sections/Cards/IconeModelFlat/Drupal.html.twig');
-      LoaderDrupal::addStyle(\file_get_contents($this->BasePath . '/Sections/Cards/IconeModelFlat/style.scss'), 'IconeModelFlat');
     }
+  }
 
-    return [
-      '#type' => 'inline_template',
-      '#template' => $fileName,
-      '#context' => [
-        'cards' => $cards,
-        'card_class_block' => $card_class_block
-      ]
-    ];
+  /**
+   * Load defalut vertical PostsVerticalM1
+   */
+  protected function loadDefaultData__PostsVerticalM1($number = 3)
+  {
+    $image_style = 'thumbnail';
+    // $attributes = \Drupal\image\Entity\ImageStyle::load($image_style)->buildUrl();
+    $imgs = $this->defaultImg();
+    $cards = [];
+    $faker = \Faker\Factory::create();
+    $faker->seed(12956812258);
+    for ($i = 0; $i < $number; $i ++) {
+      $img_url = (isset($imgs[$i])) ? $imgs[$i] : 'themes://defaultfile/CarouselCards/Modele1/photodune-6590781-product-launch-flat-illustration-2-700x400.jpg';
+      // $img_url0 = file_create_url(drupal_get_path('theme', $this->themeObject->getName()) . $img_url) . '?itok=_DGxyx-M';
+      // dump($img_url0);
+      // $img_url0 = \Drupal\image\Entity\ImageStyle::load($image_style)->buildUrl($img_url);
+      // dump(file_uri_scheme('themes://mon-image.jpg'));
+      $img_url = '/' . drupal_get_path('theme', $this->themeObject->getName()) . $img_url;
+      // $img_url0 = ImageStyleTheme::load($image_style);
+
+      $cards[] = [
+        'link' => '#',
+        'img' => [
+          'alt' => '',
+          'src' => $img_url
+        ],
+        'title' => $faker->unique()->realText(rand(30, 50)),
+        'date' => '21 Mar 2014'
+      ];
+    }
+    return $cards;
   }
 
   /**
@@ -96,6 +141,20 @@ class Cards {
       '<i class="fas fa-box-open"></i>',
       '<i class="fas fa-bullhorn"></i>',
       '<i class="fas fa-camera-retro"></i>'
+    ];
+  }
+
+  protected function defaultImg()
+  {
+    return [
+      // 'Peuple-Migrateur-Galatee-Films-3921.jpg',
+      '/defaultfile/CarouselCards/Modele1/Fotolia_32338952_Subscription_Monthly_XL-700x400.jpg',
+      // 'themes://defaultfile/CarouselCards/Modele1/Fotolia_32338952_Subscription_Monthly_XL-700x400.jpg',
+      '/defaultfile/CarouselCards/Modele1/Fotolia_33064312_Subscription_Monthly_XXL-700x400.jpg',
+      '/defaultfile/CarouselCards/Modele1/photodune-6147544-brainstorming-ideas-with-coffee-m-700x400.jpg',
+      '/defaultfile/CarouselCards/Modele1/photodune-6243139-vintage-photography-m-700x400.jpg',
+      '/defaultfile/CarouselCards/Modele1/photodune-6252039-web-and-seo-analytics-concept-m-700x400.jpg',
+      '/defaultfile/CarouselCards/Modele1/photodune-6590781-product-launch-flat-illustration-2-700x400.jpg'
     ];
   }
 }

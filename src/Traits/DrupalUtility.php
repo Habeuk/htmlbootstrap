@@ -1,11 +1,33 @@
 <?php
 namespace Stephane888\HtmlBootstrap\Traits;
 
-use Drupal\Core\Template\Attribute;
-
+// use Drupal\Core\Template\Attribute;
 trait DrupalUtility {
 
   use Portions;
+
+  public function loadCommentsDatas(&$options, $group, $theme)
+  {
+    $results = [];
+    $provider = theme_get_setting($group . '_provider', $theme);
+    if ($provider == 'theme') {
+      return false;
+    } elseif ($provider == 'node') {}
+  }
+
+  public function loadCarouselCardsDatas(&$options, $group, $theme)
+  {
+    $results = [];
+    $provider = theme_get_setting($group . '_provider', $theme);
+    if ($provider == 'theme') {
+      return false;
+    } elseif ($provider == 'node') {}
+  }
+
+  public function loadCallActionsDatas(&$options, $group, $theme)
+  {
+    $results = [];
+  }
 
   public function loadCardsDatas(&$options, $group, $theme)
   {
@@ -16,15 +38,9 @@ trait DrupalUtility {
     } elseif ($provider == 'node') {
       $bundle = theme_get_setting($group . '__content_type', $theme);
       $nombre_item = theme_get_setting($group . '_nombre_item', $theme);
-      $query = \Drupal::entityQuery('node');
-      $query->sort('nid', 'DESC');
-      $query->range(0, $nombre_item);
-      $query->condition('status', 1);
-      $query->condition('type', $bundle);
-      $ids = $query->execute();
-      $nodes = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($ids);
+      $nodes = $this->getNodes($bundle, $nombre_item);
       $fieldicone = theme_get_setting($group . '__fieldicone', $theme);
-      $fieldtitle = theme_get_setting($group . '__fieldtitle', $theme);
+      // $fieldtitle = theme_get_setting($group . '__fieldtitle', $theme);
       $fielddescription = theme_get_setting($group . '__fielddescription', $theme);
       foreach ($nodes as $node) {
         // kint($node->toLink());
@@ -43,6 +59,17 @@ trait DrupalUtility {
         $options['cards'] = $results;
       }
     }
+  }
+
+  protected function getNodes($bundle, $nombre_item = 8)
+  {
+    $query = \Drupal::entityQuery('node');
+    $query->sort('nid', 'DESC');
+    $query->range(0, $nombre_item);
+    $query->condition('status', 1);
+    $query->condition('type', $bundle);
+    $ids = $query->execute();
+    return \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($ids);
   }
 
   /**
