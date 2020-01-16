@@ -1,0 +1,27 @@
+{% set block_img_content %}
+	<div class="col-sm-6">
+		<img src="{{ img_url }}" alt="{{ img_alt }}" class="{{ img_class }}"/>
+	</div>
+{% endset %}
+<section class="imagetextrightleft-modelm1">
+	<div class="container">
+		<div class="row">
+			{% if header %}
+    			{{ block_img_content }}
+			{% endif %}
+		</div>
+		<div class="row">
+			{% if img_before %}
+				
+			{% endif %}
+			<div class="col-sm-6">
+				<h2 class="title">{{ title }}</h2>
+				<div class="text">{{ text }}</div>
+				<div class="button">{{ button }}</div>
+			</div>
+			{% if img_before %}{% else %}
+				{{ block_img_content }}
+			{% endif %}
+		</div>
+	</div>
+</section>

@@ -149,11 +149,53 @@ class LoaderDrupal {
   }
 
   /**
-   * filtre l'affichage en function de la nom de la route.
+   * Filtre l'affichage en function de la nom de la route.
+   * les routes ou parametres sont separés par |
+   *
+   * @param string $route_lits
+   * @param string $listes_parameters
+   * @return boolean
    */
-  public function filterByRouteName()
+  public function filterByRouteName($route_lits = '', $listes_parameters = '', $list_type_node = '')
   {
-    return true;
+    $RouteName = \Drupal::routeMatch()->getRouteName();
+    $nid = \Drupal::routeMatch()->getParameter('node');
+    $route_frontPage = "view.frontpage.page_1";
+    $route_node = "entity.node.canonical";
+    // strpos
+    if ($route_lits == '' || ! $route_lits)
+      return true;
+
+    $routes = \explode('|', $route_lits);
+    foreach ($routes as $route) {
+      if ($route != '') {
+        /**
+         * page d'accuiel
+         */
+        if ($RouteName == $route_frontPage && $route_frontPage == $route) {
+          return true;
+        } /**
+         * page de nodes
+         */
+        elseif ($RouteName == $route_frontPage && $route_node == $route) {
+          /**
+           * le type de node est prioritaire.
+           * Si le type de node est definie, on ne regarde plus les paramettres.
+           * les nodes de type page, doivent utiliser les parametres.
+           * les nodes de type article, films ... doivent utiliser le type de node.
+           */
+          if ($listes_parameters != '') {
+            $parameters = \explode("|", $listes_parameters);
+            foreach ($parameters as $parameter) {
+              if ($parameter == $nid) {
+                return true;
+              }
+            }
+          }
+        }
+      }
+    }
+    return false;
   }
 
   private function getDefautStyle()

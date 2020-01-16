@@ -10,9 +10,11 @@ class ThemeUtility {
 
   public $regions = [];
 
-  public $themeName = 'multiservicem1';
+  public $themeName;
 
-  public $themePath = '';
+  public $themePath;
+
+  protected $themeObject;
 
   /**
    */
@@ -20,6 +22,8 @@ class ThemeUtility {
   {
     $this->image_styles = \Drupal::entityQuery('image_style')->execute();
     $this->regions = $this->get_regions();
+    $this->themeObject = \Drupal::theme()->getActiveTheme();
+    $this->themeName = $this->themeObject->getName();
     $this->themePath = drupal_get_path('theme', $this->themeName);
   }
 
@@ -136,6 +140,20 @@ class ThemeUtility {
       '#type' => 'textfield',
       '#title' => t($title),
       '#default_value' => (isset($value) && $value != '') ? $value : $default
+    ];
+  }
+
+  /**
+   * add textfield array
+   */
+  public function add_textfield2($name, $group, &$form, $title = 'title', $default = '')
+  {
+    // $value = theme_get_setting($group . $name, 'multiservicem1');
+    // text
+    $form[$group][$name] = [
+      '#type' => 'textfield',
+      '#title' => t($title)
+      // '#default_value' => (isset($value) && $value != '') ? $value : $default
     ];
   }
 
