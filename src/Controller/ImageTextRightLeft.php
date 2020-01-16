@@ -75,6 +75,14 @@ class ImageTextRightLeft {
     }
   }
 
+  public static function listModels()
+  {
+    return [
+      'default' => 'default',
+      'ModelM1' => 'ModelM1'
+    ];
+  }
+
   protected function loadModelM1($options)
   {
     /**

@@ -8,8 +8,7 @@ class ThemeUtility {
 
   public $image_styles = false;
 
-  public $regions = [];
-
+  // public $regions = [];
   public $themeName;
 
   public $themePath;
@@ -21,7 +20,7 @@ class ThemeUtility {
   public function __construct()
   {
     $this->image_styles = \Drupal::entityQuery('image_style')->execute();
-    $this->regions = $this->get_regions();
+    // $this->regions = $this->get_regions();
     $this->themeObject = \Drupal::theme()->getActiveTheme();
     $this->themeName = $this->themeObject->getName();
     $this->themePath = drupal_get_path('theme', $this->themeName);
@@ -56,7 +55,7 @@ class ThemeUtility {
 
   /**
    */
-  protected function get_regions()
+  public function get_regions()
   {
     return system_region_list($this->themeName, $show = REGIONS_VISIBLE);
   }
@@ -143,17 +142,30 @@ class ThemeUtility {
     ];
   }
 
+  public function AddRequireTree($name, &$form)
+  {
+    $form[$name]['#required'] = true;
+  }
+
   /**
    * add textfield array
    */
-  public function add_textfield2($name, $group, &$form, $title = 'title', $default = '')
+  public function addTextfieldTree($name, &$form, $title = 'title', $default = '')
   {
-    // $value = theme_get_setting($group . $name, 'multiservicem1');
-    // text
-    $form[$group][$name] = [
+    $form[$name] = [
       '#type' => 'textfield',
-      '#title' => t($title)
-      // '#default_value' => (isset($value) && $value != '') ? $value : $default
+      '#title' => t($title),
+      '#default_value' => $default
+    ];
+  }
+
+  public function addSelectTree($name, &$form, $options = [], $title = 'title', $default = '')
+  {
+    $form[$name] = [
+      '#type' => 'select',
+      '#title' => t($title),
+      '#default_value' => $default,
+      '#options' => $options
     ];
   }
 
