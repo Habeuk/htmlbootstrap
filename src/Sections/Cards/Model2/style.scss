@@ -1,0 +1,122 @@
+$cardsmodel2_color: #3c5265;
+$cardsmodel2_lineHeight: 1.5em;
+$cardsmodel2_lineCount: 5.31;
+$cardsmodel2_bg: #ffffff;
+
+.cardsmodel2 {
+  font-size: 1.2em;
+  background: $cardsmodel2_bg;
+
+  .sectionspace {
+    margin-top: $margin_top;
+    margin-bottom: $margin_bottom;
+
+    @include media-min(DD) {
+      margin-top: $margin_top * 1.5;
+      margin-bottom: $margin_bottom * 1.5;
+    }
+  }
+
+  .header {
+    text-align: center;
+
+    .title {
+      @include media-min(DD) {
+        font-size: 2.5em;
+      }
+
+      @include media-min(M) {
+        font-size: 3em;
+      }
+
+      @include media-min(LM) {
+        font-size: 4em;
+      }
+
+      font-weight: 900;
+      line-height: 100%;
+      margin-bottom: $margin_top/2;
+      color:$cardsmodel2_color;
+    }
+
+    .desc {
+      margin-bottom: $margin_top;
+    }
+  }
+
+  .card {
+    border: none;
+    color: $text_normal;
+    flex-direction: row;
+    margin-bottom: $margin_top*0.7;
+    background: $cardsmodel2_bg;
+    cursor: pointer;
+
+    @include media-min(DD) {
+      @include multiLineEllipsis($lineHeight:$cardsmodel2_lineHeight, $lineCount: $cardsmodel2_lineCount, $bgColor: white, $text-align:left, $opacity:1, $ellipsis-margin-right:32px);
+    }
+
+    .card-text {
+      padding-bottom: 0px;
+      @include transition($propriete:all, $temps:0.3s, $style:ease-in-out);
+    }
+
+    &:hover {
+      // remove eclipse on hover
+      overflow: visible;
+      z-index: 1;
+
+      .card-text {
+        background: inherit;
+
+        @include media-min(DD) {
+          padding-bottom: 20px;
+        }
+      }
+
+      &::before,
+      &::after {
+        display: none;
+      }
+
+      .card-header i {
+        color: $link_color;
+      }
+    }
+  }
+
+  .card-header {
+    font-size: 1em;
+    background: $cardsmodel2_color;
+    border: none;
+    padding: 0.5em;
+    border-radius: calc(0.25rem - 1px) 0 0 calc(0.25rem - 1px);
+
+    i {
+      font-size: 2em;
+      width: 2em;
+
+      @include media-min(DD) {
+        font-size: 3em;
+      }
+
+      color: $text_extra_light;
+      text-align: center;
+
+      max-width: 100%;
+    }
+  }
+
+  .card-body {
+    padding-top: 0;
+    padding-bottom: 0;
+    background: inherit;
+
+    .card-title {
+      color: $cardsmodel2_color;
+      font-weight: 600;
+    }
+  }
+
+
+}

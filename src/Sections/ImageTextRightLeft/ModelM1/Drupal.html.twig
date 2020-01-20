@@ -1,6 +1,8 @@
 {% set block_img_content %}
-	<div class="col-sm-6">
-		<img src="{{ img_url }}" alt="{{ img_alt }}" class="{{ img_class }}"/>
+	<div class="col-lg-6">
+		<div class="text-body image">
+			<img src="{{ img_url }}" alt="{{ img_alt }}" class="img-fluid {{ img_class }}"/>
+		</div>
 	</div>
 {% endset %}
 <section class="imagetextrightleft-modelm1">
@@ -10,14 +12,16 @@
     			{{ block_img_content }}
 			{% endif %}
 		</div>
-		<div class="row">
+		<div class="row body">
 			{% if img_before %}
-				
+				{{ block_img_content }}
 			{% endif %}
-			<div class="col-sm-6">
-				<h2 class="title">{{ title }}</h2>
-				<div class="text">{{ text }}</div>
-				<div class="button">{{ button }}</div>
+			<div class="col-lg-6">
+				<div class=" text-body {% if img_before %} left {% endif %} ">
+					<h2 class="title">{{ title }}</h2>
+					<div class="text">{{ text | raw }}</div>
+					<div class="button">{{ button }}</div>
+				</div>
 			</div>
 			{% if img_before %}{% else %}
 				{{ block_img_content }}

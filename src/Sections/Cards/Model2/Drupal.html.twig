@@ -1,0 +1,27 @@
+<section class="cardsmodel2">
+	<div class="container sectionspace">
+		<header class="row header">
+			<div class="col-sm-12">
+				<h2 class="title">{{ title }}</h2>
+				<div class="desc">{{ description | raw }}</div>
+			</div>
+		</header>
+		<div class="row">
+			{% for card in cards %}				
+				<div class="{{ card_class_block }}">
+					{% if card.link and card.link != "" %}<a href="{{ card.link }}">{% endif %}
+					<div class="card d-flex">
+						<div class="card-header  d-flex  align-items-center justify-content-center">
+							{{ card.icone | raw }}
+						</div>
+						<div class="card-body ">
+							<h5 class="card-title">{{ card.title }}</h5>
+							<div class="card-text">{{ card.text | raw }}</div>
+						</div>
+					</div>
+					{% if card.link and card.link != "" %}</a>{% endif %}
+				</div>							
+			{% endfor %}
+		</div>
+	</div>
+</section>

@@ -1,0 +1,27 @@
+<section class="cardsstepmodel1">
+	<div class="container sectionspace">
+		<header class="row header">
+			<div class="col-sm-12">
+				<h2 class="title">{{ title }}</h2>
+			</div>
+		</header>
+		<div class="row">
+			{% for card in cards %}				
+				<div class="{{ card_class_block }}">
+					{% if card.link and card.link != "" %}<a href="{{ card.link }}">{% endif %}
+					<div class="card">
+						<div class="card-header {% if loop.last %} last {% endif %}{% if loop.first %} first {% endif %} d-flex  align-items-center justify-content-center">
+							<span class="border d-inline-block circle">0{{ loop.index }}</span><svg class="svg-icon " viewbox="0 0 100 100">
+  <path class="arrow" d="M 20,0 L 30,0 L 70,50 L 30,100 L 20,100 L 60,50 L 20,0" fill="#c0f" stroke ="#fcf" stroke-width="3" stroke-linejoin="round" />
+</svg>
+						</div>
+						<div class="card-body ">
+							<div class="card-text">{{ card.text | raw }}</div>
+						</div>
+					</div>
+					{% if card.link and card.link != "" %}</a>{% endif %}
+				</div>							
+			{% endfor %}
+		</div>
+	</div>
+</section>

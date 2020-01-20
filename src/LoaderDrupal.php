@@ -11,6 +11,7 @@ use Stephane888\HtmlBootstrap\Controller\CarouselCards;
 use Stephane888\HtmlBootstrap\Controller\CallActions;
 use Stephane888\HtmlBootstrap\Controller\Comments;
 use Stephane888\HtmlBootstrap\Controller\Footers;
+use Stephane888\HtmlBootstrap\Controller\PriceLists;
 use Stephane888\HtmlBootstrap\Traits\Examples;
 use Stephane888\HtmlBootstrap\Traits\DrupalUtility;
 
@@ -123,7 +124,16 @@ class LoaderDrupal {
   }
 
   /**
-   * ff
+   * load default slider
+   */
+  public function getPriceLists($options)
+  {
+    $PriceLists = new PriceLists($this->BasePath);
+    return $PriceLists->loadFile($options);
+  }
+
+  /**
+   * Ajoute les styles.
    */
   public static function addStyle($style, $key)
   {
@@ -150,51 +160,56 @@ class LoaderDrupal {
 
   /**
    * Filtre l'affichage en function de la nom de la route.
-   * les routes ou parametres sont separés par |
+   *
    *
    * @param string $route_lits
    * @param string $listes_parameters
    * @return boolean
    */
-  public function filterByRouteName($route_lits = '', $listes_parameters = '', $list_type_node = '')
+  public function filterByRouteName($route = '', $parameter = '', $type_node = '')
   {
     $RouteName = \Drupal::routeMatch()->getRouteName();
-    $nid = \Drupal::routeMatch()->getParameter('node');
+    $node = \Drupal::routeMatch()->getParameter('node');
+    if ($node) {
+      $nid = $node->id();
+    } else {
+      $nid = '';
+    }
     $route_frontPage = "view.frontpage.page_1";
     $route_node = "entity.node.canonical";
     // strpos
-    if ($route_lits == '' || ! $route_lits)
+    if ($route == '')
       return true;
+    if (false)
+      dump([
+        $RouteName,
+        $route_node,
+        $route,
+        $parameter,
+        $nid
+      ]);
 
-    $routes = \explode('|', $route_lits);
-    foreach ($routes as $route) {
-      if ($route != '') {
-        /**
-         * page d'accuiel
-         */
-        if ($RouteName == $route_frontPage && $route_frontPage == $route) {
-          return true;
-        } /**
-         * page de nodes
-         */
-        elseif ($RouteName == $route_frontPage && $route_node == $route) {
-          /**
-           * le type de node est prioritaire.
-           * Si le type de node est definie, on ne regarde plus les paramettres.
-           * les nodes de type page, doivent utiliser les parametres.
-           * les nodes de type article, films ... doivent utiliser le type de node.
-           */
-          if ($listes_parameters != '') {
-            $parameters = \explode("|", $listes_parameters);
-            foreach ($parameters as $parameter) {
-              if ($parameter == $nid) {
-                return true;
-              }
-            }
-          }
-        }
+    /**
+     * page d'accuiel
+     */
+    if ($RouteName == $route_frontPage && $route_frontPage == $route) {
+      return true;
+    } //
+    /**
+     * page de nodes
+     */
+    elseif ($RouteName == $route_node && $route_node == $route) {
+      /**
+       * le type de node est prioritaire.
+       * Si le type de node est definie, on ne regarde plus les paramettres.
+       * les nodes de type page, doivent utiliser les parametres.
+       * les nodes de type article, films ... doivent utiliser le type de node.
+       */
+      if ($parameter == $nid) {
+        return true;
       }
     }
+
     return false;
   }
 

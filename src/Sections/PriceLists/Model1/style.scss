@@ -1,0 +1,178 @@
+$priceLists_model1_color: #3c5265;
+$priceLists_model1_lineHeight: 1.5em;
+$priceLists_model1_lineCount: 5.31;
+$priceLists_model1_bg: #cccadc;
+
+.priceLists-model1 {
+  font-size: 1.2em;
+  background: $priceLists_model1_bg;
+
+  @include media-min(DD) {
+    .modal-lg {
+      max-width: 1140px;
+    }
+  }
+
+  .modal-body {
+    padding-top: 0;
+  }
+
+  .modal-footer {
+    justify-content: space-between;
+  }
+
+  .form-control,
+  .btn {
+    border-radius: 0;
+  }
+
+  .content-bg-image {
+    background-size: auto 93%;
+  }
+
+  .transparent-bg-text {
+    color: #FFF;
+    display: flex;
+    align-items: flex-end;
+    font-size: 1.2em;
+    text-align: center;
+    justify-content: center;
+    min-height: 12em;
+    background-size: auto 140%;
+    background-position: left 55%;
+    position: relative;
+
+    &::before {
+      background-color: rgba(61, 64, 66, 0.74);
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      position: absolute;
+      display: block;
+      content: "";
+    }
+
+    >div {
+      z-index: 2;
+      position: relative;
+    }
+
+    .titre-text {
+      font-weight: 200;
+    }
+
+    @include media-min(DD) {
+      background-image: none !important;
+    }
+  }
+
+  .transparent-bg-form {
+    background-color: rgba(255, 255, 255, 0.95);
+    padding-top: 1rem;
+  }
+
+  .sectionspace {
+    padding-top: $margin_top;
+    padding-bottom: $margin_bottom;
+    overflow: hidden;
+
+    @include media-min(DD) {
+      padding-top: $margin_top * 1.5;
+      padding-bottom: $margin_bottom * 1.5;
+    }
+  }
+
+  .header {
+    text-align: center;
+
+    .title {
+      @include media-min(DD) {
+        font-size: 2.5em;
+      }
+
+      @include media-min(M) {
+        font-size: 3em;
+      }
+
+      @include media-min(LM) {
+        font-size: 4em;
+      }
+
+      font-weight: 900;
+      line-height: 100%;
+      margin-bottom: $margin_bottom/2;
+
+      @include media-min(DD) {
+        margin-bottom: $margin_bottom;
+      }
+
+      color:$priceLists_model1_color;
+    }
+
+    .desc {
+      margin-bottom: $margin_top;
+    }
+  }
+
+  .infos {
+    margin-right: 1em;
+    font-weight: 500;
+    font-size: 0.8em;
+
+    @include media-min(DD) {
+      font-size: 1em;
+    }
+  }
+
+  .logo-whatsapp {
+    width: 50px;
+    height: 50px;
+  }
+
+
+  .priceList1 {
+    @include priceList();
+  }
+
+  .priceList2 {
+    @include priceList($background_bg:#3c6547);
+  }
+
+  .priceList3 {
+    @include priceList($background_bg:#a73493);
+  }
+
+  .svg-promo {
+    position: absolute;
+    top: 15px;
+    z-index: 5;
+    left: 0;
+    transform: skew(0deg, -3deg);
+    font-size: 0.8em;
+
+    @include media-min(XS) {
+      font-size: 1em;
+    }
+
+  }
+
+  .svg-promo-g {
+    overflow: hidden;
+    text-anchor: middle;
+    font-size: 3.5em;
+    font-weight: 900;
+    font-family: initial;
+    left: 0;
+    transform: translateX(-140%);
+
+    @include media-min(XS) {
+      transform: translateX(-70px);
+    }
+  }
+
+  .svg-promo-text {
+    fill: #FFF;
+    font-weight: 900
+  }
+}

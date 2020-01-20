@@ -1,0 +1,134 @@
+<section class="priceLists-model1">
+	<div class="container sectionspace">
+		<header class="row header">
+			<div class="col-sm-12">
+				<h2 class="title">{{ title }}</h2>
+			</div>
+		</header>
+		<div class="row">
+			{% for card in cards %}				
+				<div class="{{ card_class_block }} justify-content-center d-flex">					
+					<div class="card priceList{{ loop.index }}">
+						{% if card.show_price_promo %}
+					<svg class="svg-promo" width="390" height="75" viewBox="0 0 100 100">
+<title>PROMO</title>
+
+<g x="0" class="svg-promo-g">
+<defs>
+<mask id="textMask">
+<text class="svg-promo-text" x="175" y="55">PROMO</text>
+</mask>
+<filter id="innerShadow" x="-20%" y="-20%" width="140%" height="140%">
+<feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"></feGaussianBlur>
+<feOffset in="blur" dx="2.5" dy="2.5"></feOffset>
+</filter>
+</defs>
+<g mask="url(#textMask)">
+<rect x="0" y="0" width="350" height="75" style="fill: red;"></rect>
+<text style="fill: tomato;filter: url(#innerShadow);stroke: #ffffff;"
+							x="175" y="55">PROMO</text>
+</g>
+</g>
+</svg>
+					{% endif %}
+						<div class="card-header d-flex flex-column justify-content-center">
+							<svg class="icon  icon--plus-1" viewbox="0 0 100 100" preserveAspectRatio="none">    
+                                    <path class="arrow" d="M 0,0 L 20,0 L 20,80 L 0,80" fill="#0cf" stroke ="#0cf" stroke-width="0" stroke-linejoin="round" />
+                                    <path class="arrow ombre-left" d="M 0,80 L 20,80 L 10,100" fill="#00c" stroke ="#0cf" stroke-width="0" stroke-linejoin="round" />
+                                    <path class="arrow " d="M 19,0 L 100,0 L 95,40  L 100,80 L 19,80" fill="#0cf" stroke ="#0cf" stroke-width="0" stroke-linejoin="round" />
+                            </svg>
+							<h5 class="title-small">{{ card.title_small }}</h5>
+							<h2 class="title">{{ card.title }}</h2>
+						</div>
+						<div class="card-body ">
+							<div class="body-header">
+								
+								{% if card.show_price_promo %}<h5 class="card-title price-promo">{{ card.price_promo }}</h5>{% endif %}
+								<h5 class="card-title price {% if card.show_price_promo %}barre{% endif %}">{{ card.price }}</h5>
+							    {% if card.price_suffix and card.price_suffix != '' %}<h5 class="card-title price-suffix ">{{ card.price_suffix }}</h5>{% endif %}
+							</div>
+							<div class="card-text">
+								{% for list in card.lists %}
+									<div class="list d-flex align-items-center ">
+										<div class="icone">{{ list.icone | raw }}</div>
+										<div class="text">
+											<strong>{{ list.title }}</strong>
+											<div class="explication">{{ list.text | raw}}</div>
+										</div>
+									</div>
+								{% endfor %}
+							</div>
+							<div class="actions pb-1 text-center">
+								<button type="button" class="btn btn-outline-success pricelists-model1-button" data-toggle="modal" data-target="#pricelists-model1"  data-title-small="{{ card.title_small }}" data-title="{{ card.title }}"> <i class="fas fa-cart-arrow-down pr-1"></i>  Commander </button>
+							</div>
+						</div>
+					</div>
+				</div>							
+			{% endfor %}
+		</div>
+	</div>
+
+<!-- Modal -->
+<form class="" >
+<div class="modal fade" id="pricelists-model1" tabindex="-1" role="dialog" aria-labelledby="pricelists-model1Title" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content" >
+      <div class="modal-header">
+        <h5 class="modal-title" id="pricelists-model1Title">...</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      	<input type="hidden" name="pack_selectionner" class="pack_selectionner" >
+  		<div class="row content-bg-image" style="background-image:url({{ mentor_url }})" >
+  			<div class="col-lg-5 transparent-bg-text" style="background-image:url({{ mentor_url }})">
+      			<div>
+      				<h2 class="titre-text">Votre projet <br>d'e-commerce ...</h2>
+      			</div>
+  			</div>
+  			<div class="col-lg-7 transparent-bg-form">
+  				<div class="row">
+  					<div class="col-lg-6">
+  						<div class="form-group">
+                           <label for="inputAddress">Nom</label>
+                           <input type="text" class="form-control" id="inputAddress" placeholder="">
+                        </div>
+                        <div class="form-group">
+                           <label for="inputAddress">Email</label>
+                           <input type="email" class="form-control" id="inputAddress" placeholder="">
+                        </div>
+  					</div>
+  					<div class="col-lg-6">
+  						<div class="form-group">
+                           <label for="inputAddress">Prénom</label>
+                           <input type="text" class="form-control" id="inputAddress" placeholder="">
+                        </div>
+                        <div class="form-group">
+                           <label for="inputAddress">Téléphone</label>
+                           <input type="text" class="form-control" id="inputAddress" placeholder="">
+                        </div>
+  					</div>
+  					<div class="col-lg-12">
+  						<div class="form-group">
+                         <div class="form-group">
+                           <label for="exampleFormControlTextarea1">Parlez nous de votre projet</label>
+                           <textarea class="form-control" id="exampleFormControlTextarea1" rows="7"></textarea>                           
+                         </div>
+  					</div>
+  				</div>
+  			</div>
+  		</div>      
+  
+      </div>
+      <div class="modal-footer">
+      	<div class="infos d-flex flex-column flex-lg-row justify-content-center align-items-center">
+      		<img src="{{ whatsapp_url }}" alt="" class="logo-whatsapp"> <span>+237 694 900 622 / +237 696 436 433</span>
+      	</div>
+        <button type="button" class="btn btn-primary"><i class="fas fa-check active pr-2"></i> Souscrire</button>
+      </div>
+    </div>
+  </div>
+</div>
+</form>
+</section>

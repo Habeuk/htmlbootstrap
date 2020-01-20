@@ -1,1 +1,104 @@
-.imagetextrightleft-modelm1 {}
+.imagetextrightleft-modelm1 {
+  $dacalage_imagetextrightleft_modelm1: 150px;
+  $magetextrightleft_modelm1_color: #3c5265;
+
+
+  >.container {
+    max-width: 100% !important;
+
+    .row.body {
+      >div:first-child {
+        background: $magetextrightleft_modelm1_color;
+      }
+
+      >div:last-child {
+        background: darken($magetextrightleft_modelm1_color, 30);
+        @include linear-gradient(#ac32e4, darken($magetextrightleft_modelm1_color, 10));
+      }
+    }
+  }
+
+  .text-body {
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: $margin_top;
+    margin-bottom: $margin_bottom;
+    color: #fff !important;
+
+    @include media-min(DD) {
+      margin-right: $dacalage_imagetextrightleft_modelm1 - 60px;
+      margin-top: $margin_top * 2;
+      margin-bottom: $margin_bottom * 2;
+    }
+
+    @include media-min(M) {
+      margin-right: $dacalage_imagetextrightleft_modelm1 - 30px;
+    }
+
+    @include media-min(LM) {
+      margin-right: $dacalage_imagetextrightleft_modelm1;
+    }
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 1.2em;
+
+
+    .title {
+      @include media-min(DD) {
+        font-size: 2.5em;
+      }
+
+      @include media-min(M) {
+        font-size: 3em;
+      }
+
+      @include media-min(LM) {
+        font-size: 4em;
+      }
+
+      font-weight: 900;
+      line-height: 100%;
+      margin-bottom: 30px;
+    }
+
+    .text {
+      text-align: justify;
+    }
+  }
+
+  .text-body.left {
+    margin-left: 0;
+    margin-right: auto;
+  }
+
+  .text-body.image {
+    margin: 0;
+    max-width: 100%;
+    padding-top: $margin_top / 2;
+    padding-bottom: $margin_bottom / 2;
+    height: 100%;
+
+    img {
+      @include media-min(DD) {
+        width: calc(100% + #{$dacalage_imagetextrightleft_modelm1} - 60px);
+        max-width: calc(100% + #{$dacalage_imagetextrightleft_modelm1} - 60px);
+        transform: translateX(-$dacalage_imagetextrightleft_modelm1 + 60px);
+      }
+
+      @include media-min(M) {
+        width: calc(100% + #{$dacalage_imagetextrightleft_modelm1} - 30px);
+        max-width: calc(100% + #{$dacalage_imagetextrightleft_modelm1} - 30px);
+        transform: translateX(-$dacalage_imagetextrightleft_modelm1 + 30px);
+      }
+
+      @include media-min(LM) {
+        width: calc(100% + #{$dacalage_imagetextrightleft_modelm1});
+        max-width: calc(100% + #{$dacalage_imagetextrightleft_modelm1});
+        transform: translateX(-$dacalage_imagetextrightleft_modelm1);
+      }
+    }
+  }
+}

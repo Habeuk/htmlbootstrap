@@ -4,8 +4,9 @@ namespace Stephane888\HtmlBootstrap\Controller;
 use Stephane888\HtmlBootstrap\LoaderDrupal;
 use Stephane888\HtmlBootstrap\Traits\Portions;
 use Stephane888\HtmlBootstrap\Entity\ImageStyleTheme;
+use Stephane888\HtmlBootstrap\ThemeUtility;
 
-class Cards {
+class Cards implements ControllerInterface {
   use Portions;
 
   protected $BasePath = '';
@@ -45,11 +46,11 @@ class Cards {
     if (isset($options['type'])) {
       if ($options['type'] == 'IconeModelFlat') {
         if (empty($cards)) {
-          $number = (isset($options['nombre_item'])) ? $options['nombre_item'] : 8;
+          $number = 8;
           $cards = $this->loadDefaultData($number);
         }
         $fileName = \file_get_contents($this->BasePath . '/Sections/Cards/IconeModelFlat/Drupal.html.twig');
-        LoaderDrupal::addStyle(\file_get_contents($this->BasePath . '/Sections/Cards/IconeModelFlat/style.scss'), 'IconeModelFlat');
+        LoaderDrupal::addStyle(\file_get_contents($this->BasePath . '/Sections/Cards/IconeModelFlat/style.scss'), 'Cards-IconeModelFlat');
         return [
           '#type' => 'inline_template',
           '#template' => $fileName,
@@ -64,7 +65,7 @@ class Cards {
           $cards = $this->loadDefaultData__PostsVerticalM1($number);
         }
         $fileName = \file_get_contents($this->BasePath . '/Sections/Cards/PostsVerticalM1/Drupal.html.twig');
-        LoaderDrupal::addStyle(\file_get_contents($this->BasePath . '/Sections/Cards/PostsVerticalM1/style.scss'), 'PostsVerticalM1');
+        LoaderDrupal::addStyle(\file_get_contents($this->BasePath . '/Sections/Cards/PostsVerticalM1/style.scss'), 'Cards-PostsVerticalM1');
         return [
           '#type' => 'inline_template',
           '#template' => $fileName,
@@ -72,8 +73,86 @@ class Cards {
             'cards' => $cards
           ]
         ];
+      } elseif ($options['type'] == 'CardsModel2') {
+        /**
+         * get class of blocs
+         */
+        if (isset($options['title'])) {
+          $title = $options['title'];
+        } else {
+          $title = "Future on the producty";
+        }
+        /**
+         * get class of description
+         */
+        if (isset($options['description'])) {
+          $description = $options['description'];
+        } else {
+          $faker = \Faker\Factory::create();
+          $faker->seed(12956812258);
+          $description = $faker->unique()->realText(rand(100, 110));
+        }
+        if (empty($cards)) {
+          $number = (isset($options['nombre_item'])) ? $options['nombre_item'] : 4;
+          $cards = $this->loadDefaultData($number);
+          $card_class_block = "col-lg-6";
+        }
+        $fileName = \file_get_contents($this->BasePath . '/Sections/Cards/Model2/Drupal.html.twig');
+        LoaderDrupal::addStyle(\file_get_contents($this->BasePath . '/Sections/Cards/Model2/style.scss'), 'Cards-Model2');
+        return [
+          '#type' => 'inline_template',
+          '#template' => $fileName,
+          '#context' => [
+            'cards' => $cards,
+            'title' => $title,
+            'description' => $description,
+            'card_class_block' => $card_class_block
+          ]
+        ];
+      } elseif ($options['type'] == 'StepModel1') {
+        /**
+         * Get class of title
+         */
+        if (isset($options['title'])) {
+          $title = $options['title'];
+        } else {
+          $title = "Imaginez, Créez, Vendez";
+        }
+        if (empty($cards)) {
+          $number = (isset($options['nombre_item'])) ? $options['nombre_item'] : 4;
+          $cards = $this->loadDefaultData_StepModel1($number);
+          $card_class_block = "col-lg-3";
+        }
+        $fileName = \file_get_contents($this->BasePath . '/Sections/Cards/StepModel1/Drupal.html.twig');
+        LoaderDrupal::addStyle(\file_get_contents($this->BasePath . '/Sections/Cards/StepModel1/style.scss'), 'Cards-StepModel1');
+        return [
+          '#type' => 'inline_template',
+          '#template' => $fileName,
+          '#context' => [
+            'cards' => $cards,
+            'title' => $title,
+            'card_class_block' => $card_class_block
+          ]
+        ];
       }
     }
+  }
+
+  /**
+   *
+   * @param number $number
+   * @return string[][]
+   */
+  protected function loadDefaultData_StepModel1($number = 3)
+  {
+    $cards = [];
+    $faker = \Faker\Factory::create();
+    for ($i = 0; $i < $number; $i ++) {
+      $cards[$i] = [
+        'text' => $faker->unique()->realText(rand(70, 90))
+      ];
+    }
+    return $cards;
   }
 
   /**
@@ -81,7 +160,7 @@ class Cards {
    */
   protected function loadDefaultData__PostsVerticalM1($number = 3)
   {
-    $image_style = 'thumbnail';
+    // $image_style = 'thumbnail';
     // $attributes = \Drupal\image\Entity\ImageStyle::load($image_style)->buildUrl();
     $imgs = $this->defaultImg();
     $cards = [];
@@ -128,6 +207,114 @@ class Cards {
       ];
     }
     return $cards;
+  }
+
+  public static function listModels()
+  {
+    return [
+      'IconeModelFlat' => 'IconeModelFlat',
+      'PostsVerticalM1' => 'PostsVerticalM1',
+      'CardsModel2' => 'CardsModel2',
+      'StepModel1' => 'StepModel1'
+    ];
+  }
+
+  public static function loadFields($model, &$form, $options)
+  {
+    $ThemeUtility = new ThemeUtility();
+
+    if ($model == 'CardsModel2') {
+      /**
+       * le champs titre
+       */
+      $name = 'title';
+      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $ThemeUtility->addTextfieldTree($name, $form, 'Titre', $FieldValue);
+      /**
+       * le champs description
+       */
+      $name = 'description';
+      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $ThemeUtility->addTextareaTree($name, $form, 'Description', $FieldValue);
+      /**
+       * class card_class_block
+       */
+      $name = 'card_class_block';
+      $FieldValue = (! empty($options[$name])) ? $options[$name] : 'col-lg-6';
+      $ThemeUtility->addTextfieldTree($name, $form, 'Class colonne bootstrap', $FieldValue);
+      /**
+       * le champs nombre_item
+       */
+      $name = 'nombre_item';
+      $nombre_item = $FieldValue = (! empty($options[$name])) ? $options[$name] : 4;
+      $ThemeUtility->addTextfieldTree($name, $form, 'Nombre de blocs', $FieldValue);
+      $container = 'cards';
+
+      for ($i = 0; $i < $nombre_item; $i ++) {
+        $form[$container][$i] = [
+          '#type' => 'details',
+          '#title' => 'Blocs : ' . ($i + 1),
+          '#open' => false
+        ];
+        /**
+         * le champs titre
+         */
+        $name = 'title';
+        $FieldValue = (! empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
+        $ThemeUtility->addTextfieldTree($name, $form[$container][$i], 'Titre', $FieldValue);
+        /**
+         * le champs text
+         */
+        $name = 'text';
+        $FieldValue = (! empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
+        $ThemeUtility->addTextareaTree($name, $form[$container][$i], 'Description ', $FieldValue);
+        /**
+         * le champs icone
+         */
+        $name = 'icone';
+        $FieldValue = (! empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
+        $ThemeUtility->addTextfieldTree($name, $form[$container][$i], 'Icone fontawesome', $FieldValue);
+        /**
+         * le champs link
+         */
+        $name = 'link';
+        $FieldValue = (! empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
+        $ThemeUtility->addTextfieldTree($name, $form[$container][$i], 'Lien vers le contenu', $FieldValue);
+      }
+    } elseif ($model == 'StepModel1') {
+      /**
+       * le champs titre
+       */
+      $name = 'title';
+      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $ThemeUtility->addTextfieldTree($name, $form, 'Titre', $FieldValue);
+      /**
+       * class card_class_block
+       */
+      $name = 'card_class_block';
+      $FieldValue = (! empty($options[$name])) ? $options[$name] : 'col-lg-3';
+      $ThemeUtility->addTextfieldTree($name, $form, 'Class colonne bootstrap', $FieldValue);
+      /**
+       * Le champs nombre_item
+       */
+      $name = 'nombre_item';
+      $nombre_item = $FieldValue = (! empty($options[$name])) ? $options[$name] : 4;
+      $ThemeUtility->addTextfieldTree($name, $form, 'Nombre de blocs', $FieldValue);
+      $container = 'cards';
+      for ($i = 0; $i < $nombre_item; $i ++) {
+        $form[$container][$i] = [
+          '#type' => 'details',
+          '#title' => 'Blocs : ' . ($i + 1),
+          '#open' => false
+        ];
+        /**
+         * Le champs text
+         */
+        $name = 'text';
+        $FieldValue = (! empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
+        $ThemeUtility->addTextareaTree($name, $form[$container][$i], 'Description ', $FieldValue);
+      }
+    }
   }
 
   protected function defaultIcone()

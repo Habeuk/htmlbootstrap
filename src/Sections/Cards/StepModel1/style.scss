@@ -1,0 +1,166 @@
+$cardsmodel2_color: #3c5265;
+$cardsmodel2_lineHeight: 1.5em;
+$cardsmodel2_lineCount: 5.31;
+$cardsmodel2_bg: #eee;
+
+.cardsstepmodel1 {
+  font-size: 1.2em;
+  background: $cardsmodel2_bg;
+
+  .sectionspace {
+    padding-top: $margin_top;
+    padding-bottom: $margin_bottom;
+
+    @include media-min(DD) {
+      padding-top: $margin_top * 1.5;
+      padding-bottom: $margin_bottom * 1.5;
+    }
+  }
+
+  .header {
+    text-align: center;
+
+    .title {
+      @include media-min(DD) {
+        font-size: 2.5em;
+      }
+
+      @include media-min(M) {
+        font-size: 3em;
+      }
+
+      @include media-min(LM) {
+        font-size: 4em;
+      }
+
+      font-weight: 900;
+      line-height: 100%;
+      margin-bottom: $margin_bottom/2;
+
+      @include media-min(DD) {
+        margin-bottom: $margin_bottom;
+      }
+
+      color:$cardsmodel2_color;
+    }
+
+    .desc {
+      margin-bottom: $margin_top;
+    }
+  }
+
+  .card {
+    border: none;
+    color: $text_normal;
+    margin-bottom: $margin_top*0.7;
+    background: #FFF;
+
+    @include media-min(DD) {
+      height: 100%;
+      margin-bottom: 0;
+    }
+
+    .circle {
+      padding: 0;
+      border-radius: 50%;
+      width: 1.84em;
+      height: 1.84em;
+      line-height: 100%;
+      display: flex !important;
+      justify-content: center;
+      align-items: center;
+      border-color: $text_normal !important;
+      border-width: 3px !important;
+      z-index: 2;
+      background: #FFF;
+    }
+
+    .svg-icon {
+      height: 25px;
+      width: 25px;
+      position: absolute;
+      right: calc(0.5em - 9px);
+
+      >path {
+        stroke: #000;
+        fill: #000;
+      }
+    }
+  }
+
+  .card-header {
+    font-size: 3em;
+    background: transparent;
+    border: none;
+    padding: 0.5em;
+    border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0;
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: auto;
+      bottom: auto;
+      width: 0.8em;
+      left: 0.5em;
+      height: 3px;
+      background: $text_normal;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: auto;
+      bottom: auto;
+      width: 0.8em;
+      right: 0.5em;
+      height: 3px;
+      background: $text_normal;
+    }
+  }
+
+  .card-header.first {
+    color: $link_color;
+
+    .circle {
+      border-color: $link_color !important;
+    }
+
+    .svg-icon {
+      >path {
+        stroke: $link_color;
+        fill: $link_color;
+      }
+    }
+
+    &::after {
+      background: $link_color;
+    }
+
+    &::before {
+      display: none;
+    }
+  }
+
+  .card-header.last {
+    .svg-icon {
+      display: none;
+    }
+
+    &::after {
+      display: none;
+    }
+  }
+
+  .card-body {
+    padding-top: 0;
+    background: inherit;
+
+    .card-title {
+      color: $cardsmodel2_color;
+      font-weight: 600;
+    }
+  }
+
+
+}
