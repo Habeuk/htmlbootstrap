@@ -1,0 +1,29 @@
+{% set block_img_content %}
+	<div class="col-lg-6">
+		<div class="text-body image">
+			<img src="{{ img.img_url }}" alt="{{ img.img_alt }}" class="img-fluid {{ img.img_class }}"/>
+		</div>
+	</div>
+{% endset %}
+<section class="imagetextrightleft-modelm2" style="background-image: url('{{ background_url }}');">
+	<div class="container">
+		<div class="row body">
+			{% if img_before %}
+				{{ block_img_content }}
+			{% endif %}
+			<div class="col-lg-6 d-flex align-items-center justify-content-center col-text">
+				 <svg class="  " viewbox="0 0 100 100" height="100%" width="100%" preserveAspectRatio="none">       
+                    <path class="arrow" d="M 0,0 L 70,0 L 100,50  L 70,100 L 0,100" fill="#0cf" stroke ="#0cf" stroke-width="0" stroke-linejoin="round" />
+                  </svg>
+				<div class=" text-body {% if img_before %} left {% endif %} ">
+					<div class="sup_title">{{ sup_title  }}</div>
+					<h2 class="title">{{ title }}</h2>					
+					<div class="button"><a href="#" class="btn btn-success">{{ button }}</a></div>
+				</div>
+			</div>
+			{% if img_before %}{% else %}
+				{{ block_img_content }}
+			{% endif %}
+		</div>
+	</div>
+</section>

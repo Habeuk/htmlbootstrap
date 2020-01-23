@@ -130,11 +130,15 @@ class PriceLists implements ControllerInterface {
         $name = 'price_suffix';
         $FieldValue = (! empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : 'par an';
         $ThemeUtility->addTextfieldTree($name, $form[$container][$i], 'suffixe ', $FieldValue);
+        // dump($options[$container][$i][$lists]);
+        $options[$container][$i][$lists] = static::RebuildIndexInt($options[$container][$i][$lists]);
 
         for ($j = 0; $j < $nombre_list; $j ++) {
+          $name = 'title';
+          $label = (! empty($options[$container][$i][$lists][$j][$name])) ? $options[$container][$i][$lists][$j][$name] : '';
           $form[$container][$i][$lists][$j] = [
             '#type' => 'details',
-            '#title' => 'Option : ' . ($j + 1),
+            '#title' => 'Option : ' . $label,
             '#open' => false
           ];
           /**
@@ -164,6 +168,15 @@ class PriceLists implements ControllerInterface {
         }
       }
     }
+  }
+
+  public static function RebuildIndexInt($options)
+  {
+    $new_options = [];
+    foreach ($options as $val) {
+      $new_options[] = $val;
+    }
+    return $new_options;
   }
 
   protected function loadModelM1($options)

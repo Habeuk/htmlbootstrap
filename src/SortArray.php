@@ -2,6 +2,7 @@
 namespace Stephane888\HtmlBootstrap;
 
 use Drupal\Component\Utility\SortArray as DrupalSortArray;
+use Drupal\debug_log\debugLog;
 
 class SortArray {
 
@@ -10,7 +11,7 @@ class SortArray {
     return DrupalSortArray::sortByKeyInt($a, $b, 'weight');
   }
 
-  public static function _sortFieldOfTheme(&$values, $form_state, $theme_name, $parent = true)
+  public static function _sortFieldOfThemeAndSave(&$values, $form_state, $theme_name, $parent = true)
   {
     foreach ($values as $key => $value) {
       /**
@@ -25,7 +26,7 @@ class SortArray {
             /**
              * on odonne les enfants
              */
-            static::_sortFieldOfTheme($value, $form_state, $theme_name, false);
+            static::_sortFieldOfThemeAndSave($value, $form_state, $theme_name, false);
             uasort($value, [
               SortArray::class,
               'sortByWeightPropertyCustom'
@@ -35,10 +36,13 @@ class SortArray {
              * Ne fonctionne pas pour les themes.
              */
             // $form_state->set($key, $value);
-            $config = \Drupal::service('config.factory')->getEditable($theme_name . '.settings');
+            $config = \Drupal::configFactory()->getEditable($theme_name . '.settings');
             $config->set($key, $value);
             $config->save();
-            // dump($config->get($key));
+            if ('theme_builder_pricelists' == $key) {
+              debugLog::logs($config->get($key), 'Config_' . $key, 'dump', true);
+            }
+            // debugLog::logs($config->get($key), 'Config_' . $key, 'dump', true);
           }
         }
       } else {
@@ -49,7 +53,7 @@ class SortArray {
           /**
            * on ordonne les enfants
            */
-          static::_sortFieldOfTheme($value, $form_state, $theme_name, false);
+          static::_sortFieldOfThemeAndSave($value, $form_state, $theme_name, false);
 
           uasort($value, [
             SortArray::class,

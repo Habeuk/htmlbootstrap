@@ -312,7 +312,7 @@ class Cards implements ControllerInterface {
          */
         $name = 'text';
         $FieldValue = (! empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
-        $ThemeUtility->addTextareaTree($name, $form[$container][$i], 'Description ', $FieldValue);
+        $ThemeUtility->addTextareaSimpleTree($name, $form[$container][$i], 'Description ', $FieldValue);
       }
     }
   }

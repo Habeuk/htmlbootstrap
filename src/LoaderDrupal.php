@@ -12,6 +12,7 @@ use Stephane888\HtmlBootstrap\Controller\CallActions;
 use Stephane888\HtmlBootstrap\Controller\Comments;
 use Stephane888\HtmlBootstrap\Controller\Footers;
 use Stephane888\HtmlBootstrap\Controller\PriceLists;
+use Stephane888\HtmlBootstrap\Controller\StylePage;
 use Stephane888\HtmlBootstrap\Traits\Examples;
 use Stephane888\HtmlBootstrap\Traits\DrupalUtility;
 
@@ -129,6 +130,15 @@ class LoaderDrupal {
   public function getPriceLists($options)
   {
     $PriceLists = new PriceLists($this->BasePath);
+    return $PriceLists->loadFile($options);
+  }
+
+  /**
+   * load default StylePage
+   */
+  public function getStylePage($options)
+  {
+    $PriceLists = new StylePage($this->BasePath);
     return $PriceLists->loadFile($options);
   }
 

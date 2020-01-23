@@ -1,0 +1,45 @@
+section.section {
+  header.header {
+    margin-bottom: $margin_bottom*0.6;
+    position: relative;
+    font-size: 1em;
+    text-align: center;
+
+    .title {
+      font-size: 3em;
+    }
+
+    .desc {
+      font-size: 0.9em;
+      max-width: 500px;
+      display: inline-block;
+
+      @include media-min(LM) {
+        font-size: 1em;
+      }
+    }
+
+    &::before {
+      position: absolute;
+      top: auto;
+      bottom: -20px;
+      left: calc(50% - 15px);
+      right: auto;
+      width: 30px;
+      height: 1px;
+      background-color: #545252;
+      content: "";
+    }
+  }
+}
+
+section.cardsmodel2 {
+  padding-top: 0.1em;
+  padding-bottom: 0.1em;
+  background: rgb(229, 230, 232);
+
+  .card-body {
+    padding-top: 1.2em;
+    padding-bottom: 1.2em;
+  }
+}

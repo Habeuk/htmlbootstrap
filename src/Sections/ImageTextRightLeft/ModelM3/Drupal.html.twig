@@ -1,0 +1,46 @@
+{% set block_img_content %}
+	<div class="col-lg-6">
+		<div class="text-body image">
+			<div class="ctr-img-main ml-auto">
+				<img src="{{ img.img_url }}" alt="{{ img.img_alt }}" class="img-fluid main-img {{ img.img_class }}"/>
+			</div>
+			<div class="img-bottom">
+				<img src="{{ img_small.img_url }}" alt="{{ img_small.img_alt }}" class="img-fluid {{ img_small.img_class }}"/>
+			</div>
+			<div class="sup_title">{{ sup_title | raw }}</div>
+		</div>
+	</div>
+{% endset %}
+<section class="section imagetextrightleft-modelm3" >
+	<div class="container sectionspace">
+		<header class="row header">
+			<div class="col-sm-12">
+				<h2 class="title">{{ header_title }}</h2>
+				<div class="desc">{{ header_description | raw }}</div>
+			</div>
+		</header>
+		<div class="row body">
+			{% if img_before %}
+				{{ block_img_content }}
+			{% endif %}
+			<div class="col-lg-6 d-flex col-text">				 
+				<div class=" text-body {% if img_before %} left {% endif %} ">
+					<div class="lists">
+						{% for list in lists %}	
+							<div class="list d-flex align-items-center">
+								<i class="fas fa-check active"></i> <div>{{ list.text }}</div>
+							</div>						
+						{% endfor %}
+					</div>
+					{% if title and title != '' %}<h2 class="title">{{ title }}</h2>{% endif %}	
+					<div class="desc">{{ description | raw }}</div>									
+					{% if button and button != '' %}<div class="button"><a href="#" class="btn btn-success">{{ button }}</a></div>{% endif %}	
+					
+				</div>
+			</div>
+			{% if img_before %}{% else %}
+				{{ block_img_content }}
+			{% endif %}
+		</div>
+	</div>
+</section>

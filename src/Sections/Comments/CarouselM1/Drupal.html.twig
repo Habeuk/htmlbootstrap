@@ -1,4 +1,4 @@
-<section class="comments-carouselm1">
+<section class="section comments-carouselm1">
 	<div class="container sectionspace">
 		{% if title %}
 		<header class="header text-center d-flex justify-content-center align-items-center" >
@@ -19,7 +19,7 @@
 								{{ card.text }}
 							</div>
 							<div>
-								<a href="{{ link_user }}"><span class="name">{{ card.name }}</span></a>, <span class="function d-inline-block pl-2">{{ card.function }}</span> 
+								<a href="{{ card.link_user }}"><span class="name">{{ card.name }}</span></a>, <span class="function d-inline-block pl-2">{{ card.function }}</span> 
 							</div>
 						</div>
 					</div>			

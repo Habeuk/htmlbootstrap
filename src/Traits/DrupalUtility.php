@@ -6,6 +6,21 @@ trait DrupalUtility {
 
   use Portions;
 
+  public function loadStylePage(&$options, $group, $theme_name, $display)
+  {
+    if ($display['provider']) {
+      // $options = \array_merge($options, $display['options']);
+      ;
+    }
+  }
+
+  public function loadComments(&$options, $group, $theme_name, $display)
+  {
+    if ($display['provider'] == 'custom') {
+      $options = \array_merge($options, $display['options']);
+    }
+  }
+
   public function loadImageTextRightLeftDatas(&$options, $group, $theme_name, $display)
   {
     if ($display['provider'] == 'custom') {
