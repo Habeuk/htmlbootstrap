@@ -40,6 +40,8 @@ $color_info: rgba(255, 99, 71, 1);
 $color_breadcrumb: #e9ecef;
 $border-color:#ccc;
 
+
+
 /**
 * la police
 */
@@ -391,7 +393,7 @@ $border-color:#ccc;
 }
 
 /**
- *
+ * Pricelist
  */
 @mixin priceList($background_bg:#3c5265) {
 
@@ -401,6 +403,7 @@ $border-color:#ccc;
   margin-bottom: 30px;
   max-width: 350px;
   width: 100%;
+
 
 
   .card-header {
@@ -425,6 +428,7 @@ $border-color:#ccc;
       width: 110%; //114%;
       z-index: -1;
       border-radius: 8px 0 0 0;
+      max-width: 600px;
 
       >path {
         fill: $background_bg;
@@ -445,6 +449,7 @@ $border-color:#ccc;
       margin: 0;
       line-height: 100%;
       margin-bottom: 10px;
+      color: #FFF;
     }
 
     .title {
@@ -453,6 +458,7 @@ $border-color:#ccc;
       margin: 0;
       line-height: 100%;
       margin-bottom: 5px;
+      color: #FFF;
     }
   }
 
@@ -569,3 +575,41 @@ $border-color:#ccc;
     }
   }
 }
+
+/**
+ * Card rotation
+ */
+
+@mixin card_rotation($background_bg:#3c5265) {
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  //overflow: hidden;
+  @include rotatePerpective($width: 292px, $height: 400px, $time: 0.5s);
+
+
+  .card-header {
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    max-height: 400px;
+    overflow: hidden;
+
+    img {
+      max-width: 350px;
+    }
+  }
+
+  .card-body {
+    overflow: hidden;
+  }
+
+
+
+  .card-text {
+    padding-bottom: 1.5em;
+  }
+}
+
+/// include mixins
+@import "mixins/transform.scss";

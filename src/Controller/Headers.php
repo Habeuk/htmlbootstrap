@@ -1,12 +1,11 @@
 <?php
 namespace Stephane888\HtmlBootstrap\Controller;
 
-use Stephane888\HtmlBootstrap\Traits\Examples;
 use Stephane888\HtmlBootstrap\Traits\Portions;
 use Stephane888\HtmlBootstrap\LoaderDrupal;
+use Stephane888\HtmlBootstrap\ThemeUtility;
 
-class Headers {
-  use Examples;
+class Headers implements ControllerInterface {
   use Portions;
 
   protected $BasePath = '';
@@ -16,11 +15,30 @@ class Headers {
     $this->BasePath = $path;
   }
 
+  public static function loadFields($model, &$form, $options)
+  {
+    $ThemeUtility = new ThemeUtility();
+  }
+
+  /**
+   *
+   * @return array
+   */
+  public static function listModels()
+  {
+    return [
+      'logo_center' => 'logo_center',
+      'LogoLeftMenu' => 'LogoLeftMenu',
+      'LogoLeftMenuRight_M1' => 'LogoLeftMenuRight_M1',
+      'RxLeftMenuRight_M1' => 'RxLeftMenuRight_M1'
+    ];
+  }
+
   /**
    * Load file headers and pass variable.
    * Using default template 'inline_template'
    */
-  public function loadHeaderFile($options)
+  public function loadFile($options)
   {
     if (isset($options['type']) && $options['type'] == 'logo_center') {
       /**
@@ -56,6 +74,10 @@ class Headers {
           'rx_logo' => $rx_logo
         ]
       ];
+    } elseif (isset($options['type']) && $options['type'] == 'LogoLeftMenuRight_M1') {
+      return $this->load__LogoLeftMenuRight_M1($options);
+    } elseif (isset($options['type']) && $options['type'] == 'RxLeftMenuRight_M1') {
+      return $this->load__RxLeftMenuRight_M1($options);
     } elseif (isset($options['type']) && $options['type'] == 'LogoLeftMenu') {
       /**
        * Bloc branding
@@ -90,5 +112,59 @@ class Headers {
         ]
       ];
     }
+  }
+
+  protected function load__RxLeftMenuRight_M1($options)
+  {
+    /**
+     * Bloc branding
+     */
+    $branding = null;
+    if (isset($options['branding'])) {
+      $branding = $options['branding'];
+    }
+    /**
+     * Bloc main menu.
+     */
+    $main_menu = null;
+    if (isset($options['main_menu'])) {
+      $main_menu = $options['main_menu'];
+    }
+    LoaderDrupal::addStyle(\file_get_contents($this->BasePath . '/Sections/Headers/RxLeftMenuRightM1/style.scss'), 'Header-RxLeftMenuRightM1');
+    return [
+      '#type' => 'inline_template',
+      '#template' => \file_get_contents($this->BasePath . '/Sections/Headers/RxLeftMenuRightM1/Drupal.html.twig'),
+      '#context' => [
+        'branding' => $branding,
+        'main_menu' => $main_menu
+      ]
+    ];
+  }
+
+  protected function load__LogoLeftMenuRight_M1($options)
+  {
+    /**
+     * Bloc branding
+     */
+    $branding = null;
+    if (isset($options['branding'])) {
+      $branding = $options['branding'];
+    }
+    /**
+     * Bloc main menu.
+     */
+    $main_menu = null;
+    if (isset($options['main_menu'])) {
+      $main_menu = $options['main_menu'];
+    }
+    LoaderDrupal::addStyle(\file_get_contents($this->BasePath . '/Sections/Headers/LogoLeftMenuRightM1/style.scss'), 'Header');
+    return [
+      '#type' => 'inline_template',
+      '#template' => \file_get_contents($this->BasePath . '/Sections/Headers/LogoLeftMenuRightM1/Drupal.html.twig'),
+      '#context' => [
+        'branding' => $branding,
+        'main_menu' => $main_menu
+      ]
+    ];
   }
 }

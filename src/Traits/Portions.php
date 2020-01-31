@@ -62,6 +62,64 @@ trait Portions {
     ];
   }
 
+  public function template_fb_page_plugin($options)
+  {
+    /**
+     * name_page
+     */
+    if ($options['name_page']) {
+      $name_page = $options['name_page'];
+    } else {
+      $name_page = 'WB-universe';
+    }
+    /**
+     * active_sdk
+     */
+    if ($options['active_sdk']) {
+      $active_sdk = $options['active_sdk'];
+    } else {
+      $active_sdk = 0;
+    }
+    /**
+     * url_page
+     */
+    if ($options['url_page']) {
+      $url_page = $options['url_page'];
+    } else {
+      $url_page = 0;
+    }
+    /**
+     * url_page
+     */
+    if ($options['id_app']) {
+      $id_app = $options['id_app'];
+    } else {
+      $id_app = 1779199215738885;
+    }
+
+    /**
+     * url_page
+     */
+    if ($options['height']) {
+      $height = $options['height'];
+    } else {
+      $height = 300;
+    }
+
+    $fileName = \file_get_contents($this->BasePath . '/Utility/fbPagePlugin/Drupal.html.twig');
+    return [
+      '#type' => 'inline_template',
+      '#template' => $fileName,
+      '#context' => [
+        'name_page' => $name_page,
+        'active_sdk' => $active_sdk,
+        'url_page' => $url_page,
+        'id_app' => $id_app,
+        'height' => $height
+      ]
+    ];
+  }
+
   /**
    * Template to center content.
    */
@@ -131,6 +189,20 @@ trait Portions {
       minim ven iam quis nostrud exercitation ullamco labor nisi ut aliquip exea commodo consequat
       duis aute irudre dolor in elit sed uta labore dolore reprehender.
       ";
+  }
+
+  public function getImageUrlByFid($fid, $image_style)
+  {
+    if (! empty($fid[0])) {
+      $file = \Drupal\file\Entity\File::load($fid[0]);
+      if ($file && \Drupal\image\Entity\ImageStyle::load($image_style)) {
+        $img_url = \Drupal\image\Entity\ImageStyle::load($image_style)->buildUrl($file->getFileUri());
+        return [
+          'img_url' => $img_url
+        ];
+      }
+    }
+    return [];
   }
 
   /**

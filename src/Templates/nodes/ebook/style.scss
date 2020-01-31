@@ -1,0 +1,44 @@
+.path-node {
+  article.node {
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+
+    .field__label {
+      display: none;
+    }
+
+    header {
+      margin-bottom: 1em;
+    }
+
+    .field {
+      margin-bottom: 1.3em;
+      display: flex;
+      flex-direction: column;
+
+      &.field--type-image {
+        float: left;
+        margin-right: 2em;
+
+        img {
+          max-height: 700px;
+          max-width: 100%;
+          width: auto;
+          height: auto;
+        }
+      }
+    }
+
+
+
+    .info-post {
+      display: block;
+      text-align: right;
+
+      .field {
+        display: inline-block;
+      }
+    }
+  }
+}

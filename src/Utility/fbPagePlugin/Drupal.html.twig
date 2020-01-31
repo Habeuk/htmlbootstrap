@@ -1,0 +1,6 @@
+
+{% if active_sdk %}
+	<div id="fb-root"></div>
+	<script async defer crossorigin="anonymous" src="https://connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v5.0&appId={{ id_app }}&autoLogAppEvents=1"></script>
+{% endif %}
+<div class="fb-page" data-href="{{ url_page }}" data-tabs="timeline" data-width="" data-height="{{ height }}" data-small-header="true" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="{{ url_page }}" class="fb-xfbml-parse-ignore"><a href="{{ url_page }}">{{ name_page }}</a></blockquote></div>

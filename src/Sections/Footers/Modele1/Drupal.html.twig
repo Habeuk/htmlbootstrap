@@ -8,11 +8,21 @@
 							{{ card.title }}
 						</div>
 						<div class="card-body p-0">
-							<div class="card-text">{{ card.text }}</div>
+							<div class="card-text">{{ card.text | raw }}</div>
 						</div>
 					</div>
 				</div>							
 			{% endfor %}
+		</div>
+	</div>
+	<div class="container endfooter">
+		<div class="row">
+			<div class="col-md-6">
+				{{ text_left | raw }}
+			</div>
+			<div class="col-md-6 text-right">
+				{{ text_right | raw }}
+			</div>
 		</div>
 	</div>
 </footer>

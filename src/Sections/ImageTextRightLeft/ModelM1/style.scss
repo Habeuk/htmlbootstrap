@@ -12,7 +12,7 @@
 
       >div:last-child {
         background: darken($magetextrightleft_modelm1_color, 30);
-        @include linear-gradient(#ac32e4, darken($magetextrightleft_modelm1_color, 10));
+        @include linear-gradient(#ffffff, darken($magetextrightleft_modelm1_color, 10));
       }
     }
   }
@@ -46,6 +46,8 @@
 
 
     .title {
+      color: #fff !important;
+
       @include media-min(DD) {
         font-size: 2.5em;
       }

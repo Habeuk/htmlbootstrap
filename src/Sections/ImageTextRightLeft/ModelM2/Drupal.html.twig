@@ -16,9 +16,9 @@
                     <path class="arrow" d="M 0,0 L 70,0 L 100,50  L 70,100 L 0,100" fill="#0cf" stroke ="#0cf" stroke-width="0" stroke-linejoin="round" />
                   </svg>
 				<div class=" text-body {% if img_before %} left {% endif %} ">
-					<div class="sup_title">{{ sup_title  }}</div>
+					<div class="sup_title">{{ sup_title }}</div>
 					<h2 class="title">{{ title }}</h2>					
-					<div class="button"><a href="#" class="btn btn-success">{{ button }}</a></div>
+					<div class="button"><a href="{{ button_link }}" class="btn btn-primary">{{ button }}</a></div>
 				</div>
 			</div>
 			{% if img_before %}{% else %}

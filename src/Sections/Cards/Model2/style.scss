@@ -1,4 +1,4 @@
-$cardsmodel2_color: #3c5265;
+$cardsmodel2_color: $color2;
 $cardsmodel2_lineHeight: 1.5em;
 $cardsmodel2_lineCount: 5.31;
 $cardsmodel2_bg: #ffffff;
@@ -51,6 +51,7 @@ $cardsmodel2_bg: #ffffff;
     margin-bottom: $margin_top*0.7;
     background: $cardsmodel2_bg;
     cursor: pointer;
+    box-shadow: none;
 
     @include media-min(DD) {
       @include multiLineEllipsis($lineHeight:$cardsmodel2_lineHeight, $lineCount: $cardsmodel2_lineCount, $bgColor: white, $text-align:left, $opacity:1, $ellipsis-margin-right:32px);
@@ -80,7 +81,7 @@ $cardsmodel2_bg: #ffffff;
       }
 
       .card-header i {
-        color: $link_color;
+        color: $color1;
       }
     }
   }

@@ -54,6 +54,9 @@ $cardsmodel2_bg: #eee;
     color: $text_normal;
     margin-bottom: $margin_top*0.7;
     background: #FFF;
+    -webkit-box-shadow: 0 0.75rem 1.25rem 0.0625rem rgba(64, 64, 64, 0.09);
+    box-shadow: 0 0.75rem 1.25rem 0.0625rem rgba(64, 64, 64, 0.09);
+    text-decoration: none;
 
     @include media-min(DD) {
       height: 100%;

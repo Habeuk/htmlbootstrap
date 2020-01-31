@@ -35,8 +35,8 @@ class Comments implements ControllerInterface {
     /**
      * Get title
      */
-    if (isset($options['comments'])) {
-      $cards = $options['comments'];
+    if (isset($options['cards'])) {
+      $cards = $options['cards'];
     } else {
       $cards = $this->loadDefaultData();
     }

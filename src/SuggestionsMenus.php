@@ -43,7 +43,7 @@ class SuggestionsMenus {
   {
     $suggestions = [];
     if ($options['template'] == 'menu__main_full') {
-      LoaderDrupal::addStyle(\file_get_contents(__DIR__ . '/Sections/Menus/MenuCenter/style.scss'), 'menu__main_full');
+      // LoaderDrupal::addStyle(\file_get_contents(__DIR__ . '/Sections/Menus/MenuCenter/style.scss'), 'menu__main_full');
       $suggestions[] = 'menu__main_full';
     }
     return $suggestions;

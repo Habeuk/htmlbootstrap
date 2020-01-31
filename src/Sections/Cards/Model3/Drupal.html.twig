@@ -1,0 +1,64 @@
+<section class="cardsmodel3 section">
+	<div class="container sectionspace">
+		<header class="row header">
+			<div class="col-sm-12">
+				<h2 class="title">{{ title }}</h2>
+				<div class="desc">{{ description | raw }}</div>
+			</div>
+		</header>
+		<div class="row no-gutters">
+			{% for card in cards %}				
+				<div class="{{ card_class_block }}">
+					
+					<div class="card card-rotation rotate-right">
+						<div class="card-header face front">
+						{% if card.img['#theme']  %}
+							{{ card.img }}
+						{% else %}
+							<img src="{{ card.img.src }}" alt="{{ card.img.alt }}" class="img-fluid {{ card.img.class }}" >
+						{% endif %}
+						</div>
+						<div class="card-body face right">
+						{% set title_data %}
+                            {{ card.title  }}
+                        {% endset %}
+							<h5 class="card-title">{{ title_data }}</h5>
+							<div class="card-text">{{ card.text | raw }}</div>
+							<button class="card-button btn btn-outline-primary" data-toggle="modal" data-target="#card-cardsmodel3" data-title="{{ title_data | striptags }}"><i class="fas fa-file-download pr-2"></i>{{ card.button }}</button>
+						</div>
+					</div>
+					
+				</div>							
+			{% endfor %}
+		</div>
+	</div>
+	
+	
+  <div class="modal fade" id="card-cardsmodel3" tabindex="-1" role="dialog" aria-labelledby="pricelists-model1Title" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content" style="background-image:url('{{ icon_pdf }}')">
+      <div class="modal-header">
+        <h5 class="modal-title" id="pricelists-model1Title">...</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" >
+      	<div class="text">{{ message }}</div>
+      	<div class="form-input">
+      		<div class="form-group">
+                           <label for="inputAddress" >Votre email</label>
+                           <div class="input-group">
+                               <input type="email" class="form-control" id="inputAddress" placeholder="Votre email">
+                               <div class="input-group-prepend">
+        						  <span class="input-group-text btn btn-primary" id="basic-addon1"><i class="fas fa-file-download pr-2"></i>Télécharger le livre</span>
+      						   </div>
+      					   </div>
+                        </div>
+      	</div>
+      
+    </div>
+  </div>
+</div>
+</div>
+</section>

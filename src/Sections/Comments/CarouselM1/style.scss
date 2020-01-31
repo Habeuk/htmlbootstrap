@@ -20,12 +20,13 @@
     .owl-prev,
     .owl-next {
       cursor: pointer;
-      background-color: #f5723d;
+      background-color: $color1;
       border-radius: 50%;
       width: 40px;
       height: 40px;
       font-size: 26px;
       color: #fff;
+      padding: 1em;
     }
 
     &::before {

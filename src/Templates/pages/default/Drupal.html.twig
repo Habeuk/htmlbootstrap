@@ -1,0 +1,29 @@
+    {% if page.header %}
+      <header class="header">
+        {{ page.header }}
+      </header>
+    {% endif %}
+    
+    {% if page.before_content %}
+      <div class="before-content">
+        {{ page.before_content }}
+      </div>
+    {% endif %}
+    
+    {% if page.content %}
+      <div class="content">
+        <div class="container">{{ page.content }}</div>
+      </div>
+    {% endif %}
+    
+    {% if page.after_content %}
+      <div class="after-content">
+        {{ page.after_content }}
+      </div>
+    {% endif %}
+    
+    {% if page.footer %}
+      <footer class="featured-bottom">
+        {{ page.footer }}
+      </footer>
+    {% endif %}

@@ -34,7 +34,7 @@
 					</div>
 					{% if title and title != '' %}<h2 class="title">{{ title }}</h2>{% endif %}	
 					<div class="desc">{{ description | raw }}</div>									
-					{% if button and button != '' %}<div class="button"><a href="#" class="btn btn-success">{{ button }}</a></div>{% endif %}	
+					{% if button and button != '' %}<div class="button"><a href="{{ button_link }}" class="btn btn-primary">{{ button }}</a></div>{% endif %}	
 					
 				</div>
 			</div>

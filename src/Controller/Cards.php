@@ -41,6 +41,15 @@ class Cards implements ControllerInterface {
     }
 
     /**
+     * Get class of nombre_item
+     */
+    if (isset($options['nombre_item'])) {
+      $nombre_item = $options['nombre_item'];
+    } else {
+      $nombre_item = 4;
+    }
+
+    /**
      * Get type
      */
     if (isset($options['type'])) {
@@ -61,8 +70,7 @@ class Cards implements ControllerInterface {
         ];
       } elseif ($options['type'] == 'PostsVerticalM1') {
         if (empty($cards)) {
-          $number = (isset($options['nombre_item'])) ? $options['nombre_item'] : 4;
-          $cards = $this->loadDefaultData__PostsVerticalM1($number);
+          $cards = $this->loadDefaultData__PostsVerticalM1($nombre_item);
         }
         $fileName = \file_get_contents($this->BasePath . '/Sections/Cards/PostsVerticalM1/Drupal.html.twig');
         LoaderDrupal::addStyle(\file_get_contents($this->BasePath . '/Sections/Cards/PostsVerticalM1/style.scss'), 'Cards-PostsVerticalM1');
@@ -90,11 +98,10 @@ class Cards implements ControllerInterface {
         } else {
           $faker = \Faker\Factory::create();
           $faker->seed(12956812258);
-          $description = $faker->unique()->realText(rand(100, 110));
+          $description = $faker->unique()->realText(rand(100, 120));
         }
         if (empty($cards)) {
-          $number = (isset($options['nombre_item'])) ? $options['nombre_item'] : 4;
-          $cards = $this->loadDefaultData($number);
+          $cards = $this->loadDefaultData($nombre_item);
           $card_class_block = "col-lg-6";
         }
         $fileName = \file_get_contents($this->BasePath . '/Sections/Cards/Model2/Drupal.html.twig');
@@ -119,8 +126,7 @@ class Cards implements ControllerInterface {
           $title = "Imaginez, Créez, Vendez";
         }
         if (empty($cards)) {
-          $number = (isset($options['nombre_item'])) ? $options['nombre_item'] : 4;
-          $cards = $this->loadDefaultData_StepModel1($number);
+          $cards = $this->loadDefaultData_StepModel1($nombre_item);
           $card_class_block = "col-lg-3";
         }
         $fileName = \file_get_contents($this->BasePath . '/Sections/Cards/StepModel1/Drupal.html.twig');
@@ -132,6 +138,60 @@ class Cards implements ControllerInterface {
             'cards' => $cards,
             'title' => $title,
             'card_class_block' => $card_class_block
+          ]
+        ];
+      } elseif ($options['type'] == 'CardsModel3') {
+
+        /**
+         * Get class of title
+         */
+        if (isset($options['title'])) {
+          $title = $options['title'];
+        } else {
+          $title = "Telecharger les livres";
+        }
+
+        /**
+         * Get class of message
+         */
+        if (isset($options['message'])) {
+          $message = $options['message'];
+        } else {
+          $faker = \Faker\Factory::create();
+          $faker->seed(12956812258);
+          $message = $faker->realText(rand(180, 210));
+        }
+
+        /**
+         * Get class of title
+         */
+        if (isset($options['description'])) {
+          $description = $options['description'];
+        } else {
+          $faker = \Faker\Factory::create();
+          $faker->seed(12956812258);
+          $description = $faker->realText(rand(100, 130));
+        }
+
+        if (empty($cards)) {
+          $cards = $this->loadDefaultData($nombre_item);
+          $card_class_block = "col-md-6 col-lg-3";
+        }
+        $icon_pdf = '/' . drupal_get_path('theme', $this->themeObject->getName()) . '/defaultfile/Cards/Model3/pdf-icon-11549528510ilxx4eex38.png';
+        $fileName = \file_get_contents($this->BasePath . '/Sections/Cards/Model3/Drupal.html.twig');
+        LoaderDrupal::addStyle(\file_get_contents($this->BasePath . '/Sections/Cards/Model3/style.scss'), 'CardsModel3');
+        LoaderDrupal::addScript(\file_get_contents($this->BasePath . '/Sections/Cards/Model3/script.js'), 'CardsModel3');
+        // dump($cards);
+        return [
+          '#type' => 'inline_template',
+          '#template' => $fileName,
+          '#context' => [
+            'cards' => $cards,
+            'title' => $title,
+            'description' => $description,
+            'card_class_block' => $card_class_block,
+            'message' => $message,
+            'icon_pdf' => $icon_pdf
           ]
         ];
       }
@@ -194,6 +254,7 @@ class Cards implements ControllerInterface {
    */
   protected function loadDefaultData($number = 8)
   {
+    $imgs = $this->defaultImgBooks();
     $icones = $this->defaultIcone();
     $cards = [];
     $faker = \Faker\Factory::create();
@@ -203,7 +264,11 @@ class Cards implements ControllerInterface {
         'title' => $faker->unique()->realText(rand(15, 30)),
         'text' => $faker->text,
         'icone' => (isset($icones[$i])) ? $icones[$i] : '<i class="fas fa-chart-bar"></i>',
-        'link' => '#' // optional
+        'link' => '#', // optional
+        'button' => 'Telecharger',
+        'img' => [
+          'src' => (isset($imgs[$i])) ? '/' . drupal_get_path('theme', $this->themeObject->getName()) . $imgs[$i] : '/' . drupal_get_path('theme', $this->themeObject->getName()) . '/defaultfile/CarouselCards/Modele3/fruits--nutrition--sante--bien-etre-jbgatj.jpg'
+        ]
       ];
     }
     return $cards;
@@ -215,8 +280,84 @@ class Cards implements ControllerInterface {
       'IconeModelFlat' => 'IconeModelFlat',
       'PostsVerticalM1' => 'PostsVerticalM1',
       'CardsModel2' => 'CardsModel2',
-      'StepModel1' => 'StepModel1'
+      'StepModel1' => 'StepModel1',
+      'CardsModel3' => 'CardsModel3'
     ];
+  }
+
+  public static function loadFieldsNodes($model, &$form, $options)
+  {
+    $ThemeUtility = new ThemeUtility();
+    $ManageNode = new ManageNode();
+    if ('CardsModel3' == $model) {
+      $contentTypes = $ManageNode->getContentType();
+      /**
+       * le champs titre
+       */
+      $name = 'title';
+      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $ThemeUtility->addTextfieldTree($name, $form, 'Titre', $FieldValue);
+      /**
+       * le champs description
+       */
+      $name = 'description';
+      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $ThemeUtility->addTextareaSimpleTree($name, $form, 'Description', $FieldValue);
+
+      /**
+       * le champs description
+       */
+      $name = 'message';
+      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $ThemeUtility->addTextareaSimpleTree($name, $form, 'Message', $FieldValue);
+
+      /**
+       * le champs nombre_item
+       */
+      $name = 'nombre_item';
+      $FieldValue = (! empty($options[$name])) ? $options[$name] : 4;
+      $ThemeUtility->addTextfieldTree($name, $form, 'Nombre de blocs', $FieldValue);
+      /**
+       * le champs selection du type de contenu
+       */
+      $name = 'content_type';
+      $FieldValue = $bundle = (! empty($options[$name])) ? $options[$name] : '';
+      $ThemeUtility->addSelectTree($name, $form, $contentTypes, 'Selectionner le type de contenu', $FieldValue);
+      if ($bundle != '') {
+        $listsFields = $ManageNode->getFieldsNode($bundle);
+        $container = 'cards';
+        $form[$container] = [
+          '#type' => 'details',
+          '#title' => 'Champs ',
+          '#open' => true
+        ];
+        /**
+         * le champs titre
+         */
+        $name = 'title';
+        $FieldValue = (! empty($options[$container][$name])) ? $options[$container][$name] : '';
+        $ThemeUtility->addSelectTree($name, $form[$container], $listsFields, 'Champs Titre', $FieldValue);
+        /**
+         * le champs titre
+         */
+        $name = 'text';
+        $FieldValue = (! empty($options[$container][$name])) ? $options[$container][$name] : '';
+        $ThemeUtility->addSelectTree($name, $form[$container], $listsFields, 'Champs description courte', $FieldValue);
+        /**
+         * le champs image
+         */
+        $name = 'img';
+        $FieldValue = (! empty($options[$container][$name])) ? $options[$container][$name] : '';
+        $ThemeUtility->addSelectTree($name, $form[$container], $listsFields, 'Champs image', $FieldValue);
+
+        /**
+         * le champs nombre_item
+         */
+        $name = 'button';
+        $FieldValue = (! empty($options[$container][$name])) ? $options[$container][$name] : 'Télécharger';
+        $ThemeUtility->addTextfieldTree($name, $form[$container], 'texte download', $FieldValue);
+      }
+    }
   }
 
   public static function loadFields($model, &$form, $options)
@@ -235,7 +376,7 @@ class Cards implements ControllerInterface {
        */
       $name = 'description';
       $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
-      $ThemeUtility->addTextareaTree($name, $form, 'Description', $FieldValue);
+      $ThemeUtility->addTextareaSimpleTree($name, $form, 'Description', $FieldValue);
       /**
        * class card_class_block
        */
@@ -267,7 +408,7 @@ class Cards implements ControllerInterface {
          */
         $name = 'text';
         $FieldValue = (! empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
-        $ThemeUtility->addTextareaTree($name, $form[$container][$i], 'Description ', $FieldValue);
+        $ThemeUtility->addTextareaSimpleTree($name, $form[$container][$i], 'Description ', $FieldValue);
         /**
          * le champs icone
          */
@@ -342,6 +483,20 @@ class Cards implements ControllerInterface {
       '/defaultfile/CarouselCards/Modele1/photodune-6243139-vintage-photography-m-700x400.jpg',
       '/defaultfile/CarouselCards/Modele1/photodune-6252039-web-and-seo-analytics-concept-m-700x400.jpg',
       '/defaultfile/CarouselCards/Modele1/photodune-6590781-product-launch-flat-illustration-2-700x400.jpg'
+    ];
+  }
+
+  protected function defaultImgBooks()
+  {
+    return [
+      '/defaultfile/Cards/Model3/101-smoothies-pour-votre-sante.jpg',
+      // '/defaultfile/Cards/Model3/51dQOVYoG2L._SX374_BO1,204,203,200_.jpg',
+      '/defaultfile/Cards/Model3/51QGnnhNbsL._SX347_BO1,204,203,200_.jpg',
+      '/defaultfile/Cards/Model3/9782017020240-001-T.jpeg',
+      // '/defaultfile/Cards/Model3/9782017084365-001-T.jpeg',
+      // '/defaultfile/Cards/Model3/9782017084488-001-T.jpeg',
+      '/defaultfile/Cards/Model3/fruits--nutrition--sante--bien-etre-jbgatj.jpg',
+      '/defaultfile/Cards/Model3/les-recettes-du-regime-ig.jpg'
     ];
   }
 }

@@ -135,6 +135,22 @@ class ThemeUtility {
   }
 
   /**
+   * add image
+   */
+  public function addImageTree($name, &$form, $title = 'image', $default)
+  {
+    $form[$name] = [
+      '#type' => 'managed_file',
+      '#title' => t($title),
+      '#default_value' => $default,
+      '#upload_location' => 'public://' . $this->themeName,
+      '#submit' => [
+        'themeconsultant_completsavefile'
+      ]
+    ];
+  }
+
+  /**
    * add textfield
    */
   public function add_checkbox($name, $group, &$form, $title = 'Affiche ce block', $default = 0)

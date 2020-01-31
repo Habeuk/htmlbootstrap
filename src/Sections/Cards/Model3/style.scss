@@ -1,0 +1,58 @@
+$cardsmodel2_color: #3c5265;
+$cardsmodel2_lineHeight: 1.5em;
+$cardsmodel2_lineCount: 5.31;
+$cardsmodel2_bg: #ffffff;
+
+.cardsmodel3 {
+
+  .sectionspace {
+    margin-top: $margin_top;
+    margin-bottom: $margin_bottom;
+  }
+
+  .row {
+    >div:hover {
+      z-index: 2;
+    }
+  }
+
+  .card-rotation {
+    @include card-rotation();
+  }
+
+  .field .field__label,
+  .modal .form-input label {
+    display: none;
+  }
+
+  .modal-title {
+    font-size: 1.5em;
+    font-weight: 600;
+  }
+
+  .modal-content {
+    background-size: auto 100%;
+    background-repeat: no-repeat;
+    background-position: right center;
+    border-top: 3px solid $color2;
+  }
+
+  .modal-header,
+  .modal-body {
+    background-color: rgba(255, 255, 255, 0.92);
+  }
+
+  .modal-body {
+    padding: 1.5em 2em;
+
+    .text {
+      padding: 1.2em 0;
+      font-size: 1.5em;
+      font-style: italic;
+      text-align: center;
+      font-weight: 400;
+    }
+
+  }
+
+}

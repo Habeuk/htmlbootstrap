@@ -7,8 +7,10 @@ use Drupal\Core\Theme\ThemeSettings;
 use Stephane888\HtmlBootstrap\Controller;
 use Drupal\Component\Utility\Random;
 use Drupal\debug_log\debugLog;
+use Stephane888\HtmlBootstrap\Traits\Portions;
 
 class DefineSetting {
+  use Portions;
 
   protected $DisplaysFields = [
     'route' => '',
@@ -43,6 +45,45 @@ class DefineSetting {
     $this->group = $group;
   }
 
+  public function form_header(&$form, $vertical_tabs_group, $form_state)
+  {
+    $group = $this->group;
+    $theme_name = $this->themeName;
+    $ThemeUtility = new ThemeUtility();
+    $this->regions = $ThemeUtility->get_regions();
+    $this->ListModels = Controller\Headers::listModels();
+    $this->addSection($form, $group, 'Entetes', $vertical_tabs_group, $theme_name, - 1);
+
+    $this->addHeaderDisplay($form, $form_state);
+  }
+
+  public function form_pagenodesdisplay(&$form, $vertical_tabs_group, $form_state)
+  {
+    $group = $this->group;
+    $theme_name = $this->themeName;
+    $ThemeUtility = new ThemeUtility();
+    $this->regions = $ThemeUtility->get_regions();
+    $this->ListModels = Controller\PageNodesDisplay::listModels();
+    $this->addSection($form, $group, 'Page de contenu', $vertical_tabs_group, $theme_name, 99);
+
+    // $this->addPagenodesdisplayDisplay($form, $form_state);
+    $model = '';
+    $values = theme_get_setting($theme_name . '_' . $group, $theme_name);
+    Controller\PageNodesDisplay::loadFields($model, $form[$theme_name . '_' . $group], $values);
+  }
+
+  public function form_footers(&$form, $vertical_tabs_group, $form_state)
+  {
+    $group = $this->group;
+    $theme_name = $this->themeName;
+    $ThemeUtility = new ThemeUtility();
+    $this->regions = $ThemeUtility->get_regions();
+    $this->ListModels = Controller\Footers::listModels();
+    $this->addSection($form, $group, 'Footers', $vertical_tabs_group, $theme_name, 100);
+
+    $this->addFootersDisplay($form, $form_state);
+  }
+
   public function form_stylepage(&$form, $vertical_tabs_group, $form_state)
   {
     $group = $this->group;
@@ -52,6 +93,22 @@ class DefineSetting {
     $this->ListModels = Controller\StylePage::listModels();
     $this->addSection($form, $group, 'Styles CSS & JS', $vertical_tabs_group, $theme_name, 100);
     $this->addFormDisplay($form, $form_state);
+  }
+
+  public function form_carouselcards(&$form, $vertical_tabs_group, $form_state)
+  {
+    $group = $this->group;
+    $theme_name = $this->themeName;
+    $this->init_form_carouselcards($theme_name, $group);
+    $this->addSection($form, $group, 'Carousel cards', $vertical_tabs_group, $theme_name);
+    $this->addFormDisplay($form, $form_state);
+  }
+
+  protected function init_form_carouselcards($theme_name, $group)
+  {
+    $ThemeUtility = new ThemeUtility();
+    $this->regions = $ThemeUtility->get_regions();
+    $this->ListModels = Controller\CarouselCards::listModels();
   }
 
   public function form_comments(&$form, $vertical_tabs_group, $form_state)
@@ -126,6 +183,213 @@ class DefineSetting {
      * build form to diplays.
      */
     $this->addFormDisplay($form, $form_state);
+    // dump($form);
+  }
+
+  /**
+   *
+   * @param object $form
+   * @param object $form_state
+   * @param string $label
+   */
+  protected function addHeaderDisplay(&$form, $form_state, $label = 'Affichage')
+  {
+    $ThemeUtility = new ThemeUtility();
+    $sous_group = 'display';
+    $group = $this->group;
+    $theme_name = $this->themeName;
+    $values = theme_get_setting($theme_name . '_' . $group, $theme_name);
+    // dump($values);
+    $form[$theme_name . '_' . $group][$sous_group] = array(
+      '#type' => 'details',
+      '#title' => $label,
+      '#open' => true,
+      '#attributes' => [
+        'class' => [
+          'wbu-ui-state-default'
+        ],
+        'id' => $theme_name . '_' . $group . '_' . $sous_group
+      ]
+    );
+
+    foreach ($this->DisplaysFields as $k_field => $DefaultValue) {
+      if ($k_field == 'model' || $k_field == 'region' || $k_field == 'weight') {
+        $this->AjaxWrapperProvider = $theme_name . '_' . $group . '_' . $sous_group;
+        $this->AjaxCallbackProvider = '_' . $this->themeName . '_' . $this->group . '_provider';
+        if (isset($values[$sous_group][$k_field])) {
+          $this->addDisplayFields($k_field, $values[$sous_group][$k_field], $form[$theme_name . '_' . $group][$sous_group], $ThemeUtility);
+        } else {
+          $this->addDisplayFields($k_field, $DefaultValue, $form[$theme_name . '_' . $group][$sous_group], $ThemeUtility);
+        }
+      }
+    }
+    if (isset($values[$sous_group]['model']) && $values[$sous_group]['model'] == 'RxLeftMenuRight_M1') {
+      $rx_logos = $this->getdefault_rx_logos();
+      /**
+       * Nombre de bloc
+       */
+      $name = "nombre_item";
+      $FieldValue = $nombre_item = (! empty($values[$sous_group][$name])) ? $values[$sous_group][$name] : 4;
+      $ThemeUtility->addTextfieldTree($name, $form[$theme_name . '_' . $group][$sous_group], 'Nombre de blocs', $FieldValue);
+      /**
+       * options
+       */
+      $form[$theme_name . '_' . $group][$sous_group]['options'] = array(
+        '#type' => 'details',
+        '#title' => $label,
+        '#open' => true,
+        '#attributes' => [
+          'class' => [
+            'wbu-ui-state-default'
+          ],
+          'id' => $theme_name . '_' . $group . '_' . $sous_group
+        ]
+      );
+
+      for ($i = 0; $i < $nombre_item; $i ++) {
+        $icone = (isset($rx_logos[$i]['icone'])) ? $rx_logos[$i]['icone'] : '';
+        $url = (isset($rx_logos[$i]['url'])) ? $rx_logos[$i]['url'] : '';
+        $type = (isset($rx_logos[$i]['type'])) ? $rx_logos[$i]['type'] : '';
+        $form[$theme_name . '_' . $group][$sous_group]['options'][$i] = [
+          '#type' => 'details',
+          '#title' => $label . ' : ' . ($i + 1),
+          '#open' => false,
+          '#attributes' => [
+            'class' => [
+              'wbu-ui-state-default'
+            ],
+            'id' => $theme_name . '_' . $group . '_' . $sous_group . '-' . $i
+          ]
+        ];
+        /**
+         * Nombre de bloc
+         */
+        $name = "icone";
+        $FieldValue = (! empty($values[$sous_group]['options'][$i][$name])) ? $values[$sous_group]['options'][$i][$name] : $icone;
+        $ThemeUtility->addTextfieldTree($name, $form[$theme_name . '_' . $group][$sous_group]['options'][$i], 'Icone', $FieldValue);
+        /**
+         * Nombre de bloc
+         */
+        $name = "url";
+        $FieldValue = (! empty($values[$sous_group]['options'][$i][$name])) ? $values[$sous_group]['options'][$i][$name] : $url;
+        $ThemeUtility->addTextfieldTree($name, $form[$theme_name . '_' . $group][$sous_group]['options'][$i], 'Url', $FieldValue);
+        /**
+         * Nombre de bloc
+         */
+        $name = "type";
+        $FieldValue = (! empty($values[$sous_group]['options'][$i][$name])) ? $values[$sous_group]['options'][$i][$name] : $type;
+        $ThemeUtility->addTextfieldTree($name, $form[$theme_name . '_' . $group][$sous_group]['options'][$i], 'Type', $FieldValue);
+      }
+    }
+  }
+
+  /**
+   *
+   * @param object $form
+   * @param object $form_state
+   * @param string $label
+   */
+  protected function addFootersDisplay(&$form, $form_state, $label = 'Affichage')
+  {
+    $ThemeUtility = new ThemeUtility();
+    $sous_group = 'display';
+    $group = $this->group;
+    $theme_name = $this->themeName;
+    $values = theme_get_setting($theme_name . '_' . $group, $theme_name);
+
+    $form[$theme_name . '_' . $group][$sous_group] = array(
+      '#type' => 'details',
+      '#title' => $label,
+      '#open' => true,
+      '#attributes' => [
+        'class' => [
+          'wbu-ui-state-default'
+        ],
+        'id' => $theme_name . '_' . $group . '_' . $sous_group
+      ]
+    );
+
+    foreach ($this->DisplaysFields as $k_field => $DefaultValue) {
+      // if ($k_field == 'model' || $k_field == 'region' || $k_field == 'weight' || $k_field == 'provider') {
+      $this->AjaxWrapperProvider = $theme_name . '_' . $group . '_' . $sous_group;
+      $this->AjaxCallbackProvider = '_' . $this->themeName . '_' . $this->group . '_provider';
+      if (isset($values[$sous_group][$k_field])) {
+        $this->addDisplayFields($k_field, $values[$sous_group][$k_field], $form[$theme_name . '_' . $group][$sous_group], $ThemeUtility);
+      } else {
+        $this->addDisplayFields($k_field, $DefaultValue, $form[$theme_name . '_' . $group][$sous_group], $ThemeUtility);
+      }
+      // }
+    }
+
+    if (! empty($values[$sous_group]['model']) && ! empty($values[$sous_group]['provider']) && $values[$sous_group]['provider'] == 'custom') {
+      if ($values[$sous_group]['model'] == 'footerm1') {
+        /**
+         * card_class_block
+         */
+        $name = "card_class_block";
+        $FieldValue = (! empty($values[$sous_group][$name])) ? $values[$sous_group][$name] : 'col-md-6 col-lg-3';
+        $ThemeUtility->addTextfieldTree($name, $form[$theme_name . '_' . $group][$sous_group], 'Classe block', $FieldValue);
+        /**
+         * Nombre de bloc
+         */
+        $name = "nombre_item";
+        $FieldValue = $nombre_item = (! empty($values[$sous_group][$name])) ? $values[$sous_group][$name] : 4;
+        $ThemeUtility->addTextfieldTree($name, $form[$theme_name . '_' . $group][$sous_group], 'Nombre de blocs', $FieldValue);
+
+        /**
+         *
+         * @var string $container
+         */
+        $container = 'cards';
+        $this->ListModels = Controller\Footers::listSousModels();
+        for ($i = 0; $i < $nombre_item; $i ++) {
+          $form[$theme_name . '_' . $group][$sous_group][$container][$i] = [
+            '#type' => 'details',
+            '#title' => $label . ' : ' . ($i + 1),
+            '#open' => false,
+            '#attributes' => [
+              'class' => [
+                'wbu-ui-state-default'
+              ],
+              'id' => $theme_name . '_' . $group . '_' . $sous_group . '-' . $i
+            ]
+          ];
+          foreach ($this->DisplaysFields as $k_field2 => $DefaultValue2) {
+            if ($k_field2 == 'model' || $k_field2 == 'provider') {
+              $this->AjaxWrapperProvider = $theme_name . '_' . $group . '_' . $sous_group . '-' . $i;
+              $this->AjaxCallbackProvider = '_' . $this->themeName . '_' . $this->group . '_block_provider';
+              if (isset($values[$sous_group][$container][$i][$k_field2])) {
+                $this->addDisplayFields($k_field2, $values[$sous_group][$container][$i][$k_field2], $form[$theme_name . '_' . $group][$sous_group][$container][$i], $ThemeUtility);
+              } else {
+                $this->addDisplayFields($k_field2, $DefaultValue2, $form[$theme_name . '_' . $group][$sous_group][$container][$i], $ThemeUtility);
+              }
+            }
+          }
+          if (! empty($values[$sous_group][$container][$i]['model']) && ! empty($values[$sous_group][$container][$i]['provider'])) {
+            /**
+             * Champs pour les valeurs personnalisées.
+             */
+            $form[$theme_name . '_' . $group][$sous_group][$container][$i]['options'] = [
+              '#type' => 'details',
+              '#title' => 'Champs personalisées',
+              '#open' => true,
+              '#attributes' => [
+                'class' => [
+                  'sortable'
+                ],
+                'style' => 'display:none0;'
+                // 'id' => $this->AjaxWrapperProvider
+              ]
+            ];
+            $model = $values[$sous_group][$container][$i]['model'];
+            $provider = $values[$sous_group][$container][$i]['provider'];
+            $options = (isset($values[$sous_group][$container][$i]['options'])) ? $values[$sous_group][$container][$i]['options'] : [];
+            $this->loadFieldsBlockFooters($model, $provider, $form[$theme_name . '_' . $group][$sous_group][$container][$i]['options'], $options);
+          }
+        }
+        $this->ListModels = Controller\Footers::listModels();
+      }
+    }
   }
 
   protected function addFormDisplay(&$form, $form_state, $label = 'Affichage')
@@ -181,16 +445,23 @@ class DefineSetting {
         $i ++;
         $this->AjaxWrapperProvider = $theme_name . '_' . $group . '_' . $sous_group . $i;
         $this->AjaxCallbackProvider = '_' . $this->themeName . '_' . $this->group . '_provider';
+        $titre_block = (! empty($value['label_block'])) ? $value['label_block'] : $i;
         /**
          * Conteneur des elements d'affichage.
          */
         $form[$theme_name . '_' . $group][$sous_group][$key] = [
           '#type' => 'details',
-          '#title' => $label . ' : ' . $i,
+          '#title' => $label . ' : ' . $titre_block,
           '#open' => false,
           '#attributes' => [ // 'id' => $this->AjaxWrapperProvider
           ]
         ];
+
+        /**
+         * Add label for block
+         */
+        $FieldValue = (! empty($value['label_block'])) ? $value['label_block'] : $i;
+        $ThemeUtility->addTextfieldTree('label_block', $form[$theme_name . '_' . $group][$sous_group][$key], 'Titre du block', $FieldValue);
 
         /**
          * Affichage des champs.
@@ -214,6 +485,7 @@ class DefineSetting {
             $this->addDisplayFields($k_field, $DefaultValue, $form[$theme_name . '_' . $group][$sous_group][$key], $ThemeUtility);
           }
         }
+
         /**
          * Champs pour les valeurs personnalisées.
          */
@@ -229,28 +501,53 @@ class DefineSetting {
             'id' => $this->AjaxWrapperProvider
           ]
         ];
+
+        // /image test
+        /*
+         * $name = 'image_test';
+         * $form[$theme_name . '_' . $group][$sous_group][$key]['options'][$name] = [
+         * '#type' => 'managed_file',
+         * '#title' => 'Image load TEST v3',
+         * // '#default_value' => $default,
+         * '#upload_location' => 'public://'
+         * ];
+         */
+
         /**
          * Cas d'execution en ajax
          */
         if ($AjaxValue) {
-          // on recupere la valeur encours de provider.
-          $value['provider'] = $AjaxValue[$sous_group][$key]['provider'];
-          $value['model'] = $AjaxValue[$sous_group][$key]['model'];
-          // debugLog::logs([], '_theme_builder_' . $group . '__' . $sous_group . '-' . $key . '__' . $value['provider'], 'dump', true);
+          /**
+           * La methode utilisé par "manage_file" semble de tres bonne qualité.
+           * Niveau fonctionnement.
+           * on recupere la valeur encours de provider et model.
+           */
+          if (! empty($AjaxValue[$sous_group][$key]['provider'])) {
+            $value['provider'] = $AjaxValue[$sous_group][$key]['provider'];
+            $value['model'] = $AjaxValue[$sous_group][$key]['model'];
+          }
         }
+
         /**
          * On charge les champs personnalisés via le model selectionné.
          * Le provider doit etre custom
          */
-        if (isset($value['model']) && isset($value['provider']) && $value['provider'] == 'custom') {
-          $form[$theme_name . '_' . $group][$sous_group][$key]['options']['#attributes']['style'] = 'display:block;';
+        if (isset($value['model']) && isset($value['provider'])) {
+
           /**
            *
            * @var Ambiguous $options
            */
           $options = (empty($value['options'])) ? [] : $value['options'];
-          $this->loadFieldsModels($value['model'], $group, $form[$theme_name . '_' . $group][$sous_group][$key]['options'], $ThemeUtility, $options);
+          if ($value['provider'] == 'custom') {
+            $form[$theme_name . '_' . $group][$sous_group][$key]['options']['#attributes']['style'] = 'display:block;';
+            $this->loadFieldsModels($value['model'], $group, $form[$theme_name . '_' . $group][$sous_group][$key]['options'], $ThemeUtility, $options);
+          } elseif ($value['provider'] == 'node') {
+            $form[$theme_name . '_' . $group][$sous_group][$key]['options']['#attributes']['style'] = 'display:block;';
+            $this->loadNodeFieldsModels($value['model'], $group, $form[$theme_name . '_' . $group][$sous_group][$key]['options'], $ThemeUtility, $options);
+          }
         }
+
         /**
          * Remove display
          */
@@ -298,6 +595,20 @@ class DefineSetting {
     ];
   }
 
+  protected function loadFieldsBlockFooters($model, $provider, &$form, $options)
+  {
+    Controller\Footers::loadFieldsSousModels($model, $provider, $form, $options);
+  }
+
+  protected function loadNodeFieldsModels($model, $group, &$form, $ThemeUtility, $options)
+  {
+    if ($group == 'cards') {
+      Controller\Cards::loadFieldsNodes($model, $form, $options);
+    } elseif ($group == 'carouselcards') {
+      Controller\CarouselCards::loadFieldsNodes($model, $form, $options);
+    }
+  }
+
   /**
    * Charge les champs pour le fournissuer custom.
    *
@@ -308,7 +619,7 @@ class DefineSetting {
   protected function loadFieldsModels($model, $group, &$form, $ThemeUtility, $options)
   {
     if ($group == 'imagetextrightleft') {
-      // debugLog::logs([], '_theme_builder_' . $group . '__' . $model, 'dump', true);
+
       Controller\ImageTextRightLeft::loadFields($model, $form, $options);
     } elseif ($group == 'cards') {
       Controller\Cards::loadFields($model, $form, $options);
@@ -345,6 +656,9 @@ class DefineSetting {
       $FieldValue = (empty($FieldValue)) ? 'before_content' : $FieldValue;
       $ThemeUtility->addSelectTree($field, $form, $this->regions, 'Selectionner la region', $FieldValue);
       $ThemeUtility->AddRequireTree($field, $form);
+    } elseif ($field == 'status') {
+      $FieldValue = (empty($FieldValue)) ? 'before_content' : $FieldValue;
+      $ThemeUtility->addCheckboxTree($field, $form, 'Actif', $FieldValue);
     }
   }
 
@@ -392,6 +706,33 @@ class DefineSetting {
       '#group' => $vertical_tabs_group,
       '#weight' => $weight
     );
+  }
+
+  protected function addPagenodesdisplayDisplay(&$form, $form_state)
+  {
+    $sous_group = 'displays';
+    $group = $this->group;
+    $theme_name = $this->themeName;
+    $values = theme_get_setting($theme_name . '_' . $group, $theme_name);
+    $model = '';
+    /**
+     * le champs titre
+     */
+    $name = 'title';
+    $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+    $ThemeUtility->addTextfieldTree($name, $form, 'Titre', $FieldValue);
+
+    Controller\PageNodesDisplay::loadFields($model, $form, $values);
+  }
+
+  /**
+   * La methode de sauvegarde des fichiers ( manage_file ) contient uniquement les données pour le remplacement.
+   * ce qui peut conduire à
+   * des erreurs, pour contournée cela, on met en cache en cas de modifiecation par la methode custom.
+   */
+  private function SaveTemporaryValue()
+  {
+    ;
   }
 
   private function LoadConfigs($theme_name)

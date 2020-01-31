@@ -1,4 +1,11 @@
+$section_bg: #eaeaea;
+
 section.section {
+  .sectionspace {
+    margin-top: $margin_top*1.5;
+    margin-bottom: $margin_bottom;
+  }
+
   header.header {
     margin-bottom: $margin_bottom*0.6;
     position: relative;
@@ -7,6 +14,9 @@ section.section {
 
     .title {
       font-size: 3em;
+      font-weight: 300;
+      margin-bottom: 0.5rem;
+      color: darken($color1, 15%);
     }
 
     .desc {
@@ -36,10 +46,42 @@ section.section {
 section.cardsmodel2 {
   padding-top: 0.1em;
   padding-bottom: 0.1em;
-  background: rgb(229, 230, 232);
+  background: $section_bg;
+  font-size: 1em;
+
+  .header .desc {
+    margin-bottom: 0px;
+  }
 
   .card-body {
     padding-top: 1.2em;
     padding-bottom: 1.2em;
+  }
+}
+
+section.comments-carouselm1 {
+  .sectionspace {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
+section.carouselcards-modele1 {
+  background: $section_bg;
+
+  .sectionspace {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: $margin_top;
+    padding-bottom: $margin_bottom;
+  }
+}
+
+section.comments-carouselm1 {
+  background-color: #ffffff;
+
+  .card-body a {
+    color: $color1;
+    font-weight: 500;
   }
 }

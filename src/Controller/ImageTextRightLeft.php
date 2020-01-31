@@ -108,9 +108,126 @@ class ImageTextRightLeft implements ControllerInterface {
       $ThemeUtility->addTextareaTree($name, $form, 'Description', $FieldValue);
       // debugLog::logs($form, '_theme_builder_' . $model, 'dump', true);
     } elseif ($model == 'ModelM2') {
-      ;
+      /**
+       * le champs sup_title
+       */
+      $name = 'sup_title';
+      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $ThemeUtility->addTextfieldTree($name, $form, 'titre au dessus', $FieldValue);
+      /**
+       * le champs titre
+       */
+      $name = 'title';
+      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $ThemeUtility->addTextfieldTree($name, $form, 'Titre', $FieldValue);
+      /**
+       * le champs button_link
+       */
+      $name = 'button_link';
+      $FieldValue = (! empty($options[$name])) ? $options[$name] : '#';
+      $ThemeUtility->addTextfieldTree($name, $form, 'Lien du bouton ', $FieldValue);
+      /**
+       * le champs button
+       */
+      $name = 'button';
+      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $ThemeUtility->addTextfieldTree($name, $form, 'contenu du bouton ', $FieldValue);
+      /**
+       * le champs image
+       */
+      $name = 'img';
+      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $ThemeUtility->addImageTree($name, $form, 'Image', $FieldValue);
     } elseif ($model == 'ModelM3') {
-      ;
+      /**
+       * le champs image
+       */
+      $name = 'img';
+      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $ThemeUtility->addImageTree($name, $form, 'Image', $FieldValue);
+      /**
+       * le champs img_small
+       */
+      $name = 'img_small';
+      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $ThemeUtility->addImageTree($name, $form, 'Image Small', $FieldValue);
+
+      /**
+       * le champs sup_title
+       */
+      $name = 'sup_title';
+      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $ThemeUtility->addTextfieldTree($name, $form, 'titre au dessus dans le bloc', $FieldValue);
+
+      /**
+       * le champs header_title
+       */
+      $name = 'header_title';
+      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $ThemeUtility->addTextfieldTree($name, $form, 'titre de l\'entete ', $FieldValue);
+
+      /**
+       * le champs header_description
+       */
+      $name = 'header_description';
+      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $ThemeUtility->addTextfieldTree($name, $form, 'Description de l\'entete ', $FieldValue);
+      /**
+       * le champs header_description
+       */
+      $name = 'header_description';
+      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $ThemeUtility->addTextareaSimpleTree($name, $form, 'Description de l\'entete ', $FieldValue);
+
+      /**
+       * le champs nombre_item
+       */
+      $name = 'nombre_item';
+      $nombre_item = $FieldValue = (! empty($options[$name])) ? $options[$name] : 3;
+      $ThemeUtility->addTextfieldTree($name, $form, 'Nombre de lists', $FieldValue);
+      $container = 'lists';
+
+      for ($i = 0; $i < $nombre_item; $i ++) {
+        $form[$container][$i] = [
+          '#type' => 'details',
+          '#title' => 'Blocs : ' . ($i + 1),
+          '#open' => false
+        ];
+        /**
+         * le champs titre
+         */
+        $name = 'text';
+        $FieldValue = (! empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
+        $ThemeUtility->addTextfieldTree($name, $form[$container][$i], 'Titre', $FieldValue);
+      }
+
+      /**
+       * le champs title
+       */
+      $name = 'title';
+      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $ThemeUtility->addTextfieldTree($name, $form, 'Titre ', $FieldValue);
+
+      /**
+       * le champs title
+       */
+      $name = 'description';
+      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $ThemeUtility->addTextareaSimpleTree($name, $form, 'Description ', $FieldValue);
+
+      /**
+       * le champs title
+       */
+      $name = 'button';
+      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $ThemeUtility->addTextfieldTree($name, $form, 'Button ', $FieldValue);
+
+      /**
+       * le champs button_link
+       */
+      $name = 'button_link';
+      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $ThemeUtility->addTextfieldTree($name, $form, 'Button link', $FieldValue);
     }
   }
 
@@ -129,7 +246,7 @@ class ImageTextRightLeft implements ControllerInterface {
      * Get content img_before
      */
     if (isset($options['img'])) {
-      $img = $options['img'];
+      $img = $this->getImageUrlByFid($options['img'], $this->themeObject->getName() . '_513x500');
     } else {
       $img = [
         'img_url' => '/' . drupal_get_path('theme', $this->themeObject->getName()) . '/defaultfile/ImageTextRightLeft/ModelM2/21205351-portrait-de-confiance-jeune-homme-d-affaires-avec-les-bras-croisés-dans-le-bureau.jpg',
@@ -141,7 +258,7 @@ class ImageTextRightLeft implements ControllerInterface {
      * Get content img_small
      */
     if (isset($options['img_small'])) {
-      $img_small = $options['img_small'];
+      $img_small = $this->getImageUrlByFid($options['img_small'], $this->themeObject->getName() . '_228x158');
     } else {
       $img_small = [
         'img_url' => '/' . drupal_get_path('theme', $this->themeObject->getName()) . '/defaultfile/ImageTextRightLeft/ModelM2/portrait-homme-affaires-afro-americain-attrayant-souriant-exterieur_33839-1295.jpg',
@@ -222,6 +339,14 @@ class ImageTextRightLeft implements ControllerInterface {
     } else {
       $button = 'ours services';
     }
+    /**
+     * Get content button
+     */
+    if (isset($options['button_link'])) {
+      $button_link = $options['button_link'];
+    } else {
+      $button_link = '#';
+    }
 
     $filename = \file_get_contents($this->BasePath . '/Sections/ImageTextRightLeft/ModelM3/Drupal.html.twig');
     LoaderDrupal::addStyle(\file_get_contents($this->BasePath . '/Sections/ImageTextRightLeft/ModelM3/style.scss'), 'ImageTextRightLeft-ModelM3');
@@ -234,6 +359,7 @@ class ImageTextRightLeft implements ControllerInterface {
         'sup_title' => $sup_title,
         'title' => $title,
         'button' => $button,
+        'button_link' => $button_link,
         'img_before' => $img_before,
         'header_title' => $header_title,
         'description' => $description,
@@ -263,7 +389,7 @@ class ImageTextRightLeft implements ControllerInterface {
      * Get content img_before
      */
     if (isset($options['img'])) {
-      $img = $options['img'];
+      $img = $this->getImageUrlByFid($options['img'], $this->themeObject->getName() . '_570x394');
     } else {
       $img = [
         'img_url' => '/' . drupal_get_path('theme', $this->themeObject->getName()) . '/defaultfile/ImageTextRightLeft/ModelM2/portrait-homme-affaires-afro-americain-attrayant-souriant-exterieur_33839-1295.jpg',
@@ -288,6 +414,14 @@ class ImageTextRightLeft implements ControllerInterface {
       $button = $options['button'];
     } else {
       $button = 'Make appointment';
+    }
+    /**
+     * Get content img_before
+     */
+    if (isset($options['button_link'])) {
+      $button_link = $options['button_link'];
+    } else {
+      $button_link = '#';
     }
 
     /**
@@ -322,6 +456,7 @@ class ImageTextRightLeft implements ControllerInterface {
         'sup_title' => $sup_title,
         'title' => $title,
         'button' => $button,
+        'button_link' => $button_link,
         'img_before' => $img_before,
         'background_url' => $background_url
       ]

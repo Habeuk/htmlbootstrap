@@ -1,4 +1,7 @@
 <?php
+/**
+ * search grep -rnw '/siteweb/PluginsModules/stephane888' -e 'MenuCenter/style.scss'
+ */
 namespace Stephane888\HtmlBootstrap;
 
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -13,6 +16,7 @@ use Stephane888\HtmlBootstrap\Controller\Comments;
 use Stephane888\HtmlBootstrap\Controller\Footers;
 use Stephane888\HtmlBootstrap\Controller\PriceLists;
 use Stephane888\HtmlBootstrap\Controller\StylePage;
+use Stephane888\HtmlBootstrap\Controller\PageNodesDisplay;
 use Stephane888\HtmlBootstrap\Traits\Examples;
 use Stephane888\HtmlBootstrap\Traits\DrupalUtility;
 
@@ -24,7 +28,7 @@ use Stephane888\HtmlBootstrap\Traits\DrupalUtility;
 class LoaderDrupal {
 
   protected $BasePath = '';
-  use Examples;
+  // use Examples;
   use DrupalUtility;
 
   function __construct()
@@ -54,7 +58,7 @@ class LoaderDrupal {
   public function getSectionHeaders($options)
   {
     $Headers = new Headers($this->BasePath);
-    return $Headers->loadHeaderFile($options);
+    return $Headers->loadFile($options);
   }
 
   /**
@@ -142,29 +146,64 @@ class LoaderDrupal {
     return $PriceLists->loadFile($options);
   }
 
+  public function createFiles($displays, $dir)
+  {
+    $PageNodesDisplay = new PageNodesDisplay($this->BasePath);
+    $PageNodesDisplay->genereFiles($displays, $dir);
+  }
+
   /**
    * Ajoute les styles.
    */
   public static function addStyle($style, $key)
   {
     if (LOAD_SCSS_BY_SESSION) {
-      // dump('addStyle');
-      $Session = new Session();
-      $styles = $Session->get('theme_style', []);
-      // dump($key);
-      $styles[$key] = $style;
-      $Session->set('theme_style', $styles);
-      // dump($styles);
+      static::addData('theme_style', $style, $key);
     }
   }
 
-  public static function addScript($style, $key)
+  public static function addScript($script, $key)
   {
     if (LOAD_SCSS_BY_SESSION) {
-      $Session = new Session();
-      $styles = $Session->get('theme_script', []);
-      $styles[$key] = $style;
-      $Session->set('theme_script', $styles);
+      static::addData('theme_script', $script, $key);
+    }
+  }
+
+  public static function addData($session_key, $data, $key)
+  {
+    $Session = new Session();
+    $datas = $Session->get($session_key, []);
+    $datas[$key] = $data;
+    $Session->set($session_key, $datas);
+  }
+
+  public static function getSessionValue($session_key)
+  {
+    $Session = new Session();
+    return $Session->get($session_key, null);
+  }
+
+  public static function file_save($filename, $result)
+  {
+    $monfichier = fopen($filename, 'w+');
+    fputs($monfichier, $result);
+    fclose($monfichier);
+  }
+
+  public static function file_delete($filename)
+  {
+    return unlink($filename);
+  }
+
+  public static function deleteSession($key)
+  {
+    $Session = new Session();
+    if (\is_array($key)) {
+      foreach ($key as $k) {
+        $Session->remove($k);
+      }
+    } else {
+      $Session->remove($key);
     }
   }
 
@@ -190,14 +229,6 @@ class LoaderDrupal {
     // strpos
     if ($route == '')
       return true;
-    if (false)
-      dump([
-        $RouteName,
-        $route_node,
-        $route,
-        $parameter,
-        $nid
-      ]);
 
     /**
      * page d'accuiel
