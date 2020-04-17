@@ -1,0 +1,23 @@
+<section class="site-header-m2 {% if static_menu %} is_static {% if menu_bellow_content %} is_absolute {% endif %} {% endif %}">
+	<div class="container">
+		<div class="items d-flex justify-content-between">
+			<div class="item left">
+				<div class="d-flex h-100 align-items-center justify-content-center justify-content-sm-start  ">
+					{{ branding }}
+				</div>
+			</div>
+			<div class="item center">
+				<div class="d-flex h-100 align-items-center">
+					{{ main_menu }}
+				</div>				
+			</div>
+			{% if show_right %}
+			<div class="item right">
+				<div class="d-flex h-100 align-items-center">
+					{{ data_right }}
+				</div>
+			</div>
+			{% endif %}
+		</div>		
+	</div>
+</section>

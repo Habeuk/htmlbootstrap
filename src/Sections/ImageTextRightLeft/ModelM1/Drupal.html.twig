@@ -1,12 +1,24 @@
+{% 
+    set class_text=[
+    	'text-bloc'
+    ]
+%}
+
+{% 
+    set class_img=[
+    	'text-img'
+    ]
+%}
+
 {% set block_img_content %}
-	<div class="col-lg-6">
+	<div{{ attribute_img.addClass(class_img) }}>
 		<div class="text-body image">
-			<img src="{{ img_url }}" alt="{{ img_alt }}" class="img-fluid {{ img_class }}"/>
+			{% if img_url %}<img src="{{ img_url }}" alt="{{ img_alt }}" class="img-fluid {{ img_class }}"/> {% endif %}
 		</div>
 	</div>
 {% endset %}
 <section class="imagetextrightleft-modelm1">
-	<div class="container">
+	<div class="container sectionspace">
 		<div class="row">
 			{% if header %}
     			{{ header }}
@@ -16,11 +28,11 @@
 			{% if img_before %}
 				{{ block_img_content }}
 			{% endif %}
-			<div class="col-lg-6">
-				<div class=" text-body {% if img_before %} left {% endif %} ">
+			<div{{ attribute_text.addClass(class_text) }}>
+				<div class=" text-body content-text{% if img_before %} left {% endif %} ">
 					<h2 class="title">{{ title }}</h2>
 					<div class="text">{{ text | raw }}</div>
-					<div class="button">{{ button }}</div>
+					{% if button_link %}<div class="button"><a href="{{ button_link }}" class="btn {{ button_btn }}">{{ button }}</a></div>{% endif %}
 				</div>
 			</div>
 			{% if img_before %}{% else %}

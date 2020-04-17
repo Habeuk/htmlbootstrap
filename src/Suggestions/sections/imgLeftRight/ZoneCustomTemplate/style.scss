@@ -1,0 +1,46 @@
+.zone-custom-template{
+	@include media-max(SM) {		
+		position: relative;
+    	z-index: 2;
+    	background: inherit;
+    	padding-top: 1px;
+    	padding-bottom: 1px;
+    }
+	.container{
+		//max-width: 992px !important;
+	}
+   .sectionspace{
+   		margin-top:$margin_top;
+   		margin-bottom: $margin_bottom;
+   	}
+	&.img-bg{
+		background-color: #e2e2e2;
+		background-size: cover;
+    	background-attachment: fixed;
+    	z-index:1;
+    	position:relative;
+    	font-size: 1.5em;
+    	&::before{
+    		content:"";
+    		position:absolute;
+    		top:0;
+    		left:0;
+    		right:0;
+    		bottom:0;
+    		z-index:1;	
+    		background-color: rgba(0, 0, 0, 0.68);
+    	}
+   		.sectionspace{
+	   		margin-top:0;
+	   		margin-bottom: 0;
+	   		padding-top:$margin_top;
+	   		padding-bottom:$margin_bottom;
+	   		z-index:2;
+    		position:relative;
+    		.content-body {	
+    			color:#FFF;
+    			a{color:#FFF;}
+    		}
+	   	}
+	}
+}

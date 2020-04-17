@@ -1,0 +1,6 @@
+<header>
+	<h1 class="title">{{ content.title }}</h1>
+	<p class="localisation"><i class="fas fa-map-marker-alt"></i>{{ content.localisation }}</p>
+	<div class="user">{{ content.user }}</div><div class="date-update">{{ content.date_update }}</div>
+	<div class="price">{{ content.price }} {% if content.price_suffix != '' %}{{ content.price_suffix }}{% endif %}</div>
+</header>

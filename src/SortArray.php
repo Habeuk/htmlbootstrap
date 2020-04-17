@@ -39,10 +39,6 @@ class SortArray {
             $config = \Drupal::configFactory()->getEditable($theme_name . '.settings');
             $config->set($key, $value);
             $config->save();
-            if ('theme_builder_pricelists' == $key) {
-              debugLog::logs($config->get($key), 'Config_' . $key, 'dump', true);
-            }
-            // debugLog::logs($config->get($key), 'Config_' . $key, 'dump', true);
           }
         }
       } else {

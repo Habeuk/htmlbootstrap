@@ -1,0 +1,141 @@
+// en attendant de trouver une meilleur approche pour les images statics sur mobiles.
+.node--type-page{
+		.dialog-off-canvas-main-canvas{
+			.fixe-image{
+				display:none;
+			}
+		}
+}
+@include media-max(SM) {
+	.node--type-page, .path-frontpage{
+		.dialog-off-canvas-main-canvas{
+			 background: inherit;
+			.fixe-image{
+				display:block;
+				position: fixed;
+    			top: auto;
+    			left: 0;
+    			right: 0;
+    			bottom: auto;
+    			min-height: 500px;
+    			@include media-min(SM) {
+					min-height:600px;
+				}
+    			z-index: -1000;
+    			background-size: cover;
+    			background-position: bottom center;
+    			&::before{
+			    	content: "";
+			    	position: absolute;
+			    	top: 0;
+			    	left: 0;
+			    	bottom: 0;
+			    	right: 0;
+			    	background: #000000;
+			    	opacity: 0.1;
+			    	z-index: 0;
+			    }
+			    &::after{
+			   		content: "";
+			    	position: absolute;
+			    	top: 0;
+			    	left: 0;
+			    	bottom: 0;
+			    	right: 0;
+			    	z-index: -1;
+			    	filter: blur(10px);
+			    	backdrop-filter: blur(10px);
+			    	transition: all 400ms, -webkit-backdrop-filter 400ms, -webkit-backdrop-filter 400ms;
+			   }
+			   &.lazyloaded::after{
+   					filter: none;
+   			    	backdrop-filter: none;
+    		   }
+			}	
+			> *{
+				    position: relative;
+    				z-index: 1;
+    				background: inherit;
+    				padding-bottom:1px;// il faut trouver une autre approche.
+    				padding-top: 1px;
+    		}
+    		.static-image::before{
+    			opacity: 0 !important;
+    		}
+		}	
+	}
+}
+.static-image{
+	min-height:500px;
+	height: 50vh;
+	@include media-min(SM) {
+		min-height:600px;
+	}
+	// pour les iphones.
+	@include media-max(SM) {		
+		background:none !important;
+	}
+	@include media-min(DD) {
+		height: 80vh;
+	}
+	@include media-min(M) {
+		min-height: 550px;
+	}
+	background-size: cover;
+    background-position: bottom center;
+    background-attachment: fixed;
+    position:relative;
+    z-index: 1;
+    &::before{
+    	content: "";
+    	position: absolute;
+    	top: 0;
+    	left: 0;
+    	bottom: 0;
+    	right: 0;
+    	background: #000000;
+    	opacity: 0.3;
+    	z-index: 0;
+    }
+   &::after{
+   		content: "";
+    	position: absolute;
+    	top: 0;
+    	left: 0;
+    	bottom: 0;
+    	right: 0;
+    	z-index: -1;
+    	filter: blur(10px);
+    	backdrop-filter: blur(10px);
+    	transition: all 400ms, -webkit-backdrop-filter 400ms, -webkit-backdrop-filter 400ms;
+   }
+   &.lazyloaded::after{
+   		filter: none;
+   		backdrop-filter: none;
+    }
+   .sectionspace{
+   		margin-top:$margin_top*1.4;
+   		margin-bottom: $margin_bottom;
+   		@include media-min(DD) {
+   			margin-top:$margin_top*2.4;
+   			margin-bottom: $margin_bottom;	
+   		}
+   	}
+   .content-body{
+ 		font-size: 1.2em;
+    	font-weight: 600;	
+    	@include media-min(DD) {
+    		font-size: 1.5em;
+    	}
+ 	} 
+ 	.field {
+ 		.field__label{
+ 			display:none;
+ 		}
+ 	}
+	 @include media-min(L) {
+	 	header.header .title{
+	 		font-size: 3.8em;
+	 	}
+	 }
+}

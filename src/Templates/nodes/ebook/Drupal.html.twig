@@ -69,7 +69,8 @@
     not node.isPublished() ? 'node--unpublished',
     view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
     'clearfix',
-    page ? 'container-node'
+    page ? 'container-node',
+    'node-default-ebook'
   ]
 %}
 
@@ -78,7 +79,7 @@
   <header class="header">
   	{{ title_prefix }}
   	{% if page %}
-  		<h1 {{ title_attributes.addClass('node__title title') }}>{{ label_clean|striptags }}</h1>
+  		<h1 {{ title_attributes.addClass('node__title title') }}>{{ label_clean }}</h1>
   	{% endif %}    
     {% if not page %}
       <h2{{ title_attributes.addClass('node__title') }}>

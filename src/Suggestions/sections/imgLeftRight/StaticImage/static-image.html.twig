@@ -1,0 +1,30 @@
+{%
+    set classes = [
+    	'static-image',
+    	'section',
+    	'd-flex',
+    	'text-white'
+    ]
+%}
+
+{%
+    set mobileclasses = [
+    	'fixe-image',
+    ]
+%}
+
+<section{{ attributes.addClass(classes) }}>
+	<div{{ attributes.addClass(mobileclasses).removeClass(classes) }}></div>
+	<div class="container sectionspace">
+		
+		<div class="row body">			
+			<div class="col-lg-8 col-text">	
+				{% set type_tag = orther_vars.type_tag %}
+				{% include '@terremploi/Suggestions/sections/headers/model_with_bar/model_with_bar.html.twig' %}			 
+				<div class=" content-body {% if img_before %} right {% endif %} ">
+					{{ sub_title }}
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

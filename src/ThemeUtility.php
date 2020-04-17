@@ -35,7 +35,7 @@ class ThemeUtility {
   /**
    * add textfield array
    */
-  public function addTextfieldTree($name, &$form, $title = 'title', $default = '')
+  public function addTextfieldTree($name, &$form, $title, $default)
   {
     $form[$name] = [
       '#type' => 'textfield',
@@ -44,13 +44,14 @@ class ThemeUtility {
     ];
   }
 
-  public function addSelectTree($name, &$form, $options = [], $title = 'title', $default = '')
+  public function addSelectTree($name, &$form, $options, $title, $default)
   {
     $form[$name] = [
       '#type' => 'select',
       '#title' => t($title),
       '#default_value' => $default,
-      '#options' => $options
+      '#options' => $options,
+      '#empty_value' => ''
     ];
   }
 
@@ -125,7 +126,7 @@ class ThemeUtility {
     );
   }
 
-  public function addTextareaSimpleTree($name, &$form, $title = 'Description', $default = '')
+  public function addTextareaSimpleTree($name, &$form, $title, $default)
   {
     $form[$name] = [
       '#type' => 'textarea',
@@ -137,7 +138,7 @@ class ThemeUtility {
   /**
    * add image
    */
-  public function addImageTree($name, &$form, $title = 'image', $default)
+  public function addImageTree($name, &$form, $title, $default)
   {
     $form[$name] = [
       '#type' => 'managed_file',

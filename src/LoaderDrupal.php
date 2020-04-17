@@ -1,11 +1,13 @@
 <?php
 /**
  * search grep -rnw '/siteweb/PluginsModules/stephane888' -e 'MenuCenter/style.scss'
+ *
+ *
  */
 namespace Stephane888\HtmlBootstrap;
 
 use Symfony\Component\HttpFoundation\Session\Session;
-use Stephane888\HtmlBootstrap\Controller\TopHeader;
+use Stephane888\HtmlBootstrap\Controller\TopHeaders;
 use Stephane888\HtmlBootstrap\Controller\Headers;
 use Stephane888\HtmlBootstrap\Controller\Sliders;
 use Stephane888\HtmlBootstrap\Controller\ImageTextRightLeft;
@@ -28,6 +30,8 @@ use Stephane888\HtmlBootstrap\Traits\DrupalUtility;
 class LoaderDrupal {
 
   protected $BasePath = '';
+
+  private $loadScss = false;
   // use Examples;
   use DrupalUtility;
 
@@ -36,7 +40,7 @@ class LoaderDrupal {
     $this->BasePath = __DIR__;
     // $Session = new Session();
     // $Session->remove('theme_style');
-    $this->getDefautStyle();
+    $this->checkLoadScss()->getDefautStyle();
   }
 
   /**
@@ -48,7 +52,7 @@ class LoaderDrupal {
    */
   public function getSectionTopHeaders($options)
   {
-    $Headers = new TopHeader($this->BasePath);
+    $Headers = new TopHeaders($this->BasePath);
     return $Headers->loadFile($options);
   }
 
@@ -71,7 +75,7 @@ class LoaderDrupal {
   public function getSectionSliders($options)
   {
     $Sliders = new Sliders($this->BasePath);
-    return $Sliders->loadSliderFile($options);
+    return $Sliders->loadFile($options);
   }
 
   /**
@@ -152,6 +156,12 @@ class LoaderDrupal {
     $PageNodesDisplay->genereFiles($displays, $dir);
   }
 
+  public function loadPagePlugins(&$variables, $displays, $node, $theme_name)
+  {
+    $PageNodesDisplay = new PageNodesDisplay($this->BasePath);
+    $PageNodesDisplay->loadPagePlugins($variables, $displays, $node, $theme_name);
+  }
+
   /**
    * Ajoute les styles.
    */
@@ -181,6 +191,12 @@ class LoaderDrupal {
   {
     $Session = new Session();
     return $Session->get($session_key, null);
+  }
+
+  public static function DeleteSessionValue($session_key)
+  {
+    $Session = new Session();
+    return $Session->remove($session_key);
   }
 
   public static function file_save($filename, $result)
@@ -250,16 +266,33 @@ class LoaderDrupal {
         return true;
       }
     }
-
     return false;
+  }
+
+  private function checkLoadScss()
+  {
+    if (isset($_GET['build']) && $_GET['build'] == 'scss') {
+      $this->loadScss = true;
+    }
+    return $this;
   }
 
   private function getDefautStyle()
   {
-    $Session = new Session();
-    $styles = $Session->get('theme_style', []);
-    $styles['init'] = '@import "../scss/defaut/models.scss";';
-    $styles['init2'] = '@import "../scss/defaut/defaultStyle.scss";';
-    $Session->set('theme_style', $styles);
+    if ($this->loadScss) {
+      $Session = new Session();
+
+      if (defined('KEY_LOAD_SCSS') && KEY_LOAD_SCSS == 'loarder2') {
+        $styles = $Session->get('theme_style', []);
+        $styles['init'] = '@import "defaut/loader_model1.scss";';
+        $styles['init2'] = '@import "defaut/defaultStyle.scss";';
+        $Session->set('theme_style', $styles);
+      } else {
+        $styles = $Session->get('theme_style', []);
+        $styles['init'] = '@import "defaut/models.scss";';
+        $styles['init2'] = '@import "defaut/defaultStyle.scss";';
+        $Session->set('theme_style', $styles);
+      }
+    }
   }
 }

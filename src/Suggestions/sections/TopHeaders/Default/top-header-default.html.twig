@@ -1,0 +1,14 @@
+{%
+    set classes = [
+    	'top-header-default',
+    ]
+%}
+<section{{ attributes.addClass(classes) }}>
+	<div class="container">
+		<div class="items d-flex align-items-center justify-content-between">
+			{% for item in items %}
+				<div class="item">{{ item | raw }}</div>
+			{% endfor %}			
+		</div>
+	</div>
+</section>

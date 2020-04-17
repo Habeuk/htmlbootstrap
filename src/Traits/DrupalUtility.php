@@ -3,6 +3,7 @@ namespace Stephane888\HtmlBootstrap\Traits;
 
 // use Drupal\Core\Template\Attribute;
 use Drupal\debug_log\debugLog;
+use Stephane888\HtmlBootstrap\Controller\Cards;
 
 trait DrupalUtility {
 
@@ -65,6 +66,7 @@ trait DrupalUtility {
       }
     } //
     elseif ($options['type'] == 'RxLeftMenuRight_M1') {
+
       /**
        * On recupere le tableau du branding.
        */
@@ -79,31 +81,111 @@ trait DrupalUtility {
         $options['main_menu'] = $variables['page']['header'][$theme_name . '_main_menu'];
         unset($variables['page']['header'][$theme_name . '_main_menu']);
       }
+    } elseif ($options['type'] == 'LogoLeftMenuRight_M2') {
+      /**
+       * On recupere le tableau du branding.
+       */
+      if (isset($variables['page']['header'][$theme_name . '_branding'])) {
+        $options['branding'] = $variables['page']['header'][$theme_name . '_branding'];
+        unset($variables['page']['header'][$theme_name . '_branding']);
+      }
+      /**
+       * Get main menu
+       */
+      if (isset($variables['page']['header'][$theme_name . '_main_menu'])) {
+        $options['main_menu'] = $variables['page']['header'][$theme_name . '_main_menu'];
+        unset($variables['page']['header'][$theme_name . '_main_menu']);
+      }
+      /**
+       * Get orther datas:
+       */
+      if (isset($display['options'])) {
+        if (! empty($display['options']['block_right'])) {
+          $options['data_right'] = $display['options']['block_right'];
+        }
+        $options['static_menu'] = (isset($display['options']['static_menu'])) ? $display['options']['static_menu'] : 1;
+        $options['menu_bellow_content'] = (isset($display['options']['menu_bellow_content'])) ? $display['options']['menu_bellow_content'] : 0;
+        $options['show_right'] = (isset($display['options']['show_right'])) ? $display['options']['show_right'] : 1;
+      }
+      // dump($display, $options);
     }
   }
 
+  public function loadTopHeaderDatas(&$options, $group, $theme_name, $display)
+  {
+    ;
+  }
+
+  /**
+   *
+   * @param array $options
+   * @param string $group
+   * @param string $theme_name
+   * @param array $display
+   */
   public function loadFootersDatas(&$options, $group, $theme_name, $display)
   {
     $provider = $display['provider'];
     if ($provider == 'theme') {
       return;
     } elseif ($provider == 'custom') {
-      $options['cards'] = [];
-      $options['card_class_block'] = $display['card_class_block'];
-      foreach ($display['cards'] as $card) {
-        if ($card['model'] == 'texte' && $card['provider'] == 'custom') {
-          $options['cards'][] = [
-            'title' => $card['options']['title'],
-            'text' => $card['options']['description']
-          ];
-        } elseif ($card['model'] == 'fb-page-plugin') {
-          $options['cards'][] = [
-            'title' => $card['options']['title'],
-            'text' => $this->template_fb_page_plugin($card['options'])
-          ];
+      if ($display['model'] == 'footerm1') {
+        $options['cards'] = [];
+        $options['card_class_block'] = $display['card_class_block'];
+        $options = \array_merge($options, $display);
+
+        foreach ($display['cards'] as $card) {
+          if ($card['model'] == 'texte' && $card['provider'] == 'custom') {
+            $options['cards'][] = [
+              'title' => $card['options']['title'],
+              'text' => $card['options']['description']
+            ];
+          } elseif ($card['model'] == 'fb-page-plugin') {
+            $options['cards'][] = [
+              'title' => $card['options']['title'],
+              'text' => $this->template_fb_page_plugin($card['options'])
+            ];
+          } elseif ($card['model'] == 'menu') {
+            $options['cards'][] = [
+              'title' => $card['options']['title'],
+              'text' => self::loadMenu($card['options']['description'])
+            ];
+          } elseif ($card['model'] == 'PostsVerticalM1' && $card['provider'] == 'node') {
+            // $Cards = new ;
+            // new \Stephane888\HtmlBootstrap\Controller\Cards Cards();
+            // \Stephane888\HtmlBootstrap\Controller\Cards::
+
+            $Cards = new \Stephane888\HtmlBootstrap\Controller\Cards($this->BasePath);
+            $new_option = [
+              'cards' => $this->loadFieldsDatas($this->getNodes($card['options']['contenttype'], $card['options']['nombre_item']), $card['options']['cards'])
+            ];
+            $new_option['type'] = 'PostsVerticalM1';
+
+            $options['cards'][] = [
+              'title' => $card['options']['title'],
+              'text' => $Cards->loadFile($new_option)
+            ];
+          }
+        }
+        // $options = \array_merge($options, $display['options']);
+      } elseif ($display['model'] == 'FooterMenuRx') {
+        $options['footer_menu'] = [
+          'menu_select' => $display['options']['menu_select'],
+          'status_rx' => $display['options']['status_rx'],
+          'rx_position' => $display['options']['rx_position'],
+          'rx_model' => $display['options']['rx_model'],
+          'rx_logos' => $display['options']['rx_logos']
+        ];
+        $options['end_left'] = $display['options']['end_left'];
+        $options['end_right'] = $display['options']['end_right'];
+        $languagecode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+        if ($languagecode) {
+          $options['end_right_link'] = '/' . $languagecode . $display['options']['end_right_link'];
+          ;
+        } else {
+          $options['end_right_link'] = $display['options']['end_right_link'];
         }
       }
-      // $options = \array_merge($options, $display['options']);
     }
   }
 
@@ -124,9 +206,39 @@ trait DrupalUtility {
 
   public function loadImageTextRightLeftDatas(&$options, $group, $theme_name, $display)
   {
-    if ($display['provider'] == 'custom') {
+    $provider = $display['provider'];
+    if ($provider == 'custom') {
       $options = \array_merge($options, $display['options']);
+    } elseif ($provider == 'node') {
+      if ($display['model'] == 'content_text') {
+        $bundle = $display['options']['content_type'];
+        $bundle = $display['options']['content_type'];
+        $node = \Drupal\node\Entity\Node::load($display['options']['nid']); // \Drupal::entityTypeManager()->getStorage('node')->load($display['options']['nid']);
+        $field = $display['options']['text'];
+        if ($node && $bundle == $node->bundle() && ($node->hasField($field))) {
+          $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+          if ($language) {
+            $translation = $node->getTranslation($language);
+            $options['text'] = $translation->{$field}->view([
+              'label' => 'hidden'
+            ]);
+          } else {
+            $options['text'] = $node->{$field}->view([
+              'label' => 'hidden'
+            ]);
+          }
+        }
+      }
     }
+  }
+
+  protected function loadFieldsDatas($nodes, &$options)
+  {
+    $results = [];
+    foreach ($nodes as $node) {
+      $results[] = $this->loadFieldsNode($node, $options);
+    }
+    return $results;
   }
 
   public function loadPriceLists(&$options, $group, $theme_name, $display)
@@ -230,7 +342,6 @@ trait DrupalUtility {
           foreach ($display['options']['cards'] as $key => $field) {
             if ($node->hasField($field)) {
               // debugLog::logs($node->get($field), 'getfield__loadCardsDatas ' . $options['type'], 'kint', true);
-              // $options['cards'][$i][$key] = $node->get($field)->view([]);
               $options['cards'][$i][$key] = $node->{$field}->view('carousel');
             } else {
               $options['cards'][$i][$key] = $field;
@@ -280,12 +391,23 @@ trait DrupalUtility {
     return \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($ids);
   }
 
+  public function loadSlideDatas(&$options, $group, $theme_name, $display)
+  {
+    $provider = $display['provider'];
+    if ($provider == 'theme') {
+      return false;
+    } elseif ($provider == 'custom') {
+      $options['provider'] = $display['provider'];
+      $options = \array_merge($options, $display['options']);
+    }
+  }
+
   /**
    *
    * @param object $variables
    * @param string $group
    */
-  public function loadSlideDatas(&$options, $group, $theme_name)
+  public function loadSlideDatas_0(&$options, $group, $theme_name)
   {
     $results = [];
     $provider = theme_get_setting($group . '_provider', $theme_name);

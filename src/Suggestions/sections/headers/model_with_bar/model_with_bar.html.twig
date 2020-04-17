@@ -1,0 +1,8 @@
+<header class="header">
+	<span class="bar_title light">{{ sup_title }}</span>
+	{% if type_tag %}
+		<{{ type_tag }} class="title">{{ title }}</{{ type_tag }}>
+	{% else %}
+		<h2 class="title">{{ title }}</h2>
+	{% endif %}
+</header>

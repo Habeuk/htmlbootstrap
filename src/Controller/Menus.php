@@ -1,6 +1,9 @@
 <?php
 namespace Stephane888\HtmlBootstrap\Controller;
 
+use Drupal\Core\Menu\MenuTreeParameters;
+use Drupal\system\Entity\Menu;
+
 class Menus {
 
   /**
@@ -31,5 +34,32 @@ class Menus {
       }
     }
     return $items;
+  }
+
+  /**
+   *
+   * @param string $menu_name
+   * @return array
+   */
+  public static function loadMenu($menu_name)
+  {
+    $MenuTreeParameters = new MenuTreeParameters();
+    $menu_tree = \Drupal::menuTree();
+    $menuTreeFooter = $menu_tree->load($menu_name, $MenuTreeParameters);
+    return $menu_tree->build($menuTreeFooter);
+  }
+
+  /**
+   * .
+   */
+  public static function getAllMenus()
+  {
+    $all_menus = Menu::loadMultiple();
+    $menus = [];
+    foreach ($all_menus as $id => $menu) {
+      $menus[$id] = $menu->label();
+    }
+    asort($menus);
+    return $menus;
   }
 }

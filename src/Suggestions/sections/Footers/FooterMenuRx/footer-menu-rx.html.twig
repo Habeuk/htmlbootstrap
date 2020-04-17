@@ -1,0 +1,16 @@
+<section{{ attributes }}>
+	<div class="container sectionspace">
+		<nav clss="navbar footer">{{ footer_menu }}</nav>
+		<div class="d-flex justify-content-between footer_end ">
+			<div class="end_left">{{ end_left|raw }}</div>
+			<div class="end_right">
+			{% if end_right_link and end_right_link != ''%}
+				<a href="{{ end_right_link }}">{{ end_right|raw }}</a>
+			{% else %}
+			    {{ end_right|raw }}
+			{% endif %}
+			
+			</div>
+		</div>
+	</div>
+</section>

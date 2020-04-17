@@ -24,13 +24,15 @@
   We call a macro which calls itself to render the full tree.
   @see http://twig.sensiolabs.org/doc/tags/macro.html
 #}
-{{ menus.menu_links(items, attributes, 0) }}
 
-{% macro menu_links(items, attributes, menu_level) %}
+{{ menus.menu_links(items, attributes, 0, show_icone_home) }}
+
+{% macro menu_links(items, attributes, menu_level, show_icone_home=null) %}
+
   {% import _self as menus %}
   {% if items %}
     {% if menu_level == 0 %}
-      <ul{{ attributes.addClass('nav navbar-nav m-md-auto') }}>
+      <ul{{ attributes.addClass('nav navbar-nav m-md-auto justify-content-lg-center') }}>
     {% else %}
       <ul class="dropdown-menu">
     {% endif %}
@@ -45,6 +47,7 @@
         ]
       %}
       <li{{ item.attributes.addClass(classes) }}>
+      
         {%
           set link_classes = [
             not menu_level ? 'nav-link',
@@ -53,11 +56,15 @@
             item.url.getOption('attributes').class ? item.url.getOption('attributes').class | join(' '),
           ]
         %}
-        {% if item.below %}
+        {% if item.below %}        
           {{ link(item.title, item.url, {'class': link_classes, 'data-toggle': 'dropdown', 'aria-expanded': 'false', 'aria-haspopup': 'true' }) }}
           {{ menus.menu_links(item.below, attributes, menu_level + 1) }}
-        {% else %}
-          {{ link(item.title, item.url, {'class': link_classes}) }}
+        {% else %}        
+        	{% if menu_level == 0 and loop.index == 1 and show_icone_home == true %}
+        	    <a href="/" class="nav-link"><i class="fa fa-home"></i></a>
+            {% else %}
+              {{ link(item.title, item.url, {'class': link_classes}) }}
+            {% endif %}
         {% endif %}
       </li>
     {% endfor %}

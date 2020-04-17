@@ -1,0 +1,36 @@
+.bloc-contact{
+	.sectionspace{
+   		margin-top:$margin_top;
+   		margin-bottom: $margin_bottom;
+   	}
+   &.show_bg{
+   		.sectionspace{
+   			margin-top: 0;
+   			margin-bottom: 0;
+   			padding-top:$margin_top;
+   			padding-bottom: $margin_bottom;
+   		}
+   		background-size: 80%;
+    	background-position: center;
+   }
+   .address-items{
+		padding-left: 0;
+		list-style: none;
+		> li{
+			padding-bottom: 0.9em;
+			.title{
+				padding-bottom: 0.3em;	
+				border-bottom: 1px solid #ccc;
+				font-size: 1.2em;
+			}	
+			.icone{
+				font-size: 3em;	
+				padding-right: 0.3em;
+				color: $color2;
+			}
+			.desc{
+				font-size: 0.9em;
+			}
+		}
+    }
+}

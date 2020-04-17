@@ -1,0 +1,51 @@
+{% set main_classe=[
+		'bloc-contact'
+    ] 
+%}
+{% 
+    set class_address = [
+        'address'
+    ]
+%}
+
+{% 
+    set class_form = [
+        'form'
+    ]
+%}
+
+{% set block_img_content %}
+	<div{{ attribute_address.addClass(class_address) }}>
+		<ul class="address-items">
+			{% for card in cards %}	
+				<li>
+					<h4 class="title">{{ card.text }}</h4>
+					<div class="d-flex align-items-center">
+						<span class="icone">{{ card.icone | raw }}</span>
+						<div class="desc">{{ card.description | raw}}</div>
+					</div>
+				</li>
+			{% endfor %}
+		</ul>
+	</div>
+{% endset %}
+
+<div{{ attributes.addClass(main_classe) }}>
+	<div class="container sectionspace">
+		<div class="row body">
+			{% if orther_vars.img_before == 1%}
+				{{ block_img_content }}
+			{% endif %}
+			<div{{ attribute_form.addClass(class_form) }}>
+				<div class="header-bloc">
+					<h3 class="title">{{ title_header }}</h3>
+					<div class="description">{{ desc_header | raw }}</div>
+				</div>
+				{{ forms | raw }}
+			</div>			
+			{% if orther_vars.img_before == 0 %}
+				{{ block_img_content }}
+			{% endif %}
+		</div>
+	</div>
+</div>

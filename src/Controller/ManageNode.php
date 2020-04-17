@@ -5,6 +5,10 @@ class ManageNode {
 
   protected $entity_type = 'node';
 
+  /**
+   *
+   * @return []
+   */
   public function getContentType()
   {
     $node_types = \Drupal\node\Entity\NodeType::loadMultiple();

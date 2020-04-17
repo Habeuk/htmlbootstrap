@@ -1,0 +1,21 @@
+{% 
+    set classe = [
+        'header-bg',
+        'section',
+        'header-node'
+    ]
+%}
+{% if image.img_url %}
+	{% set img_bg = image.img_url %}
+{% else %}
+	{% set img_bg = '' %}
+{% endif %}
+<section{{ attributes.addClass(classe) }}>
+	<div class="container sectionspace">
+		<div class="items">
+		{% if content_top %}<div class="item content-top"> {{ content_top | raw }} </div> {% endif %}
+	    {% if content_center %}<div class="item content-center"> {{ content_center | raw }} </div> {% endif %}
+	    {% if content_bottom %}<div class="item content-bottom"> {{ content_bottom | raw }} </div> {% endif %}
+	    </div>
+	</div>
+</section>

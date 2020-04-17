@@ -5,6 +5,8 @@ use Stephane888\HtmlBootstrap\LoaderDrupal;
 use Stephane888\HtmlBootstrap\Traits\Portions;
 use Stephane888\HtmlBootstrap\Entity\ImageStyleTheme;
 use Stephane888\HtmlBootstrap\ThemeUtility;
+use Drupal\Core\Template\Attribute;
+use Stephane888\HtmlBootstrap\PreprocessTemplate;
 
 class Cards implements ControllerInterface {
   use Portions;
@@ -54,21 +56,53 @@ class Cards implements ControllerInterface {
      */
     if (isset($options['type'])) {
       if ($options['type'] == 'IconeModelFlat') {
+        /**
+         * Get class of nombre_item
+         */
+        if (isset($options['show_border_card'])) {
+          $show_border_card = $options['show_border_card'];
+        } else {
+          $show_border_card = 0;
+        }
+        /**
+         * Get class of nombre_item
+         */
+        if (isset($options['show_bg'])) {
+          $show_bg = $options['show_bg'];
+        } else {
+          $show_bg = 0;
+        }
+        $Attribute = new Attribute();
+        if ($show_border_card) {
+          $Attribute->addClass('border-card');
+        }
+        if ($show_bg) {
+          $Attribute->addClass('show-bg');
+          $url_image = $this->getImageUrlByFid($options['image_bg'], $options['image_style_bg']);
+          $Attribute->setAttribute('style', 'background-image:url(' . $url_image['img_url'] . ')');
+        }
+
         if (empty($cards)) {
           $number = 8;
           $cards = $this->loadDefaultData($number);
+        } else {
+          $cards = $this->perfomDatas($cards, $options);
         }
+
         $fileName = \file_get_contents($this->BasePath . '/Sections/Cards/IconeModelFlat/Drupal.html.twig');
         LoaderDrupal::addStyle(\file_get_contents($this->BasePath . '/Sections/Cards/IconeModelFlat/style.scss'), 'Cards-IconeModelFlat');
         return [
           '#type' => 'inline_template',
           '#template' => $fileName,
           '#context' => [
+            'attribute' => $Attribute,
             'cards' => $cards,
-            'card_class_block' => $card_class_block
+            'card_class_block' => $card_class_block,
+            'show_border_card' => $show_border_card
           ]
         ];
       } elseif ($options['type'] == 'PostsVerticalM1') {
+
         if (empty($cards)) {
           $cards = $this->loadDefaultData__PostsVerticalM1($nombre_item);
         }
@@ -250,6 +284,39 @@ class Cards implements ControllerInterface {
 
   /**
    *
+   * @param string $cards
+   * @param string $options
+   */
+  protected function perfomDatas($cards, $options)
+  {
+    foreach ($cards as $key => $card) {
+      $attribute = new Attribute();
+      if (! empty($options['align_card_text'])) {
+        $attribute->addClass($options['align_card_text']);
+      }
+      if (! empty($card['link'])) {
+        $attribute->addClass('card-link');
+      }
+      if (! empty($options['show_shadow'])) {
+        $attribute->addClass('card-image');
+      }
+      if ($options['sous_models'] == 'image') {
+        $url_image = $this->getImageUrlByFid($card['image'], $options['image_style']);
+        $cards[$key]['icone'] = [
+          '#theme' => 'image',
+          '#attributes' => [
+            'src' => $url_image['img_url']
+          ]
+        ];
+      }
+      $cards[$key]['attribute'] = $attribute;
+    }
+
+    return $cards;
+  }
+
+  /**
+   *
    * @param number $number
    */
   protected function loadDefaultData($number = 8)
@@ -281,6 +348,7 @@ class Cards implements ControllerInterface {
       'PostsVerticalM1' => 'PostsVerticalM1',
       'CardsModel2' => 'CardsModel2',
       'StepModel1' => 'StepModel1',
+      'CardsModel3' => 'CardsModel3',
       'CardsModel3' => 'CardsModel3'
     ];
   }
@@ -363,8 +431,140 @@ class Cards implements ControllerInterface {
   public static function loadFields($model, &$form, $options)
   {
     $ThemeUtility = new ThemeUtility();
+    /**
+     * class card_class_block
+     */
+    $name = 'card_class_block';
+    $FieldValue = (! empty($options[$name])) ? $options[$name] : 'col-md-6 col-lg-3';
+    $ThemeUtility->addTextfieldTree($name, $form, 'Class colonne bootstrap', $FieldValue);
+    if ($model == 'IconeModelFlat') {
+      /**
+       * show_control
+       */
+      $name = 'sous_models';
+      $FieldValue = $sous_models = (isset($options[$name])) ? $options[$name] : 'icone';
+      $option_models = [
+        'icone' => 'model with icone',
+        'image' => 'Model avec image'
+      ];
+      // dump($sous_models);
+      $ThemeUtility->addSelectTree($name, $form, $option_models, 'Selectionner le sous model', $FieldValue);
 
-    if ($model == 'CardsModel2') {
+      /**
+       * Align text
+       */
+      $name = 'align_card_text';
+      $FieldValue = (isset($options[$name])) ? $options[$name] : 'icone';
+      $option_models = [
+        'text-center' => 'text-center',
+        'text-left' => 'text-left',
+        'text-right' => 'text-right',
+        'text-justify' => 'text-justify'
+      ];
+      $ThemeUtility->addSelectTree($name, $form, $option_models, "Selectionner l'alignement du texte", $FieldValue);
+      /**
+       * list images styles.
+       *
+       * @var array $styles_images.
+       */
+      $styles_images = PreprocessTemplate::loadAllStyleMedia();
+      $name = 'image_style';
+      $FieldValue = (isset($options[$name])) ? $options[$name] : 'large';
+      $ThemeUtility->addSelectTree($name, $form, $styles_images, "Selectionner le style d'image", $FieldValue);
+
+      /**
+       * show_control
+       */
+      $name = 'show_border_card';
+      $FieldValue = (isset($options[$name])) ? $options[$name] : 0;
+      $ThemeUtility->addCheckboxTree($name, $form, 'Affiche la bordure sur les blocs', $FieldValue);
+
+      /**
+       * show_control
+       */
+      $name = 'show_shadow';
+      $FieldValue = (isset($options[$name])) ? $options[$name] : 0;
+      $ThemeUtility->addCheckboxTree($name, $form, 'show_shadow', $FieldValue);
+
+      /**
+       * show_bg
+       */
+      $name = 'show_bg';
+      $FieldValue = $show_bg = (isset($options[$name])) ? $options[$name] : 0;
+      $ThemeUtility->addCheckboxTree($name, $form, "Affiche l'arriere plan", $FieldValue);
+      if ($show_bg) {
+        /**
+         * list images styles.
+         *
+         * @var array $styles_images.
+         */
+        $name = 'image_style_bg';
+        $FieldValue = (isset($options[$name])) ? $options[$name] : 'large';
+        $ThemeUtility->addSelectTree($name, $form, $styles_images, "Selectionner le style d'image", $FieldValue);
+        /**
+         * le champs image
+         */
+        $name = 'image_bg';
+        $FieldValue = (isset($options[$name])) ? $options[$name] : '';
+        $ThemeUtility->addImageTree($name, $form, 'Image bg', $FieldValue);
+      }
+
+      /**
+       * Nombre de blocs.
+       */
+      $name = 'nombre_card';
+      $FieldValue = $nombre_item = (! empty($options[$name])) ? $options[$name] : 3;
+      $ThemeUtility->addTextfieldTree($name, $form, 'Nombre de bloc', $FieldValue);
+      $container = 'cards';
+      for ($i = 0; $i < $nombre_item; $i ++) {
+        $form[$container][$i] = [
+          '#type' => 'details',
+          '#title' => 'Blocs : ' . ($i + 1),
+          '#open' => false
+        ];
+        if ($sous_models == 'icone') {
+          /**
+           * le champs icone
+           */
+          $name = 'icone';
+          $FieldValue = (isset($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
+          $ThemeUtility->addTextfieldTree($name, $form[$container][$i], 'Icone', $FieldValue);
+        } elseif ($sous_models == 'image') {
+
+          /**
+           * le champs image
+           */
+          $name = 'image';
+          $FieldValue = (isset($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
+          $ThemeUtility->addImageTree($name, $form[$container][$i], 'Image', $FieldValue);
+        }
+        /**
+         * le champs texte
+         */
+        $name = 'titre';
+        $FieldValue = (isset($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
+        $ThemeUtility->addTextareaSimpleTree($name, $form[$container][$i], 'Titre', $FieldValue);
+        /**
+         * le champs texte
+         */
+        $name = 'description';
+        $FieldValue = (isset($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
+        $ThemeUtility->addTextareaSimpleTree($name, $form[$container][$i], 'description', $FieldValue);
+
+        /**
+         * le champs texte
+         */
+        $name = 'link';
+        $FieldValue = (isset($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
+        $ThemeUtility->addTextfieldTree($name, $form[$container][$i], 'texte du lien', $FieldValue);
+        /**
+         * le champs texte
+         */
+        $name = 'linkvalue';
+        $FieldValue = (isset($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
+        $ThemeUtility->addTextfieldTree($name, $form[$container][$i], 'Valeur du lien', $FieldValue);
+      }
+    } elseif ($model == 'CardsModel2') {
       /**
        * le champs titre
        */
@@ -377,12 +577,7 @@ class Cards implements ControllerInterface {
       $name = 'description';
       $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addTextareaSimpleTree($name, $form, 'Description', $FieldValue);
-      /**
-       * class card_class_block
-       */
-      $name = 'card_class_block';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : 'col-lg-6';
-      $ThemeUtility->addTextfieldTree($name, $form, 'Class colonne bootstrap', $FieldValue);
+
       /**
        * le champs nombre_item
        */

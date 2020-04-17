@@ -1,6 +1,8 @@
 <?php
 namespace Stephane888\HtmlBootstrap\Traits;
 
+use Stephane888\HtmlBootstrap\LoaderDrupal;
+
 trait DisplaySection {
 
   // \\ to update in defaultTheme.
@@ -9,12 +11,47 @@ trait DisplaySection {
    * @param object $LoaderDrupal
    * @param object $variables
    */
-  protected static function getHeaders($LoaderDrupal, &$variables)
+  protected static function getTopHeaders(LoaderDrupal $LoaderDrupal, &$variables)
+  {
+    $group = 'topheader';
+    $theme_name = static::$theme_name;
+    $i = 0;
+    $value = theme_get_setting($theme_name . '_' . $group, static::$theme_name);
+    $values = [
+      'displays' => $value
+    ];
+    /**
+     * Gestion de l'affichage.
+     */
+    if (isset($values['displays']))
+      foreach ($values['displays'] as $display) {
+        if (isset($display['status']) && $display['status']) {
+          $i ++;
+          $options = [
+            'type' => $display['model']
+          ];
+          /**
+           * get datas and put it in options.
+           */
+          $LoaderDrupal->loadTopHeaderDatas($options, $group, $theme_name, $display);
+          $variables['page'][$display['region']][$theme_name . '_' . $group][$i] = $LoaderDrupal->getSectionTopHeaders($options);
+          $variables['page'][$display['region']][$theme_name . '_' . $group]["#weight"] = $display['weight'];
+        }
+      }
+  }
+
+  // \\ to update in defaultTheme.
+  /**
+   *
+   * @param object $LoaderDrupal
+   * @param object $variables
+   */
+  protected static function getHeaders(LoaderDrupal $LoaderDrupal, &$variables)
   {
     $group = 'header';
-    $theme_name = 'themeconsultant';
+    $theme_name = static::$theme_name;
     $i = 0;
-    $value = theme_get_setting($theme_name . '_' . $group, 'themeconsultant');
+    $value = theme_get_setting($theme_name . '_' . $group, static::$theme_name);
     $values = [
       'displays' => $value
     ];
@@ -42,28 +79,12 @@ trait DisplaySection {
    * @param object $LoaderDrupal
    * @param object $variables
    */
-  protected static function getSliders($LoaderDrupal, &$variables)
+  protected static function getSliders(LoaderDrupal $LoaderDrupal, &$variables)
   {
-    $theme_name = 'themeconsultant';
-    $value = theme_get_setting($theme_name . '_slide_value', 'themeconsultant');
-    $theme_name = 'themeconsultant';
-    $options = [
-      'type' => $value
-    ];
-    /**
-     * get datas and put it in options.
-     */
-    $LoaderDrupal->loadSlideDatas($options, $theme_name . '_slide', $theme_name);
-    $variables['page']['before_content'][$theme_name . '_sliders'] = $LoaderDrupal->getSectionSliders($options);
-    $variables['page']['before_content'][$theme_name . '_sliders']["#weight"] = - 100;
-  }
-
-  protected static function getImageTextRightLeft($LoaderDrupal, &$variables)
-  {
-    $group = 'imagetextrightleft';
-    $theme_name = 'themeconsultant';
+    $group = 'slide';
+    $theme_name = static::$theme_name;
     $i = 0;
-    $values = theme_get_setting($theme_name . '_' . $group, 'themeconsultant');
+    $values = theme_get_setting($theme_name . '_' . $group, static::$theme_name);
     /**
      * Gestion de l'affichage.
      */
@@ -74,7 +95,39 @@ trait DisplaySection {
          * Filtre de l'affichage
          */
         $parameter = (empty($display['nid'])) ? '' : $display['nid'];
-        if ($LoaderDrupal->filterByRouteName($display['route'], $parameter)) {
+        if ($LoaderDrupal->filterByRouteName($display['route'], $parameter) && $display['status']) {
+          $options = [
+            'type' => $display['model']
+          ];
+          /**
+           * get datas and put it in options.
+           */
+          $LoaderDrupal->loadSlideDatas($options, $group, $theme_name, $display);
+          $variables['page'][$display['region']][$theme_name . '_' . $group][$i] = $LoaderDrupal->getSectionSliders($options);
+          $variables['page'][$display['region']][$theme_name . '_' . $group][$i]["#weight"] = $display['weight'];
+          $variables['page'][$display['region']][$theme_name . '_' . $group]["#weight"] = $display['weight'];
+        }
+      }
+  }
+
+  protected static function getImageTextRightLeft($LoaderDrupal, &$variables)
+  {
+    $group = 'imagetextrightleft';
+    $theme_name = static::$theme_name;
+    $i = 0;
+    $values = theme_get_setting($theme_name . '_' . $group, static::$theme_name);
+
+    /**
+     * Gestion de l'affichage.
+     */
+    if (isset($values['displays']))
+      foreach ($values['displays'] as $display) {
+        $i ++;
+        /**
+         * Filtre de l'affichage
+         */
+        $parameter = (empty($display['nid'])) ? '' : $display['nid'];
+        if ($LoaderDrupal->filterByRouteName($display['route'], $parameter) && $display['status']) {
 
           $options = [
             'type' => $display['model']
@@ -97,9 +150,9 @@ trait DisplaySection {
   protected static function getCallActions($LoaderDrupal, &$variables)
   {
     $group = 'callactions';
-    $theme_name = 'themeconsultant';
+    $theme_name = static::$theme_name;
     $i = 0;
-    $values = theme_get_setting($theme_name . '_' . $group, 'themeconsultant');
+    $values = theme_get_setting($theme_name . '_' . $group, static::$theme_name);
     /**
      * Gestion de l'affichage.
      */
@@ -110,7 +163,7 @@ trait DisplaySection {
          * Filtre de l'affichage
          */
         $parameter = (empty($display['nid'])) ? '' : $display['nid'];
-        if ($LoaderDrupal->filterByRouteName($display['route'], $parameter)) {
+        if ($LoaderDrupal->filterByRouteName($display['route'], $parameter) && $display['status']) {
 
           $options = [
             'type' => $display['model']
@@ -132,9 +185,9 @@ trait DisplaySection {
   protected static function getCards($LoaderDrupal, &$variables)
   {
     $group = 'cards';
-    $theme_name = 'themeconsultant';
+    $theme_name = static::$theme_name;
     $i = 0;
-    $values = theme_get_setting($theme_name . '_' . $group, 'themeconsultant');
+    $values = theme_get_setting($theme_name . '_' . $group, static::$theme_name);
     /**
      * Gestion de l'affichage.
      */
@@ -145,7 +198,7 @@ trait DisplaySection {
          * Filtre de l'affichage
          */
         $parameter = (empty($display['nid'])) ? '' : $display['nid'];
-        if ($LoaderDrupal->filterByRouteName($display['route'], $parameter)) {
+        if ($LoaderDrupal->filterByRouteName($display['route'], $parameter) && $display['status']) {
           $options = [
             'type' => $display['model']
           ];
@@ -169,9 +222,9 @@ trait DisplaySection {
   protected static function getPriceLists($LoaderDrupal, &$variables)
   {
     $group = 'pricelists';
-    $theme_name = 'themeconsultant';
+    $theme_name = static::$theme_name;
     $i = 0;
-    $values = theme_get_setting($theme_name . '_' . $group, 'themeconsultant');
+    $values = theme_get_setting($theme_name . '_' . $group, static::$theme_name);
     /**
      * Gestion de l'affichage.
      */
@@ -182,7 +235,7 @@ trait DisplaySection {
          * Filtre de l'affichage
          */
         $parameter = (empty($display['nid'])) ? '' : $display['nid'];
-        if ($LoaderDrupal->filterByRouteName($display['route'], $parameter)) {
+        if ($LoaderDrupal->filterByRouteName($display['route'], $parameter) && $display['status']) {
           $options = [
             'type' => $display['model']
           ];
@@ -207,10 +260,9 @@ trait DisplaySection {
   protected static function getCarouselCards($LoaderDrupal, &$variables)
   {
     $group = 'carouselcards';
-    $theme_name = 'themeconsultant';
+    $theme_name = static::$theme_name;
     $i = 0;
-    $add_libray = true;
-    $values = theme_get_setting($theme_name . '_' . $group, 'themeconsultant');
+    $values = theme_get_setting($theme_name . '_' . $group, static::$theme_name);
     /**
      * Gestion de l'affichage.
      */
@@ -221,7 +273,7 @@ trait DisplaySection {
          * Filtre de l'affichage
          */
         $parameter = (empty($display['nid'])) ? '' : $display['nid'];
-        if ($LoaderDrupal->filterByRouteName($display['route'], $parameter)) {
+        if ($LoaderDrupal->filterByRouteName($display['route'], $parameter) && isset($display['status']) && $display['status']) {
           $options = [
             'type' => $display['model']
           ];
@@ -232,13 +284,7 @@ trait DisplaySection {
           $variables['page'][$display['region']][$theme_name . '_' . $group][$i] = $LoaderDrupal->getCarouselCards($options);
           $variables['page'][$display['region']][$theme_name . '_' . $group][$i]["#weight"] = $display['weight'];
           $variables['page'][$display['region']][$theme_name . '_' . $group]["#weight"] = $display['weight'];
-          if ($add_libray) {
-            /**
-             * Add library
-             */
-            $variables['page'][$display['region']][$theme_name . '_' . $group]['#attached']['library'][] = 'themeconsultant/owlcarousel';
-            $add_libray = false;
-          }
+          $variables['page'][$display['region']][$theme_name . '_' . $group][$i]['#attached']['library'][] = $theme_name . '/owlcarousel';
         }
       }
   }
@@ -252,9 +298,9 @@ trait DisplaySection {
   protected static function getComments($LoaderDrupal, &$variables)
   {
     $group = 'comments';
-    $theme_name = 'themeconsultant';
+    $theme_name = static::$theme_name;
     $i = 0;
-    $values = theme_get_setting($theme_name . '_' . $group, 'themeconsultant');
+    $values = theme_get_setting($theme_name . '_' . $group, static::$theme_name);
     /**
      * Gestion de l'affichage.
      */
@@ -267,7 +313,7 @@ trait DisplaySection {
          * Filtre de l'affichage
          */
         $parameter = (empty($display['nid'])) ? '' : $display['nid'];
-        if ($LoaderDrupal->filterByRouteName($display['route'], $parameter)) {
+        if ($LoaderDrupal->filterByRouteName($display['route'], $parameter) && $display['status']) {
           $options = [
             'type' => $display['model']
           ];
@@ -278,7 +324,7 @@ trait DisplaySection {
           $variables['page'][$display['region']][$theme_name . '_' . $group][$i] = $LoaderDrupal->getComments($options);
           $variables['page'][$display['region']][$theme_name . '_' . $group][$i]["#weight"] = $display['weight'];
           $variables['page'][$display['region']][$theme_name . '_' . $group]["#weight"] = $display['weight'];
-          $variables['page'][$display['region']][$theme_name . '_' . $group][$i]['#attached']['library'][] = 'themeconsultant/owlcarousel';
+          $variables['page'][$display['region']][$theme_name . '_' . $group][$i]['#attached']['library'][] = $theme_name . '/owlcarousel';
         }
       }
   }
@@ -286,9 +332,9 @@ trait DisplaySection {
   protected static function getStylePage($LoaderDrupal, &$variables)
   {
     $group = 'stylepage';
-    $theme_name = 'themeconsultant';
+    $theme_name = static::$theme_name;
     $i = 0;
-    $values = theme_get_setting($theme_name . '_' . $group, 'themeconsultant');
+    $values = theme_get_setting($theme_name . '_' . $group, static::$theme_name);
     /**
      * Gestion de l'affichage.
      */
@@ -322,9 +368,9 @@ trait DisplaySection {
   protected static function getFooters($LoaderDrupal, &$variables)
   {
     $group = 'footers';
-    $theme_name = 'themeconsultant';
+    $theme_name = static::$theme_name;
     $i = 0;
-    $value = theme_get_setting($theme_name . '_' . $group, 'themeconsultant');
+    $value = theme_get_setting($theme_name . '_' . $group, static::$theme_name);
     $values = [
       'displays' => $value
     ];

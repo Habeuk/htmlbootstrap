@@ -4,13 +4,18 @@ namespace Stephane888\HtmlBootstrap;
 use Stephane888\HtmlBootstrap\Traits\DisplaySection;
 use Symfony\Component\HttpFoundation\Session\Session;
 use ScssPhp\ScssPhp\Compiler;
+use Drupal\Core\Template\Attribute;
 
 class PreprocessPage {
+
+  protected $is_front = false;
+
+  protected static $theme_name;
   use DisplaySection;
 
   public function createTemplates($theme_name, $displays = null, $force = false)
   {
-    if ((isset($_GET['build']) && $_GET['build'] == 'template') || $force) {
+    if ((isset($_GET['template']) && $_GET['template'] == 'build') || $force) {
       if (! $displays) {
         $displays = theme_get_setting($theme_name . '_pagenodesdisplay', $theme_name);
       }
@@ -20,11 +25,20 @@ class PreprocessPage {
     }
   }
 
+  public function setThemeName($theme_name)
+  {
+    static::$theme_name = $theme_name;
+  }
+
   public function loadSection($theme_name, &$variables)
   {
+    $this->setThemeName($theme_name);
+    if ($variables['is_front'])
+      $this->is_front = $variables['is_front'];
     $LoaderDrupal = new LoaderDrupal();
+
     /**
-     * get style for pages
+     * Get style for pages
      */
     if (theme_get_setting($theme_name . '_stylepage_status', $theme_name)) {
       static::getStylePage($LoaderDrupal, $variables);
@@ -32,9 +46,10 @@ class PreprocessPage {
 
     /**
      * get top headers
+     * Not use for now.
      */
     if (theme_get_setting($theme_name . '_topheader_status', $theme_name)) {
-      // MdbootstrapWbu::getTopHeaders($LoaderDrupal, $variables);
+      static::getTopHeaders($LoaderDrupal, $variables);
     }
     /**
      * get headers
@@ -45,7 +60,7 @@ class PreprocessPage {
     /**
      * get sliders
      */
-    if (theme_get_setting($theme_name . '_slide_status', $theme_name) && $LoaderDrupal->filterByRouteName(theme_get_setting($theme_name . '_slide_routes', 'themeconsultant'))) {
+    if (theme_get_setting($theme_name . '_slide_status', $theme_name) && $LoaderDrupal->filterByRouteName(theme_get_setting($theme_name . '_slide_routes', $theme_name))) {
       static::getSliders($LoaderDrupal, $variables);
     }
     /**
@@ -95,9 +110,71 @@ class PreprocessPage {
     if (theme_get_setting($theme_name . '_footers_status', $theme_name)) {
       static::getFooters($LoaderDrupal, $variables);
     }
+
+    /**
+     * load plugins page (node)
+     */
+    $route_name = \Drupal::routeMatch()->getRouteName();
+    $node = \Drupal::routeMatch()->getParameter('node');
+
+    if ($node) {
+      $Attribute = new Attribute();
+      $Attribute->addClass([
+        'container',
+        'page-node-custom'
+      ]);
+      $variables['page']['content']['attributes'] = $Attribute;
+      $wrapper_attribute = new Attribute();
+      $wrapper_attribute->addClass('region-content');
+      $variables['page']['content']['wrapper_attribute'] = $wrapper_attribute;
+
+      // dump('dd kl');
+      $displays = theme_get_setting($theme_name . '_pagenodesdisplay', $theme_name);
+      // loadPagePlugins
+      $LoaderDrupal->loadPagePlugins($variables, $displays, $node, $theme_name);
+      // dump($variables['page']);
+    } elseif ('entity.taxonomy_term.canonical' == $route_name) {
+      // $term = \Drupal::routeMatch()->getParameter('taxonomy_term');
+      // dump($term);
+      $Attribute = new Attribute();
+      $_Attribute = $Attribute->addClass([
+        'container',
+        'page-term-custom'
+      ]);
+      $variables['page']['content']['attributes'] = $_Attribute;
+    } elseif (! $this->is_front && \strstr($route_name, 'user.')) {
+      /**
+       * En attendant de trouver une meilleur approche pour les pages de connextions, on ajoute une classe.
+       */
+      $Attribute = new Attribute();
+      $_Attribute = $Attribute->addClass([
+        'container',
+        'page-user-custom',
+        'my-5'
+      ]);
+      $variables['page']['content']['attributes'] = $_Attribute;
+    } elseif (! $this->is_front && $route_name == 'entity.webform.canonical') {
+      /**
+       * Pour les pages webfomrs.
+       */
+      $Attribute = new Attribute();
+      $_Attribute = $Attribute->addClass([
+        'container',
+        'container-md',
+        'my-5'
+      ]);
+      $variables['page']['content']['entete'] = [
+        '#type' => 'html_tag',
+        '#tag' => 'h1',
+        '#value' => $variables['page']['#title']
+      ];
+      $variables['page']['content']['entete']['#weight'] = - 100;
+      $variables['page']['content']['attributes'] = $_Attribute;
+      // dump($variables);
+    }
   }
 
-  public function ApplyActions(&$variables)
+  public function ApplyActions(&$variables, $theme_name = 'themeconsultant')
   {
     /**
      * Remove system page in front.
@@ -110,59 +187,166 @@ class PreprocessPage {
      */
     if ($variables['is_front']) {
       // dump($variables['page']['content']);
-      unset($variables['page']['content']['themeconsultant_page_title']);
-      unset($variables['page']['content']['themeconsultant_content']);
+      unset($variables['page']['content'][$theme_name . '_page_title']);
+      unset($variables['page']['content'][$theme_name . '_content']);
     }
 
     /**
      * remove edit for all user except admibistrator
      */
     if (! \Drupal\user\Entity\User::load(\Drupal::currentUser()->id())->hasRole('administrator')) {
-      unset($variables['page']['content']['themeconsultant_local_tasks']);
+      unset($variables['page']['content'][$theme_name . '_local_tasks']);
     }
   }
 
-  public function AddLibrary(&$variables)
+  public function AddLibrary(&$variables, $theme_name = 'themeconsultant')
   {
     /**
      * Ajout les fichiers de style et Scripts.
      *
-     * @var Ambiguous $node
+     * @var $node
      */
     $node = \Drupal::routeMatch()->getParameter('node');
     if ($node) {
-      $variables['page']['content']['#attached']['library'][] = 'themeconsultant/page-node';
+      $variables['page']['content']['#attached']['library'][] = $theme_name . '/page-node';
     }
+  }
+
+  public static function LoadTemplates($theme_name)
+  {
+    return [
+      // views-view-field-cutom
+      'views_view_field_cutom' => [
+        'variables' => [
+          'field' => []
+        ]
+      ],
+      'image_url' => [
+        'variables' => [
+          'image_style' => NULL,
+          'file' => null,
+          'width' => null,
+          'height' => null
+        ],
+        'path' => drupal_get_path('theme', $theme_name) . '/templates/layouts'
+        // 'path' => 'templates/layouts'
+      ],
+      'header_bg' => [
+        'variables' => [
+          'image' => NULL,
+          'content_top' => NULL,
+          'content_center' => NULL,
+          'content_bottom' => NULL,
+          'attributes' => [],
+          'orther_vars' => []
+        ],
+        'path' => drupal_get_path('theme', $theme_name) . '/templates/Suggestions/sections/PageNodesDisplay/headerBg'
+      ],
+      'item_list_custom' => [
+        'variables' => [
+          'image' => NULL,
+          'content_top' => NULL,
+          'content_center' => NULL,
+          'content_bottom' => NULL
+        ]
+      ],
+      'static_image' => [
+        'variables' => [
+          'sub_title' => NULL,
+          'title' => NULL,
+          'sup_title' => NULL,
+          'img' => NULL,
+          'attributes' => [],
+          'orther_vars' => [],
+          'attributes_mobile' => []
+        ],
+        'path' => drupal_get_path('theme', $theme_name) . '/templates/Suggestions/sections/imgLeftRight/StaticImage'
+      ],
+      'zone_custom_template' => [
+        'variables' => [
+          'sup_title' => NULL,
+          'title' => NULL,
+          'text' => NULL,
+          'attributes' => [],
+          'orther_vars' => []
+        ],
+        'path' => drupal_get_path('theme', $theme_name) . '/templates/Suggestions/sections/imgLeftRight/ZoneCustomTemplate'
+      ],
+      'footer_menu_rx' => [
+        'variables' => [
+          'footer_menu' => NULL,
+          'rx_logo' => NULL,
+          'end_left' => NULL,
+          'end_right' => NULL,
+          'end_right_link' => NULL,
+          'attributes' => [],
+          'orther_vars' => []
+        ],
+        'path' => drupal_get_path('theme', $theme_name) . '/templates/Suggestions/sections/Footers/FooterMenuRx'
+      ],
+      'top_header_default' => [
+        'variables' => [
+          'items' => [],
+          'attributes' => [],
+          'orther_vars' => []
+        ],
+        'path' => drupal_get_path('theme', $theme_name) . '/templates/Suggestions/sections/TopHeaders/Default'
+      ],
+      'dropdown_menu' => [
+        'variables' => [
+          'data' => NULL,
+          'menu' => [],
+          'attributes' => [],
+          'orther_vars' => []
+        ],
+        'path' => drupal_get_path('theme', $theme_name) . '/templates/Suggestions/Bootstrap'
+      ],
+      'bloc_contact' => [
+        'variables' => [
+          'title_header' => NULL,
+          'desc_header' => null,
+          'forms' => NULL,
+          'cards' => [],
+          'attributes' => [],
+          'attribute_address' => [],
+          'attribute_form' => [],
+          'orther_vars' => []
+        ],
+        'path' => drupal_get_path('theme', $theme_name) . '/templates/Suggestions/sections/imgLeftRight/blocContact'
+      ]
+    ];
+  }
+
+  public function Preprocess_field__image(&$variables, $theme_name)
+  {
+    // dump($variables);
+    $variables['#attached']['library'][] = $theme_name . '/owlcarousel';
   }
 
   /**
    * load scss csss
    */
-  public function _load_scss()
+  public function _load_scss($theme_name)
   {
     if (isset($_GET['build']) && $_GET['build'] == 'scss') {
       require_once __DIR__ . '/../vendor/autoload.php';
-      $theme_name = 'themeconsultant';
-      // convertie un fichier scss en css.
-      require_once DRUPAL_ROOT . '/themes/' . $theme_name . '/scssphp-master/scss.inc.php';
       // convert bootstrap scss to css
       // new ScssPhp\ScssPhp\Compiler();
       $parser = new Compiler();
       // build bootstrap end default style theme
-
-      $result = $parser->compile('@import "' . DRUPAL_ROOT . '/themes/' . $theme_name . '/scss/bootstrap-overlay.scss"; body{height:3em;}');
-      $filename = DRUPAL_ROOT . '/themes/' . $theme_name . '/css/bootstrap-overlay.css';
+      $theme_root = DRUPAL_ROOT . '/' . \drupal_get_path('theme', $theme_name);
+      $result = $parser->compile('@import "' . $theme_root . '/scss/bootstrap-overlay.scss";');
+      $filename = $theme_root . '/css/bootstrap-overlay.css';
       $monfichier = fopen($filename, 'w+');
       fputs($monfichier, $result);
       fclose($monfichier);
 
       // build custom style
-      if (LOAD_SCSS_BY_SESSION) {
+      if (LOAD_SCSS_BY_SESSION && $this->is_front) {
         // dump('_load_scss');
         $Session = new Session();
         $styles = $Session->get('theme_style', []);
         if (! empty($styles)) {
-          // dump($styles);
           $style = '';
           if (isset($styles['init'])) {
             $style .= $styles['init'];
@@ -177,12 +361,13 @@ class PreprocessPage {
             }
           }
           $style .= implode("\n", $styles);
+          // dump($styles);
           // $Session->remove('theme_style');
           // kint($style);
           /**
            * on enregistre le fichier generere en scss.
            */
-          $filename = DRUPAL_ROOT . '/themes/' . $theme_name . '/scss/style-auto.scss';
+          $filename = $theme_root . '/scss/style-auto.scss';
           $monfichier = fopen($filename, 'w+');
           fputs($monfichier, $style);
           fclose($monfichier);
@@ -193,7 +378,7 @@ class PreprocessPage {
           /**
            * on sauvegarde le fichier css generé.
            */
-          $filename = DRUPAL_ROOT . '/themes/' . $theme_name . '/css/style-auto.css';
+          $filename = $theme_root . '/css/style-auto.css';
           $monfichier = fopen($filename, 'w+');
           fputs($monfichier, $result);
           fclose($monfichier);
@@ -205,7 +390,7 @@ class PreprocessPage {
           /**
            * On enregistre le fichier generere en js.
            */
-          $filename = DRUPAL_ROOT . '/themes/' . $theme_name . '/js/script-auto.js';
+          $filename = $theme_root . '/js/script-auto.js';
           $monfichier = fopen($filename, 'w+');
           fputs($monfichier, $script);
           fclose($monfichier);
@@ -213,71 +398,85 @@ class PreprocessPage {
       }
 
       // build custom style
-      $result = $parser->compile('@import "' . DRUPAL_ROOT . '/themes/' . $theme_name . '/scss/style.scss";');
-      $filename = DRUPAL_ROOT . '/themes/' . $theme_name . '/css/style.css';
+      $result = $parser->compile('@import "' . $theme_root . '/scss/style.scss";');
+      $filename = $theme_root . '/css/style.css';
       $monfichier = fopen($filename, 'w+');
       fputs($monfichier, $result);
       fclose($monfichier);
 
       // build custom style
-      $result = $parser->compile('@import "' . DRUPAL_ROOT . '/themes/' . $theme_name . '/scss/accueill.scss";');
-      $filename = DRUPAL_ROOT . '/themes/' . $theme_name . '/css/accueill.css';
+      $result = $parser->compile('@import "' . $theme_root . '/scss/accueill.scss";');
+      $filename = $theme_root . '/css/accueill.css';
       $monfichier = fopen($filename, 'w+');
       fputs($monfichier, $result);
       fclose($monfichier);
       /* */
       // build custom style
-      $result = $parser->compile('@import "' . DRUPAL_ROOT . '/themes/' . $theme_name . '/scss/article.scss";');
-      $filename = DRUPAL_ROOT . '/themes/' . $theme_name . '/css/article.css';
+      $result = $parser->compile('@import "' . $theme_root . '/scss/article.scss";');
+      $filename = $theme_root . '/css/article.css';
       $monfichier = fopen($filename, 'w+');
       fputs($monfichier, $result);
       fclose($monfichier);
 
       // build custom style
-      $result = $parser->compile('@import "' . DRUPAL_ROOT . '/themes/' . $theme_name . '/scss/article-teaser.scss";');
-      $filename = DRUPAL_ROOT . '/themes/' . $theme_name . '/css/article-teaser.css';
+      $result = $parser->compile('@import "' . $theme_root . '/scss/article-teaser.scss";');
+      $filename = $theme_root . '/css/article-teaser.css';
       $monfichier = fopen($filename, 'w+');
       fputs($monfichier, $result);
       fclose($monfichier);
 
       // build custom style
-      $result = $parser->compile('@import "' . DRUPAL_ROOT . '/themes/' . $theme_name . '/scss/sign-in.scss";');
-      $filename = DRUPAL_ROOT . '/themes/' . $theme_name . '/css/sign-in.css';
+      $result = $parser->compile('@import "' . $theme_root . '/scss/sign-in.scss";');
+      $filename = $theme_root . '/css/sign-in.css';
       $monfichier = fopen($filename, 'w+');
       fputs($monfichier, $result);
       fclose($monfichier);
 
       // build custom style
-      $result = $parser->compile('@import "' . DRUPAL_ROOT . '/themes/' . $theme_name . '/scss/style-admin.scss";');
-      $filename = DRUPAL_ROOT . '/themes/' . $theme_name . '/css/style-admin.css';
+      $result = $parser->compile('@import "' . $theme_root . '/scss/style-admin.scss";');
+      $filename = $theme_root . '/css/style-admin.css';
       $monfichier = fopen($filename, 'w+');
       fputs($monfichier, $result);
       fclose($monfichier);
 
       // build custom style
-      $result = $parser->compile('@import "' . DRUPAL_ROOT . '/themes/' . $theme_name . '/scss/ckeditor_custom.scss";');
-      $filename = DRUPAL_ROOT . '/themes/' . $theme_name . '/css/ckeditor_custom.css';
+      $result = $parser->compile('@import "' . $theme_root . '/scss/ckeditor_custom.scss";');
+      $filename = $theme_root . '/css/ckeditor_custom.css';
       $monfichier = fopen($filename, 'w+');
       fputs($monfichier, $result);
       fclose($monfichier);
 
       // build custom member-ship
-      $result = $parser->compile('@import "' . DRUPAL_ROOT . '/themes/' . $theme_name . '/scss/member-ship.scss";');
-      $filename = DRUPAL_ROOT . '/themes/' . $theme_name . '/css/member-ship.css';
+      $result = $parser->compile('@import "' . $theme_root . '/scss/member-ship.scss";');
+      $filename = $theme_root . '/css/member-ship.css';
       $monfichier = fopen($filename, 'w+');
       fputs($monfichier, $result);
       fclose($monfichier);
 
       // build custom member-ship
-      $result = $parser->compile('@import "' . DRUPAL_ROOT . '/themes/' . $theme_name . '/scss/generates/page_node_scss.scss";');
-      $filename = DRUPAL_ROOT . '/themes/' . $theme_name . '/css/page-node.css';
+      $result = $parser->compile('@import "' . $theme_root . '/scss/page_node_scss.scss";');
+      $filename = $theme_root . '/css/page-node.css';
       $monfichier = fopen($filename, 'w+');
       fputs($monfichier, $result);
       fclose($monfichier);
 
       // build custom member-ship
-      $result = $parser->compile('@import "' . DRUPAL_ROOT . '/themes/' . $theme_name . '/scss/generates/node_scss.scss";');
-      $filename = DRUPAL_ROOT . '/themes/' . $theme_name . '/css/node.css';
+      $result = $parser->compile('@import "' . $theme_root . '/scss/node_scss.scss";');
+      $filename = $theme_root . '/css/node.css';
+      $monfichier = fopen($filename, 'w+');
+      fputs($monfichier, $result);
+      fclose($monfichier);
+
+      // build custom maintenance-page
+      $result = $parser->compile('@import "' . $theme_root . '/scss/maintenance-page.scss";');
+      $filename = $theme_root . '/css/maintenance-page.css';
+      $monfichier = fopen($filename, 'w+');
+      fputs($monfichier, $result);
+      fclose($monfichier);
+
+      // build custom maintenance-page
+      $result = $parser->compile('@import "' . $theme_root . '/scss/page-content-over.scss";');
+      $filename = $theme_root . '/css/page-content-over.css';
       $monfichier = fopen($filename, 'w+');
       fputs($monfichier, $result);
       fclose($monfichier);

@@ -1,0 +1,61 @@
+{% if id_carousel %}
+{%
+    set carousel_item = [
+    	'carousel-item',
+    	'lazyload'
+    ]
+%}
+{% 
+    set carousel = [
+        'carousel-cover',
+        show-content-bellow ? 'show-content-bellow':'',
+    ]
+%}
+<section {{ attribute.addClass(carousel) }}>
+	<div id="{{ id_carousel }}" class="carousel section {% if image_bg %}image-bg-cover {% endif %} slide {% if slide %}{% else %} carousel-fade{% endif %}" data-pause="false" data-ride="carousel" data-interval={{ interval }}>
+      {% if show_indicators %}
+      <ol class="carousel-indicators">
+          {% for carousel in carousels %}
+          	{% if loop.index0 == 0 %}
+          		<li data-target="#{{ id_carousel }}" data-slide-to="{{ loop.index0 }}" class="active"></li>
+          	{% else %}
+          		<li data-target="#{{ id_carousel }}" data-slide-to="{{ loop.index0 }}" ></li>
+          	{% endif %}
+          {% endfor %}
+      </ol>
+      {% endif %}
+      <div class="carousel-inner">
+      	  {% for carousel in carousels %}
+      	  	<div{{ carousel.attribute.addClass(carousel_item) }}>
+          			{% if image_bg %} {% else %} <img class="d-block w-100" src="{{ carousel.image.img_url }}" alt="{{ carousel.image.alt }}"> {% endif %}
+          			{% if carousel.content %}
+          				<div class="carousel-caption d-md-block ">
+          				    <h3>{{ carousel.content | raw }}</h3>
+          				    <div class="sup_content">{{ carousel.sup_content | raw }}</div>
+          				</div>    
+          			{% endif %}  			
+          	</div>
+          {% endfor %}
+      </div>
+        {% if display_content_bellow %}
+        	<div class="content-bellow">
+        		<div class="container">
+        			<h2 class="title item">{{ content_bellow_titre | raw }}</h2>
+        			<div class="sup-title item">{{ content_bellow_sup_titre | raw }}</div>
+        			<div class="container-button"><a href="#" class="button item btn btn-info">{{ content_bellow_button | raw }}</a></div>
+        		</div>
+        	</div>
+        {% endif %}
+      {% if show_control %}
+      <a class="carousel-control-prev" href="#{{ id_carousel }}" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#{{ id_carousel }}" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+      {% endif %}
+    </div>
+</section>
+{% endif %}

@@ -1,0 +1,17 @@
+.top-header-default{
+	background-color: #f5f5f5;
+	.items{
+		padding: 0.3em 0;
+		.item{
+			margin-left:0.8em;
+		}
+		.item:first-child{
+			margin-right: auto;
+			margin-left:0;
+		}
+		.dropdown-menu{
+			width: 110px;	
+			min-width: 100px;
+		}
+	}
+}

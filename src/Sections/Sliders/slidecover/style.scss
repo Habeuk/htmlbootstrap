@@ -1,0 +1,117 @@
+.carousel-cover{
+	position: relative;
+	z-index: 1;
+	font-size:0.7em;
+	
+	@include media-min(MD) {
+		font-size:0.8em;
+	}
+
+	@include media-min(MS) {
+		font-size:1em;
+	}
+	
+	.carousel.image-bg-cover{		
+		.carousel-item{
+			height:100vh;
+			min-height:600px;
+			background-size: cover;
+			background-position: center center;
+			background-attachment: fixed;
+			@include load_progressive_image();
+			&.active{
+    				z-index:5		
+    		}
+		}
+	}
+	&.show-content-bellow{
+		.carousel-item{
+			.carousel-caption{
+				display:none !important;	
+			}			
+		}	
+		&::before{
+			content:"";
+			position:absolute;
+			top:0;
+			right:0;
+			left:0;
+			bottom:0;
+			background:rgba(0,0,0, 1);
+			opacity:0.4;	
+			z-index:2;
+		}
+	}
+	.content-bellow{
+		position: absolute;
+    	top: calc(50% - 150px);
+    	font-size: 1.5em;
+    	color: #FFF;
+    	text-shadow: 0 0 1em #000;	
+    	z-index:2;
+    	left: 0;
+    	right: 0;
+    	text-align:center;
+    	.title{
+    		font-size:2.5em;
+    		font-weight:900;	
+    		margin-bottom: 0.8em;
+    	}
+    	.sup-title{
+    		max-width: 900px;
+    		margin-left: auto;
+    		margin-right: auto;
+    		margin-bottom: 1em;
+    	}
+    	.container-button{
+    		font-size: 0.8em;
+    		.btn{
+    			font-size: inherit;
+				padding: 0.5em 0.8em;
+				    font-weight: 600;
+    			text-shadow: none;
+    		}	
+    	}
+	}
+	&.no_cover{
+		font-size:1em;
+		@include media-min(MS) {
+			font-size:1.8em;
+		}
+		@include media-min(LM) {
+			font-size:2.2em;
+		}
+		.carousel.image-bg-cover{		
+			.carousel-item{
+				height:auto;
+				min-height:300px;
+				@include media-min(MD) {
+					min-height:400px;
+				}
+				@include media-min(MS) {
+					min-height:600px;
+				}
+				background-size: cover;
+				background-attachment: scroll;
+				display: flex;
+    			align-items: center;
+				&::after{
+					background: rgba(0, 0, 0, 0.20);
+				}
+				
+				.carousel-caption{
+					text-align: left;
+    				position: relative;
+    				left: 0;
+    				right: 0;
+    				max-width: 1100px;
+    				padding-left:50px;
+    				padding-right:50px;
+    				margin-left: auto;
+    				margin-right: auto;
+    				flex: 0 0 100%;    				
+				}
+			}
+		}
+	}
+}

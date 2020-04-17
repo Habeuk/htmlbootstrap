@@ -2,14 +2,40 @@
 namespace Stephane888\HtmlBootstrap\Traits;
 
 use Stephane888\HtmlBootstrap\LoaderDrupal;
+use Drupal\Core\Menu\MenuTreeParameters;
+use Drupal\Core\Template\Attribute;
 
 trait Portions {
+
+  private $style_image = [
+    [
+      'image_style' => 'slider_home_phone',
+      'size' => '475w'
+    ],
+    [
+      'image_style' => 'slider_home_tablette',
+      'size' => '992w'
+    ],
+    [
+      'image_style' => 'slider_home_lg_desktop',
+      'size' => '1920w'
+    ],
+    [
+      'image_style' => 'slider_home',
+      'size' => '3840w'
+    ]
+  ];
 
   /**
    *
    * @return string[][]
    */
   public function getdefault_rx_logos()
+  {
+    return static::getdefault_rx_logos_static();
+  }
+
+  public static function getdefault_rx_logos_static()
   {
     return [
       [
@@ -35,6 +61,14 @@ trait Portions {
     ];
   }
 
+  public static function loadMenu($menu_name)
+  {
+    $MenuTreeParameters = new MenuTreeParameters();
+    $menu_tree = \Drupal::menuTree();
+    $menuTreeFooter = $menu_tree->load($menu_name, $MenuTreeParameters);
+    return $menu_tree->build($menuTreeFooter);
+  }
+
   /**
    * Retourne le template ou l'affichage pour les liens des rx.
    * Les differentes valeurs sont
@@ -52,6 +86,9 @@ trait Portions {
     } elseif ($template == 'flat') {
       LoaderDrupal::addStyle(\file_get_contents($this->BasePath . '/Utility/RxLogos/Flat/style.scss'), 'template_rx_logos');
       $fileName = \file_get_contents($this->BasePath . '/Utility/RxLogos/Flat/Drupal.html.twig');
+    } elseif ($template == 'flat-small') {
+      LoaderDrupal::addStyle(\file_get_contents($this->BasePath . '/Utility/RxLogos/FlatSmall/style.scss'), 'template_rx_logos');
+      $fileName = \file_get_contents($this->BasePath . '/Utility/RxLogos/FlatSmall/Drupal.html.twig');
     }
     return [
       '#type' => 'inline_template',
@@ -59,6 +96,15 @@ trait Portions {
       '#context' => [
         'rx_logos' => $rx_logos
       ]
+    ];
+  }
+
+  public static function model_rx_logos()
+  {
+    return [
+      'circle_animate' => 'circle_animate',
+      'flat' => 'flat Big',
+      'flat-small' => 'flat Small'
     ];
   }
 
@@ -191,18 +237,41 @@ trait Portions {
       ";
   }
 
-  public function getImageUrlByFid($fid, $image_style)
+  public function getImageUrlByFid($fid, $image_style = null)
   {
     if (! empty($fid[0])) {
       $file = \Drupal\file\Entity\File::load($fid[0]);
-      if ($file && \Drupal\image\Entity\ImageStyle::load($image_style)) {
-        $img_url = \Drupal\image\Entity\ImageStyle::load($image_style)->buildUrl($file->getFileUri());
+      if ($file) {
+        if (! empty($image_style) && \Drupal\image\Entity\ImageStyle::load($image_style)) {
+          $img_url = \Drupal\image\Entity\ImageStyle::load($image_style)->buildUrl($file->getFileUri());
+        } else {
+          $img_url = file_create_url($file->getFileUri());
+        }
+
         return [
           'img_url' => $img_url
         ];
       }
     }
     return [];
+  }
+
+  public function getImagesSliderResponssive($fid, $theme_name)
+  {
+    $imgs = [];
+    $styles = $this->style_image;
+    $i = 0;
+    foreach ($styles as $style) {
+      $imgs[$i] = $this->getImageUrlByFid($fid, $theme_name . '_' . $style['image_style']);
+      $imgs[$i]['size'] = $style['size'];
+      $i ++;
+    }
+    return $imgs;
+  }
+
+  public function setSyleImage($styles)
+  {
+    $this->style_image = $styles;
   }
 
   /**
@@ -214,6 +283,11 @@ trait Portions {
    * @return string[]
    */
   public function template_htmltag($string, $tag = 'p', $class = null, $id = null)
+  {
+    return static::template_htmltag__static($string, $tag, $class, $id);
+  }
+
+  public static function template_htmltag__static($string, $tag = 'p', $class = null, $id = null)
   {
     $html = [
       '#type' => 'html_tag',
@@ -227,5 +301,140 @@ trait Portions {
       $html['#attributes']['id'] = $id;
     }
     return $html;
+  }
+
+  /**
+   * Build dropdown menu
+   *
+   * @param string $class
+   * @param array $links
+   * @return string[]
+   */
+  public function buildDropdownMenu($links, $class = '')
+  {
+    $attribute = new Attribute();
+    $menu = [
+      '#theme' => 'menu',
+      '#attributes' => [
+        'class' => [
+          'dropdown-menu',
+          $class
+        ]
+      ],
+      '#items' => []
+    ];
+    $data_dropdown_menu = '';
+    if (! empty($links)) {
+      $first_link = reset($links);
+      if (! isset($first_link['label'])) {
+        $links = $this->TransformdToDropdownMenu($links);
+      }
+    }
+
+    foreach ($links as $link) {
+      if ($link['active']) {
+        $data_dropdown_menu = $link['label'];
+      }
+      $menu['#items'][] = [
+        'title' => $link['label'],
+        'url' => \Drupal\Core\Url::fromUserInput('#'),
+        'attributes' => $attribute,
+        'in_active_trail' => $link['active']
+      ];
+    }
+    return [
+      '#theme' => 'dropdown_menu',
+      '#attributes' => [
+        'class' => [
+          'dropdown-menu'
+        ]
+      ],
+      '#orther_vars' => [
+        'button_class' => ''
+      ],
+      '#data' => $data_dropdown_menu,
+      '#menu' => $menu
+    ];
+  }
+
+  protected function TransformdToDropdownMenu($links)
+  {
+    $first_item = true;
+    $new_links = [];
+    foreach ($links as $key => $link) {
+      $new_links[] = [
+        'label' => $link,
+        'active' => $first_item
+      ];
+      $first_item = false;
+    }
+    return $new_links;
+  }
+
+  protected function getUrlImageFromNodeItem(\Drupal\file\Plugin\Field\FieldType\FileFieldItemList $items, $style = "")
+  {
+    $result = $items->getValue();
+    $result = reset($result);
+    if (! empty($result['target_id'])) {
+      return $this->getImageUrlByFid([
+        $result['target_id']
+      ]);
+    }
+    return null;
+  }
+
+  /**
+   * Contruit le fichier css à partir des chemins abolutes;
+   *
+   * @param string $Scss_file
+   * @param string $css_file
+   */
+  public function buildCss($Scss_file, $css_file)
+  {
+    require_once DRUPAL_ROOT . '/../vendor/stephane888/htmlbootstrap/vendor/autoload.php';
+    $parser = new \ScssPhp\ScssPhp\Compiler();
+    $data = '@import "' . DRUPAL_ROOT . '/../vendor/stephane888/htmlbootstrap/scss/defaut/loader_model_module.scss";';
+    // $data = '@import "/siteweb/sogesti/public/vendor/stephane888/htmlbootstrap/scss/defaut/loader_model1.scss";';
+    $data .= '@import "' . $Scss_file . '";';
+    $result = $parser->compile($data);
+    $monfichier = fopen($css_file, 'w+');
+    fputs($monfichier, $result);
+    fclose($monfichier);
+  }
+
+  /**
+   *
+   * @param \Drupal\node\Entity\Node $node
+   * @param array $options
+   *          doit contenir la clee à utilisé dans le template et le machine name du champs ['image'=>'field_image']
+   * @return array
+   */
+  protected function loadFieldsNode(\Drupal\node\Entity\Node $node, $options)
+  {
+    $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    if ($language && $node->hasTranslation($language)) {
+      foreach ($options as $key => $field) {
+
+        if (! empty($field)) {
+          $translation = $node->getTranslation($language);
+          $options[$key] = $translation->{$field}->view([
+            'label' => 'hidden'
+          ]);
+        } else {
+          unset($options[$key]);
+        }
+      }
+    } else {
+      foreach ($options as $key => $field) {
+        if (! empty($field)) {
+          $options[$key] = $node->{$field}->view([
+            'label' => 'hidden'
+          ]);
+        } else {
+          unset($options[$key]);
+        }
+      }
+    }
+    return $options;
   }
 }

@@ -1,0 +1,10 @@
+<section{{ attributes }}>
+	<div class="container sectionspace">	
+				{% if title and title !='' and orther_vars.show_header %}
+				    {% include '@terremploi/Suggestions/sections/headers/model_with_bar/model_with_bar.html.twig' %}
+				{% endif %}			 
+				<div class=" content-body ">
+					{{ text | raw }}
+				</div>
+	</div>
+</section>

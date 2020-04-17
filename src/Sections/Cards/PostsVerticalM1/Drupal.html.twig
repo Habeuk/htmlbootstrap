@@ -2,9 +2,13 @@
 			{% for card in cards %}				
 					<div class="d-flex small-block">
 						<div class="img">
+						{% if card.img %}
 							<a href="{{ card.link }}" title="{{ card.title }}">
 								<img alt="{{ card.img.alt }}" src="{{ card.img.src }}" class="img-fluid">
 							</a>
+						{% else %}
+							{{ card.image }}
+						{% endif %}
 						</div>
 						<div class="text">
 							<a href="{{ card.link }}"><h5 class="title" title="{{ card.title }}">{{ card.title }}</h5></a>

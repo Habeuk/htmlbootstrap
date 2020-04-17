@@ -1,0 +1,58 @@
+.footer-menu-rx{
+	font-size: 0.938em;
+	background:$color1;
+	color:#FFF;
+	.sectionspace{
+		padding-top:$margin_top;
+		padding-bottom:$margin_bottom*0.5;	
+	}	
+	a{
+		color:#FFF;
+		&:hover{
+			color:$color2;	
+		}	
+	}
+
+	.footer-menu{
+		margin-bottom:$margin_bottom*0.5;
+		.nav-link{
+			color:#FFF;
+			font-weight: 600;
+			padding: 0.5rem 1em;
+			min-width: 240px;
+			@include media-min('DD'){
+				min-width: 100px;	
+			}
+			&:hover{
+				color:$color2;
+			}
+		}
+		.rx-test{
+			padding-left:1em;
+			padding-right:1em;
+			font-size: 1.0em;
+			a{
+				display:block;
+				line-height: 1;
+			}
+			a i{
+				padding-right: 10px;
+    			color: #FFF;
+    		}
+    		.fa-instagram{
+    			font-size: 1.3em;
+    		}
+    		.fa-linkedin-in{
+    			font-size: 1.2em;
+    		}
+    		a:last-child i{
+    			padding-right: 0;
+    		}
+		}
+	}
+	.footer_end{
+		.site-name{
+			text-transform: capitalize;	
+		}
+	}
+}

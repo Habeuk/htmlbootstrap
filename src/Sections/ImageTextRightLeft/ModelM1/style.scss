@@ -4,18 +4,23 @@
 
   >.container {
     max-width: 100% !important;
-
+	
     .row.body {
-      >div:first-child {
+      >div.text-bloc {
         background: $magetextrightleft_modelm1_color;
       }
 
-      >div:last-child {
+      >div.text-img {
         background: darken($magetextrightleft_modelm1_color, 30);
         @include linear-gradient(#ffffff, darken($magetextrightleft_modelm1_color, 10));
+        &.image-in-bg{
+			background-size: cover;
+			background-position: center;
+		}
       }
     }
   }
+	
 
   .text-body {
     max-width: 600px;
@@ -66,7 +71,8 @@
     }
 
     .text {
-      text-align: justify;
+     // text-align: justify;
+     margin-bottom:1.2em;
     }
   }
 

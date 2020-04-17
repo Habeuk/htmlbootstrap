@@ -1,5 +1,5 @@
 .path-node {
-  article.node {
+  .node-default-ebook {
     max-width: 1000px;
     margin-left: auto;
     margin-right: auto;
@@ -8,8 +8,11 @@
       display: none;
     }
 
-    header {
+    header.title {
       margin-bottom: 1em;
+      .field{
+      	margin-bottom: 0.5em;	
+      }
     }
 
     .field {
@@ -29,9 +32,6 @@
         }
       }
     }
-
-
-
     .info-post {
       display: block;
       text-align: right;

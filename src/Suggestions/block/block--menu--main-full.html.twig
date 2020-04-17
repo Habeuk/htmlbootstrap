@@ -37,10 +37,13 @@
     'block-menu',
     'navigation',
     'menu--' ~ derivative_plugin_id|clean_class,
-    'navbar navbar-expand-md navbar-light',
+    'navbar',
     'header-menu',
+    'navbar-expand-lg',
+    'navbar-light'
   ]
 %}
+
 {% set heading_id = attributes.id ~ '-menu'|clean_id %}
 <nav role="navigation" aria-labelledby="{{ heading_id }}"{{ attributes.addClass(classes)|without('role', 'aria-labelledby') }}>
   <button class="navbar-toggler navbar-toggler-right mx-auto" type="button" data-toggle="collapse" data-target="#CollapsingNavbar" 
