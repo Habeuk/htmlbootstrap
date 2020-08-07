@@ -1,7 +1,11 @@
 <section{{ attributes }}>
 	<div class="container sectionspace">	
+		{% set  url_include %}
+			@{{ orther_vars.themename }}/Suggestions/sections/headers/model_with_bar/model_with_bar.html.twig
+		{% endset %}
+		{% set url_include = url_include|trim %}
 				{% if title and title !='' and orther_vars.show_header %}
-				    {% include '@terremploi/Suggestions/sections/headers/model_with_bar/model_with_bar.html.twig' %}
+                    {% include url_include %}
 				{% endif %}			 
 				<div class=" content-body ">
 					{{ text | raw }}

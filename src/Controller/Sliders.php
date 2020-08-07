@@ -71,6 +71,34 @@ class Sliders implements ControllerInterface {
       $ThemeUtility->addCheckboxTree($name, $form, 'Affiche le block de contenu au dessus', $FieldValue);
 
       /**
+       * 'no_cover'
+       */
+      $name = 'no_cover';
+      $FieldValue = (isset($options[$name])) ? $options[$name] : 0;
+      $ThemeUtility->addCheckboxTree($name, $form, 'image cover', $FieldValue);
+
+      /**
+       * list provider content.
+       *
+       * @var array $styles_images.
+       */
+      $styles_images = [
+        'block' => 'Contenus fourni par les blocks'
+      ];
+      $name = 'content_provider';
+      $FieldValue = $content_provider = (isset($options[$name])) ? $options[$name] : '';
+      $ThemeUtility->addSelectTree($name, $form, $styles_images, "Selectionner le provider", $FieldValue);
+
+      /**
+       * fornisseur de contenu.
+       *
+       * @var array $styles_images.
+       */
+      if ($content_provider == 'block') {
+        ManageBlock::addSelectBlockTree($ThemeUtility, $form, $options);
+      }
+
+      /**
        */
       $name = 'interval';
       $FieldValue = (isset($options[$name])) ? $options[$name] : 10000;
@@ -92,7 +120,7 @@ class Sliders implements ControllerInterface {
       for ($i = 0; $i < $nombre_item; $i ++) {
         $form[$container][$i] = [
           '#type' => 'details',
-          '#title' => 'Blocs : ' . ($i + 1),
+          '#title' => 'Slide test : ' . ($i + 1),
           '#open' => false
         ];
         /**
@@ -219,7 +247,15 @@ class Sliders implements ControllerInterface {
     if (isset($options['no_cover'])) {
       $no_cover = $options['no_cover'];
     } else {
-      $no_cover = 1;
+      $no_cover = 0;
+    }
+    /**
+     * 'content_provider'
+     */
+    if (isset($options['content_provider'])) {
+      $content_provider = $options['content_provider'];
+    } else {
+      $content_provider = '';
     }
 
     /**
@@ -228,9 +264,26 @@ class Sliders implements ControllerInterface {
     $image_bg = true;
     $slide = false;
     $Attribute = new Attribute();
-    if ($no_cover) {
+    if (! $no_cover) {
       $Attribute->addClass('no_cover');
     }
+
+    if ($content_provider == 'block') {
+      if (! empty($options['blocks'])) {
+        $blocks = [];
+        $i = 0;
+        foreach ($options['blocks'] as $block) {
+          $blocks[$i]['block'] = ManageBlock::loadBlock($block['block']);
+          $block_attribute = new Attribute();
+          $block_attribute->addClass('kksa888_block');
+          $blocks[$i]['attribute'] = $block_attribute;
+          $i ++;
+        }
+      }
+    } else {
+      $blocks = [];
+    }
+    // dump($blocks);
 
     LoaderDrupal::addStyle(\file_get_contents($this->BasePath . '/Sections/Sliders/slidecover/style.scss'), 'CarouselBootstrap');
     return [
@@ -248,7 +301,9 @@ class Sliders implements ControllerInterface {
         'content_bellow_sup_titre' => $content_bellow_sup_titre,
         'slide' => $slide,
         'content_bellow_button' => $content_bellow_button,
-        'attribute' => $Attribute
+        'attribute' => $Attribute,
+        'content_provider' => $content_provider,
+        'blocks' => $blocks
       ]
     ];
   }

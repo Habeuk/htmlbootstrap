@@ -40,4 +40,30 @@ class ManageBlock {
     $webform = $webform->getSubmissionForm();
     return $webform;
   }
+
+  public static function addSelectBlockTree(\Stephane888\HtmlBootstrap\ThemeUtility $ThemeUtility, &$form, &$options, $number = 2)
+  {
+    $list_blocks = self::getListBloks();
+    $container = 'blocks';
+    for ($i = 0; $i < $number; $i ++) {
+      $form[$container][$i] = [
+        '#type' => 'details',
+        '#title' => 'Blocs : ' . ($i + 1),
+        '#open' => false
+      ];
+      /**
+       * block
+       */
+      $name = 'block';
+      $FieldValue = (isset($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
+      $ThemeUtility->addSelectTree($name, $form[$container][$i], $list_blocks, 'Selectionner le bloc', $FieldValue);
+
+      /**
+       * block
+       */
+      $name = 'class';
+      $FieldValue = (isset($container[$i][$name])) ? $container[$i][$name] : '';
+      $ThemeUtility->addTextfieldTree($name, $form[$container][$i], 'Class pour le bloc', $FieldValue);
+    }
+  }
 }

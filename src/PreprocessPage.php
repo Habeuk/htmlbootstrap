@@ -5,6 +5,9 @@ use Stephane888\HtmlBootstrap\Traits\DisplaySection;
 use Symfony\Component\HttpFoundation\Session\Session;
 use ScssPhp\ScssPhp\Compiler;
 use Drupal\Core\Template\Attribute;
+use Stephane888\HtmlBootstrap\ThemeUtility;
+use PhpParser\Node\Stmt\Foreach_;
+use Stephane888\HtmlBootstrap\LoaderDrupal;
 
 class PreprocessPage {
 
@@ -116,37 +119,37 @@ class PreprocessPage {
      */
     $route_name = \Drupal::routeMatch()->getRouteName();
     $node = \Drupal::routeMatch()->getParameter('node');
-
+    $displays = theme_get_setting($theme_name . '_pagenodesdisplay', $theme_name);
+    $Attribute = new Attribute();
+    $defaultClass = $this->getDisplaysClass($displays);
+    // $node =new \Drupal\node\Entity\Node();
+    // dump($displays);
     if ($node) {
-      $Attribute = new Attribute();
-      $Attribute->addClass([
-        'container',
-        'page-node-custom'
-      ]);
+      $defaultClassEntity = $this->getDisplaysClass($displays, $node->bundle());
+      $Attribute->addClass('page-node-custom');
+      if ($defaultClassEntity) {
+        $Attribute->addClass($defaultClassEntity);
+      } else {
+        // dump($defaultClass);
+        $Attribute->addClass($defaultClass);
+      }
+
       $variables['page']['content']['attributes'] = $Attribute;
       $wrapper_attribute = new Attribute();
       $wrapper_attribute->addClass('region-content');
       $variables['page']['content']['wrapper_attribute'] = $wrapper_attribute;
 
-      // dump('dd kl');
-      $displays = theme_get_setting($theme_name . '_pagenodesdisplay', $theme_name);
       // loadPagePlugins
       $LoaderDrupal->loadPagePlugins($variables, $displays, $node, $theme_name);
-      // dump($variables['page']);
+      // dump($node->bundle());
     } elseif ('entity.taxonomy_term.canonical' == $route_name) {
-      // $term = \Drupal::routeMatch()->getParameter('taxonomy_term');
-      // dump($term);
-      $Attribute = new Attribute();
-      $_Attribute = $Attribute->addClass([
-        'container',
-        'page-term-custom'
-      ]);
-      $variables['page']['content']['attributes'] = $_Attribute;
+      $Attribute->addClass('page-term-custom');
+      $Attribute->addClass($defaultClass);
+      $variables['page']['content']['attributes'] = $Attribute;
     } elseif (! $this->is_front && \strstr($route_name, 'user.')) {
       /**
        * En attendant de trouver une meilleur approche pour les pages de connextions, on ajoute une classe.
        */
-      $Attribute = new Attribute();
       $_Attribute = $Attribute->addClass([
         'container',
         'page-user-custom',
@@ -156,8 +159,8 @@ class PreprocessPage {
     } elseif (! $this->is_front && $route_name == 'entity.webform.canonical') {
       /**
        * Pour les pages webfomrs.
+       * [ Affichage statiques à modifier plus tard ].
        */
-      $Attribute = new Attribute();
       $_Attribute = $Attribute->addClass([
         'container',
         'container-md',
@@ -171,7 +174,25 @@ class PreprocessPage {
       $variables['page']['content']['entete']['#weight'] = - 100;
       $variables['page']['content']['attributes'] = $_Attribute;
       // dump($variables);
+    } elseif ('view.frontpage.page_1' != $route_name) {
+      $Attribute->addClass('page-orther-custom');
+      $Attribute->addClass($defaultClass);
+      $variables['page']['content']['attributes'] = $Attribute;
     }
+  }
+
+  public function getDisplaysClass($displays, $content_type = null)
+  {
+    if (! $content_type) {
+      if (! empty($displays['all-content-type']['status'])) {
+        return (! empty($displays['all-content-type']['classes'])) ? $displays['all-content-type']['classes'] : '';
+      }
+    } elseif ($content_type) {
+      if (! empty($displays[$content_type]['status'])) {
+        return (! empty($displays[$content_type]['classes'])) ? $displays[$content_type]['classes'] : '';
+      }
+    }
+    return false;
   }
 
   public function ApplyActions(&$variables, $theme_name = 'themeconsultant')
@@ -192,7 +213,7 @@ class PreprocessPage {
     }
 
     /**
-     * remove edit for all user except admibistrator
+     * Remove edit for all user except admibistrator
      */
     if (! \Drupal\user\Entity\User::load(\Drupal::currentUser()->id())->hasRole('administrator')) {
       unset($variables['page']['content'][$theme_name . '_local_tasks']);
@@ -329,13 +350,26 @@ class PreprocessPage {
   public function _load_scss($theme_name)
   {
     if (isset($_GET['build']) && $_GET['build'] == 'scss') {
+      /**
+       * il ya un soucis à ce niveau, si on eneleve le chemin cela ne fonctionne plus.
+       */
       require_once __DIR__ . '/../vendor/autoload.php';
       // convert bootstrap scss to css
       // new ScssPhp\ScssPhp\Compiler();
       $parser = new Compiler();
       // build bootstrap end default style theme
       $theme_root = DRUPAL_ROOT . '/' . \drupal_get_path('theme', $theme_name);
-      $result = $parser->compile('@import "' . $theme_root . '/scss/bootstrap-overlay.scss";');
+
+      /**
+       * formatte les fichiers scss du theme enfants
+       */
+      $scss_config_bootstrap = $this->childrenThemeFormarteScss($parser, $theme_root);
+
+      /**
+       *
+       * @var string $result
+       */
+      $result = $parser->compile($scss_config_bootstrap . '@import "' . $theme_root . '/scss/bootstrap-overlay.scss";');
       $filename = $theme_root . '/css/bootstrap-overlay.css';
       $monfichier = fopen($filename, 'w+');
       fputs($monfichier, $result);
@@ -374,7 +408,7 @@ class PreprocessPage {
           /**
            * compilation du fichier.
            */
-          $result = $parser->compile('@import "' . $filename . '";');
+          $result = $parser->compile($scss_config_bootstrap . '@import "' . $filename . '";');
           /**
            * on sauvegarde le fichier css generé.
            */
@@ -398,84 +432,70 @@ class PreprocessPage {
       }
 
       // build custom style
-      $result = $parser->compile('@import "' . $theme_root . '/scss/style.scss";');
+      $result = $parser->compile($scss_config_bootstrap . '@import "' . $theme_root . '/scss/style.scss";');
       $filename = $theme_root . '/css/style.css';
       $monfichier = fopen($filename, 'w+');
       fputs($monfichier, $result);
       fclose($monfichier);
 
       // build custom style
-      $result = $parser->compile('@import "' . $theme_root . '/scss/accueill.scss";');
+      $result = $parser->compile($scss_config_bootstrap . '@import "' . $theme_root . '/scss/accueill.scss";');
       $filename = $theme_root . '/css/accueill.css';
       $monfichier = fopen($filename, 'w+');
       fputs($monfichier, $result);
       fclose($monfichier);
-      /* */
-      // build custom style
-      $result = $parser->compile('@import "' . $theme_root . '/scss/article.scss";');
-      $filename = $theme_root . '/css/article.css';
-      $monfichier = fopen($filename, 'w+');
-      fputs($monfichier, $result);
-      fclose($monfichier);
 
       // build custom style
-      $result = $parser->compile('@import "' . $theme_root . '/scss/article-teaser.scss";');
-      $filename = $theme_root . '/css/article-teaser.css';
-      $monfichier = fopen($filename, 'w+');
-      fputs($monfichier, $result);
-      fclose($monfichier);
-
-      // build custom style
-      $result = $parser->compile('@import "' . $theme_root . '/scss/sign-in.scss";');
+      $result = $parser->compile($scss_config_bootstrap . '@import "' . $theme_root . '/scss/sign-in.scss";');
       $filename = $theme_root . '/css/sign-in.css';
       $monfichier = fopen($filename, 'w+');
       fputs($monfichier, $result);
       fclose($monfichier);
 
       // build custom style
-      $result = $parser->compile('@import "' . $theme_root . '/scss/style-admin.scss";');
+      $result = $parser->compile($scss_config_bootstrap . '@import "' . $theme_root . '/scss/style-admin.scss";');
       $filename = $theme_root . '/css/style-admin.css';
       $monfichier = fopen($filename, 'w+');
       fputs($monfichier, $result);
       fclose($monfichier);
 
       // build custom style
-      $result = $parser->compile('@import "' . $theme_root . '/scss/ckeditor_custom.scss";');
+      $result = $parser->compile($scss_config_bootstrap . '@import "' . $theme_root . '/scss/ckeditor_custom.scss";');
       $filename = $theme_root . '/css/ckeditor_custom.css';
       $monfichier = fopen($filename, 'w+');
       fputs($monfichier, $result);
       fclose($monfichier);
 
       // build custom member-ship
-      $result = $parser->compile('@import "' . $theme_root . '/scss/member-ship.scss";');
+      $result = $parser->compile($scss_config_bootstrap . '@import "' . $theme_root . '/scss/member-ship.scss";');
       $filename = $theme_root . '/css/member-ship.css';
       $monfichier = fopen($filename, 'w+');
       fputs($monfichier, $result);
       fclose($monfichier);
 
       // build custom member-ship
-      $result = $parser->compile('@import "' . $theme_root . '/scss/page_node_scss.scss";');
+      $result = $parser->compile($scss_config_bootstrap . '@import "' . $theme_root . '/scss/page_node_scss.scss";');
       $filename = $theme_root . '/css/page-node.css';
       $monfichier = fopen($filename, 'w+');
       fputs($monfichier, $result);
       fclose($monfichier);
 
       // build custom member-ship
-      $result = $parser->compile('@import "' . $theme_root . '/scss/node_scss.scss";');
+      $result = $parser->compile($scss_config_bootstrap . '@import "' . $theme_root . '/scss/node_scss.scss";');
       $filename = $theme_root . '/css/node.css';
       $monfichier = fopen($filename, 'w+');
       fputs($monfichier, $result);
       fclose($monfichier);
 
       // build custom maintenance-page
-      $result = $parser->compile('@import "' . $theme_root . '/scss/maintenance-page.scss";');
+      $result = $parser->compile($scss_config_bootstrap . '@import "' . $theme_root . '/scss/maintenance-page.scss";');
       $filename = $theme_root . '/css/maintenance-page.css';
       $monfichier = fopen($filename, 'w+');
       fputs($monfichier, $result);
       fclose($monfichier);
 
       // build custom maintenance-page
-      $result = $parser->compile('@import "' . $theme_root . '/scss/page-content-over.scss";');
+      $result = $parser->compile($scss_config_bootstrap . '@import "' . $theme_root . '/scss/page-content-over.scss";');
       $filename = $theme_root . '/css/page-content-over.css';
       $monfichier = fopen($filename, 'w+');
       fputs($monfichier, $result);
@@ -486,6 +506,49 @@ class PreprocessPage {
        */
       $this->_delete_scss();
     }
+  }
+
+  /**
+   * Permet de formater les fichiers css present dans le theme enfants.
+   * retourne le fichier de configuration, pour pouvoir surcharcher les valeurs de
+   * bootstrap.
+   */
+  protected function childrenThemeFormarteScss(Compiler $parser, $theme_root_parent)
+  {
+    $ThemeUtility = new ThemeUtility();
+    $themes = $ThemeUtility->themeObject->getBaseThemeExtensions();
+    $scss_config_bootstrap = '';
+    if (! empty($themes)) {
+      if (\array_key_first($themes) == "wb_universe") {
+        $theme_root = DRUPAL_ROOT . '/' . \drupal_get_path('theme', $ThemeUtility->themeName);
+        $theme_scss = $theme_root . '/scss/autos';
+        if (\file_exists($theme_root . '/scss/_variables_custom.scss')) {
+          $scss_config_bootstrap = '@import "' . $theme_root . '/scss/_variables_custom.scss"; ';
+        }
+        // creer le fichier style-auto.css à partir du contenu du dossier /scss/autos.
+        if (\file_exists($theme_scss)) {
+
+          // $style = file_get_contents($theme_root_parent . '/scss/style.scss');
+          $style = $scss_config_bootstrap . '@import "' . $theme_root_parent . '/scss/defaut/loader_model_module.scss"; ';
+          //
+          $file_system = \Drupal::service('file_system');
+          $list_scss = $file_system->scanDirectory($theme_scss, '/.scss/');
+          ksort($list_scss);
+          $import_scss = $style;
+          foreach ($list_scss as $key => $scs) {
+            $import_scss .= '@import "' . $key . '"; ';
+          }
+          // dump($import_scss);
+          // on construit la scss.
+          $result = $parser->compile($import_scss);
+          $filename = $theme_root . '/css/style-auto.css';
+          $monfichier = fopen($filename, 'w+');
+          fputs($monfichier, $result);
+          fclose($monfichier);
+        }
+      }
+    }
+    return $scss_config_bootstrap;
   }
 
   protected function _delete_scss()

@@ -4,7 +4,7 @@ namespace Stephane888\HtmlBootstrap\Controller;
 use Stephane888\HtmlBootstrap\Traits\Portions;
 use Stephane888\HtmlBootstrap\LoaderDrupal;
 use Stephane888\HtmlBootstrap\ThemeUtility;
-use Drupal\debug_log\debugLog;
+// use Drupal\debug_log\debugLog;
 use Drupal\Core\Template\Attribute;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Stephane888\HtmlBootstrap\PreprocessTemplate;
@@ -700,7 +700,8 @@ class ImageTextRightLeft implements ControllerInterface {
       '#sup_title' => $sup_title,
       '#title' => $title,
       '#orther_vars' => [
-        'show_header' => false
+        'show_header' => false,
+        'themename' => $this->themeObject->getName()
       ],
       '#attributes' => $wrapper_attribute,
       '#text' => $text

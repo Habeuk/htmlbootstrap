@@ -5,7 +5,6 @@ use Stephane888\HtmlBootstrap\Traits\Portions;
 use Stephane888\HtmlBootstrap\LoaderDrupal;
 use Stephane888\HtmlBootstrap\ThemeUtility;
 use Drupal\Core\Template\Attribute;
-use Drupal\debug_log\debugLog;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 class Headers implements ControllerInterface {

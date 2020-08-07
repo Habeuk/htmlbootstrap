@@ -5,6 +5,7 @@ use Drupal\Core\Database\Database;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\Component\Utility\Random;
 
+// use Drupal\Core\Theme\ActiveTheme;
 class ThemeUtility {
 
   public $image_styles = false;
@@ -14,7 +15,7 @@ class ThemeUtility {
 
   public $themePath;
 
-  protected $themeObject;
+  public $themeObject;
 
   /**
    */
@@ -41,6 +42,15 @@ class ThemeUtility {
       '#type' => 'textfield',
       '#title' => t($title),
       '#default_value' => $default
+    ];
+  }
+
+  public function addContainerTree($name, &$form, $title = 'Blocs', $open = false)
+  {
+    $form[$name] = [
+      '#type' => 'details',
+      '#title' => $title,
+      '#open' => $open
     ];
   }
 

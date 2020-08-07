@@ -27,22 +27,32 @@
       <div class="carousel-inner">
       	  {% for carousel in carousels %}
       	  	<div{{ carousel.attribute.addClass(carousel_item) }}>
+      	  		{% if display_content_bellow == false %}
           			{% if image_bg %} {% else %} <img class="d-block w-100" src="{{ carousel.image.img_url }}" alt="{{ carousel.image.alt }}"> {% endif %}
           			{% if carousel.content %}
           				<div class="carousel-caption d-md-block ">
           				    <h3>{{ carousel.content | raw }}</h3>
           				    <div class="sup_content">{{ carousel.sup_content | raw }}</div>
           				</div>    
-          			{% endif %}  			
+          			{% endif %} 
+          		{% endif %} 			
           	</div>
           {% endfor %}
       </div>
-        {% if display_content_bellow %}
-        	<div class="content-bellow">
+        {% if display_content_bellow  %}
+        	<div class="content-bellow">        		
         		<div class="container">
+        			{% if content_provider == '' %}
         			<h2 class="title item">{{ content_bellow_titre | raw }}</h2>
         			<div class="sup-title item">{{ content_bellow_sup_titre | raw }}</div>
         			<div class="container-button"><a href="#" class="button item btn btn-info">{{ content_bellow_button | raw }}</a></div>
+        			{% elseif content_provider == 'block' %}
+        				{% for block in blocks %}
+        					<div{{ block.attribute }}>
+        						{{ block.block }}
+        					</div>        				
+        				{% endfor %}   				
+        			{% endif %}
         		</div>
         	</div>
         {% endif %}

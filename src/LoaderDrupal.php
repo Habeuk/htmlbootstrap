@@ -1,6 +1,6 @@
 <?php
 /**
- * search grep -rnw '/siteweb/PluginsModules/stephane888' -e 'MenuCenter/style.scss'
+ * Search grep -rnw '/siteweb/PluginsModules/stephane888' -e 'MenuCenter/style.scss'
  *
  *
  */
@@ -285,12 +285,10 @@ class LoaderDrupal {
       if (defined('KEY_LOAD_SCSS') && KEY_LOAD_SCSS == 'loarder2') {
         $styles = $Session->get('theme_style', []);
         $styles['init'] = '@import "defaut/loader_model1.scss";';
-        $styles['init2'] = '@import "defaut/defaultStyle.scss";';
         $Session->set('theme_style', $styles);
       } else {
         $styles = $Session->get('theme_style', []);
         $styles['init'] = '@import "defaut/models.scss";';
-        $styles['init2'] = '@import "defaut/defaultStyle.scss";';
         $Session->set('theme_style', $styles);
       }
     }

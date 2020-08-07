@@ -137,47 +137,8 @@ class PageNodesDisplay {
 
   public function genereFiles($displays, $dir)
   {
-    foreach ($displays as $key => $display) {
-      /**
-       * On cree plus les fichiers pour surcharger les pages pas necessaires.
-       * Car les styles de bases evoluent mais pas ceux en internes
-       */
-      if ($display['status'] && $display['model']) {
-        if ($key == 'all-content-type') {
-          $page = 'page--node';
-          $this->loadPageFile($display, $page);
-          $directory = DRUPAL_ROOT . '/' . $dir . '/templates/generates/pages';
-          // dump($directory);
-          $this->createfile($page, $directory);
-        } else {
-          $page = 'page--' . $key . '-node';
-          $this->loadPageFile($display, $page);
-          $directory = DRUPAL_ROOT . '/' . $dir . '/templates/generates/pages';
-          $this->createfile($page, $directory);
-        }
-      } elseif (! $display['status']) {
-        /**
-         * Delete files.
-         */
-        if ($key == 'all-content-type') {
-          $page = 'page--node';
-          $directory = DRUPAL_ROOT . '/' . $dir . '/templates/generates/pages';
-          $this->deleteFile($page, $directory);
-        } else {
-          $page = 'page--' . $key . '-node';
-          $directory = DRUPAL_ROOT . '/' . $dir . '/templates/generates/pages';
-          $this->deleteFile($page, $directory);
-        }
-        /**
-         * Delete file nodes.
-         */
-        foreach ($display['nodes'] as $key => $value) {
-          if (! $value['status']) {
-            $directory = DRUPAL_ROOT . '/' . $dir . '/templates/nodes';
-            $this->deleteFile($key, $directory);
-          }
-        }
-      }
+    foreach ($displays as $display) {
+
       /**
        * Find plugins activate.
        */
@@ -270,7 +231,7 @@ class PageNodesDisplay {
     $ThemeUtility = new ThemeUtility();
     $ManageNode = new ManageNode();
     $content_types = [
-      'all-content-type' => 'model de contenu par default'
+      'all-content-type' => 'model de contenu par default (Tous type de page)'
     ];
     $content_types += $ManageNode->getContentType();
     foreach ($content_types as $machine_name => $content_type) {
@@ -287,18 +248,28 @@ class PageNodesDisplay {
         "#tree" => true
       );
       /**
-       * Le champs selection du type de contenu
+       * Le champs selection du type de contenu.
+       * Not use
        */
-      $name = 'model';
-      $FieldValue = (! empty($options[$machine_name][$name])) ? $options[$machine_name][$name] : '';
-      $ThemeUtility->addSelectTree($name, $form[$machine_name], static::listModels(), 'Selectionner le modele', $FieldValue);
+      // $name = 'model';
+      // $FieldValue = (! empty($options[$machine_name][$name])) ? $options[$machine_name][$name] : '';
+      // $ThemeUtility->addSelectTree($name, $form[$machine_name], static::listModels(), 'Selectionner le modele', $FieldValue);
 
       /**
-       * Le champs selection du type de contenu
+       * Le champs permettant d'identifier si le contenu est surchargé.
        */
       $name = 'status';
       $FieldValue = (isset($options[$machine_name][$name])) ? $options[$machine_name][$name] : 0;
       $ThemeUtility->addCheckboxTree($name, $form[$machine_name], 'Utiliser un theme personnalisé', $FieldValue);
+
+      /**
+       * Classe
+       */
+      $name = 'classes';
+      $FieldValue = (isset($options[$machine_name][$name])) ? $options[$machine_name][$name] : '';
+      $ThemeUtility->addTextfieldTree($name, $form[$machine_name], 'Classe PAGE CSS (region content) use by par tous les pages ou specifiques à une entité', $FieldValue);
+
+      //
       $options[$machine_name] = (isset($options[$machine_name])) ? $options[$machine_name] : [];
       $form[$machine_name] = (isset($form[$machine_name])) ? $form[$machine_name] : [];
       static::loadNodeTemplate($machine_name, $form[$machine_name], $options[$machine_name], $ThemeUtility, $ManageNode);
@@ -347,6 +318,7 @@ class PageNodesDisplay {
       $machine_name = '--' . $machine_name;
     }
     $form['messages2'][] = static::template_htmltag__static('Affichage des modes d\'affichage ', 'h4');
+    $form['messages2'][] = static::template_htmltag__static('Effecer le cache à chaque foix que vous modifiez le template ', 'small');
     foreach (static::mode_display() as $key => $value) {
       if ($key == 'default-node') {
         $key = '';
@@ -368,6 +340,12 @@ class PageNodesDisplay {
       $name = 'status';
       $FieldValue = (isset($options['nodes'][$container][$name])) ? $options['nodes'][$container][$name] : 0;
       $ThemeUtility->addCheckboxTree($name, $form['nodes'][$container], 'Utiliser un theme personnalisé', $FieldValue);
+      /**
+       * classe
+       */
+      $name = 'classes';
+      $FieldValue = (isset($options['nodes'][$container][$name])) ? $options['nodes'][$container][$name] : '';
+      $ThemeUtility->addTextfieldTree($name, $form['nodes'][$container], 'Classe css', $FieldValue);
       /**
        * Le champs selection du type de contenu
        */
