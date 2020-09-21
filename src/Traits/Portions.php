@@ -269,6 +269,28 @@ trait Portions {
     return $imgs;
   }
 
+  public function getResponsiveImageUrlByFid($fid, $style_image)
+  {
+    $imgs = [];
+    $i = 0;
+    foreach ($style_image as $key => $style) {
+      $imgs[$i] = $this->getImageUrlByFid($fid, $key);
+      $imgs[$i]['size'] = $style['size'];
+      $i ++;
+    }
+    return $imgs;
+  }
+
+  public function setBackgroundBgset(Attribute &$wrapper_attribute, $imgs = [])
+  {
+    $image_responsive = '';
+    foreach ($imgs as $img_list) {
+      $image_responsive .= $img_list['img_url'] . ' ' . $img_list['size'] . ',';
+    }
+    $wrapper_attribute->setAttribute('data-bgset', $image_responsive);
+    $wrapper_attribute->setAttribute('data-sizes', 'auto');
+  }
+
   public function setSyleImage($styles)
   {
     $this->style_image = $styles;

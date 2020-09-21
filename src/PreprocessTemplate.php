@@ -44,6 +44,9 @@ class PreprocessTemplate {
       }
     } elseif ($hook == 'form_terremploi') {
       $variables['content']['txt']['moreoption'] = t('More criteria');
+    } elseif ($hook == 'ds_entity_view') {
+      // dump($variables);
+      // $variables['render_user'] = "Good";
     }
   }
 

@@ -379,7 +379,7 @@ class PreprocessPage {
       if (LOAD_SCSS_BY_SESSION && $this->is_front) {
         // dump('_load_scss');
         $Session = new Session();
-        $styles = $Session->get('theme_style', []);
+        $styles = $Session->get('theme-style', []);
         if (! empty($styles)) {
           $style = '';
           if (isset($styles['init'])) {
@@ -396,7 +396,7 @@ class PreprocessPage {
           }
           $style .= implode("\n", $styles);
           // dump($styles);
-          // $Session->remove('theme_style');
+          // $Session->remove('theme-style');
           // kint($style);
           /**
            * on enregistre le fichier generere en scss.
@@ -419,7 +419,7 @@ class PreprocessPage {
           /**
            * Get script
            */
-          $scripts = $Session->get('theme_script', []);
+          $scripts = $Session->get('theme-script', []);
           $script = implode("\n", $scripts);
           /**
            * On enregistre le fichier generere en js.
@@ -501,10 +501,10 @@ class PreprocessPage {
       fputs($monfichier, $result);
       fclose($monfichier);
 
-      /**
-       * delete session
-       */
-      $this->_delete_scss();
+    /**
+     * delete session
+     */
+      // $this->_delete_scss();
     }
   }
 
@@ -519,23 +519,28 @@ class PreprocessPage {
     $themes = $ThemeUtility->themeObject->getBaseThemeExtensions();
     $scss_config_bootstrap = '';
     if (! empty($themes)) {
+
       if (\array_key_first($themes) == "wb_universe") {
+
         $theme_root = DRUPAL_ROOT . '/' . \drupal_get_path('theme', $ThemeUtility->themeName);
+        // dump($theme_root_parent);
         $theme_scss = $theme_root . '/scss/autos';
         if (\file_exists($theme_root . '/scss/_variables_custom.scss')) {
           $scss_config_bootstrap = '@import "' . $theme_root . '/scss/_variables_custom.scss"; ';
         }
-        // creer le fichier style-auto.css à partir du contenu du dossier /scss/autos.
+        // Creer le fichier style-auto.css à partir du contenu du dossier /scss/autos.
         if (\file_exists($theme_scss)) {
 
           // $style = file_get_contents($theme_root_parent . '/scss/style.scss');
-          $style = $scss_config_bootstrap . '@import "' . $theme_root_parent . '/scss/defaut/loader_model_module.scss"; ';
+          $style = $scss_config_bootstrap . '@import "' . $theme_root_parent . '/scss/loader_model_module2.scss"; ';
           //
           $file_system = \Drupal::service('file_system');
           $list_scss = $file_system->scanDirectory($theme_scss, '/.scss/');
+          // dump($list_scss);
           ksort($list_scss);
           $import_scss = $style;
           foreach ($list_scss as $key => $scs) {
+            $import_scss .= " \n/* Fichier : $key */ \n\n ";
             $import_scss .= '@import "' . $key . '"; ';
           }
           // dump($import_scss);
@@ -553,8 +558,13 @@ class PreprocessPage {
 
   protected function _delete_scss()
   {
+    dump('delete');
     $Session = new Session();
-    $Session->remove('theme_style');
-    $Session->remove('theme_script');
+    if ($Session->has('theme-style')) {
+      $Session->remove('theme-style');
+    }
+    if ($Session->has('theme-script')) {
+      $Session->remove('theme-script');
+    }
   }
 }

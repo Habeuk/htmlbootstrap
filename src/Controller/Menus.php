@@ -8,15 +8,20 @@ class Menus {
 
   /**
    * Ajoute les icones sur les elements du menus.
-   * il faut verifier le comportement pour les menus créer en admins. ( est que tout menu possede une route ? )
+   * il faut verifier le comportement pour les menus créer en admins. ( est que tout menu possede une route ? ).
    */
   public static function MenuAddIcones($items, $icones = [])
   {
     foreach ($items as $key => $value) {
-      // dump($value['url']->getRouteName());
-      $routeName = $value['url']->getRouteName();
+      $routeName = '';
+      if ($value['url']->isRouted()) {
+        $routeName = $value['url']->getRouteName();
+      }
       if (! empty($icones[$routeName])) {
         $items[$key]['#icone'] = $icones[$routeName];
+      }
+      if (! empty($value['below'])) {
+        $items[$key]['below'] = self::MenuAddIcones($value['below'], $icones);
       }
     }
     return $items;

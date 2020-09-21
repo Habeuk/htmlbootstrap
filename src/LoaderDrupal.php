@@ -39,7 +39,7 @@ class LoaderDrupal {
   {
     $this->BasePath = __DIR__;
     // $Session = new Session();
-    // $Session->remove('theme_style');
+    // $Session->remove('theme-style');
     $this->checkLoadScss()->getDefautStyle();
   }
 
@@ -168,14 +168,14 @@ class LoaderDrupal {
   public static function addStyle($style, $key)
   {
     if (LOAD_SCSS_BY_SESSION) {
-      static::addData('theme_style', $style, $key);
+      static::addData('theme-style', $style, $key);
     }
   }
 
   public static function addScript($script, $key)
   {
     if (LOAD_SCSS_BY_SESSION) {
-      static::addData('theme_script', $script, $key);
+      static::addData('theme-script', $script, $key);
     }
   }
 
@@ -269,6 +269,7 @@ class LoaderDrupal {
     return false;
   }
 
+  // debug 1
   private function checkLoadScss()
   {
     if (isset($_GET['build']) && $_GET['build'] == 'scss') {
@@ -283,13 +284,13 @@ class LoaderDrupal {
       $Session = new Session();
 
       if (defined('KEY_LOAD_SCSS') && KEY_LOAD_SCSS == 'loarder2') {
-        $styles = $Session->get('theme_style', []);
+        $styles = $Session->get('theme-style', []);
         $styles['init'] = '@import "defaut/loader_model1.scss";';
-        $Session->set('theme_style', $styles);
+        $Session->set('theme-style', $styles);
       } else {
-        $styles = $Session->get('theme_style', []);
+        $styles = $Session->get('theme-style', []);
         $styles['init'] = '@import "defaut/models.scss";';
-        $Session->set('theme_style', $styles);
+        $Session->set('theme-style', $styles);
       }
     }
   }
