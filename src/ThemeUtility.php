@@ -45,6 +45,42 @@ class ThemeUtility {
     ];
   }
 
+  public function addButtonTree($name, &$form, $title, array $default)
+  {
+    $this->addContainerTree($name, $form, $title);
+    $this->addTextfieldTree('text', $form[$name], "Texte", (isset($default['text'])) ? $default['text'] : '');
+    $this->addTextfieldTree('url', $form[$name], 'Url', (isset($default['url'])) ? $default['url'] : '');
+    $this->addSelectTree('btn', $form[$name], $this->typeButton(), "Button", (isset($default['btn'])) ? $default['btn'] : '');
+  }
+
+  /**
+   * Creer un groupe de lien
+   *
+   * @param String $name
+   * @param array $form
+   * @param String $title
+   * @param array $default
+   */
+  public function addLinksTree($name, array &$form, $title, array $default)
+  {
+    $this->addContainerTree($name, $form, $title);
+    $nombre = (isset($default['nombre'])) ? $default['nombre'] : 4;
+    $this->addTextfieldTree('nombre', $form[$name], "Nombre d'elemnt", $nombre);
+    $form[$name]['links'] = [];
+    for ($i = 0; $i < $nombre; $i ++) {
+      $j = $i + 1;
+      $link = (isset($default['links'][$i])) ? $default['links'][$i] : [];
+      $this->addLinkTree($i, $form[$name]['links'], 'Lien : ' . $j, $link);
+    }
+  }
+
+  public function addLinkTree($name, array &$form, String $title, array $default)
+  {
+    $this->addContainerTree($name, $form, $title);
+    $this->addTextfieldTree('text', $form[$name], 'Text', (isset($default['text'])) ? $default['text'] : '');
+    $this->addTextfieldTree('url', $form[$name], 'Url', (isset($default['url'])) ? $default['url'] : '');
+  }
+
   public function addContainerTree($name, &$form, $title = 'Blocs', $open = false)
   {
     $form[$name] = [
@@ -54,7 +90,7 @@ class ThemeUtility {
     ];
   }
 
-  public function addSelectTree($name, &$form, $options, $title, $default)
+  public function addSelectTree($name, array &$form, array $options, $title, $default)
   {
     $form[$name] = [
       '#type' => 'select',

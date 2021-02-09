@@ -6,7 +6,7 @@ use Stephane888\HtmlBootstrap\SortArray;
 use Drupal\Core\Theme\ThemeSettings;
 use Stephane888\HtmlBootstrap\Controller;
 use Drupal\Component\Utility\Random;
-use Drupal\debug_log\debugLog;
+use Stephane888\Debug\debugLog;
 use Stephane888\HtmlBootstrap\Traits\Portions;
 
 class DefineSetting {
@@ -15,7 +15,7 @@ class DefineSetting {
   protected $DisplaysFields = [
     'route' => '',
     'model' => "",
-    'provider' => 'theme',
+    'provider' => 'layout',
     'region' => '',
     'weight' => 0,
     'status' => 1
@@ -24,7 +24,8 @@ class DefineSetting {
   protected $ListModels;
 
   protected $providers = [
-    'theme' => 'Theme (default)',
+    'layout' => 'Layout',
+    'theme' => 'Theme',
     'node' => 'Contenus',
     'custom' => 'Personnaliser'
   ];
@@ -59,7 +60,6 @@ class DefineSetting {
     $this->regions = $ThemeUtility->get_regions();
     $this->ListModels = Controller\TopHeaders::listModels();
     $this->addSection($form, $group, 'Top Entetes', $vertical_tabs_group, $theme_name, - 1);
-
     $this->addTopHeaderDisplay($form, $form_state);
   }
 
@@ -227,6 +227,7 @@ class DefineSetting {
     $group = $this->group;
     $theme_name = $this->themeName;
     $values = theme_get_setting($theme_name . '_' . $group, $theme_name);
+    $this->AjaxWrapperProvider = $theme_name . '_' . $group . '_' . $sous_group;
     // dump($values);
     $form[$theme_name . '_' . $group][$sous_group] = array(
       '#type' => 'details',
@@ -236,13 +237,12 @@ class DefineSetting {
         'class' => [
           'wbu-ui-state-default'
         ],
-        'id' => $theme_name . '_' . $group . '_' . $sous_group
+        'id' => $this->AjaxWrapperProvider
       ]
     );
 
     foreach ($this->DisplaysFields as $k_field => $DefaultValue) {
-      if ($k_field == 'model' || $k_field == 'region' || $k_field == 'weight' || $k_field == 'status' || $k_field == 'provider') {
-        $this->AjaxWrapperProvider = $theme_name . '_' . $group . '_' . $sous_group;
+      if ($k_field == 'region' || $k_field == 'weight' || $k_field == 'status' || $k_field == 'provider') {
         $this->AjaxCallbackProvider = '_' . $this->themeName . '_' . $this->group . '_provider';
         if (isset($values[$sous_group][$k_field])) {
           $this->addDisplayFields($k_field, $values[$sous_group][$k_field], $form[$theme_name . '_' . $group][$sous_group], $ThemeUtility);
@@ -252,10 +252,25 @@ class DefineSetting {
       }
     }
     //
-    if (isset($values['display']['model'])) {
-      $model = $values['display']['model'];
-      $values = theme_get_setting($theme_name . '_' . $group, $theme_name);
-      Controller\TopHeaders::loadFields($model, $form[$theme_name . '_' . $group][$sous_group], $values);
+    if (isset($values['display']['provider']) && $values['display']['provider'] == "layout") {
+      $layoutPluginManager = \Drupal::service('plugin.manager.core.layout');
+
+      if (! empty($values['display']['layout'])) {
+        $typelayout = $values['display']['layout']['typelayout'];
+      }
+      $form[$theme_name . '_' . $group][$sous_group]['layout'] = [];
+      $ThemeUtility->addSelectTree('typelayout', $form[$theme_name . '_' . $group][$sous_group]['layout'], $layoutPluginManager->getLayoutOptions(), 'Selectionner le layout', $typelayout);
+      if ($typelayout) {
+        $layoutValue = [];
+        if (! empty($values['display']['layout']['fields'])) {
+          $layoutValue = $values['display']['layout']['fields'];
+        }
+        $form[$theme_name . '_' . $group][$sous_group]['layout']['fields'] = [];
+        $layout = $layoutPluginManager->createInstance($typelayout);
+        // debugLog::kintDebugDrupal($values['display'], "addTopHeaderDisplay::values");
+        // $typelayout = $values['display']['layout']['typelayout']=[];
+        Controller\LayoutBuilderForm::loadFields($layout->getPluginDefinition()->getRegions(), $form[$theme_name . '_' . $group][$sous_group]['layout']['fields'], $layoutValue);
+      }
     }
   }
 
