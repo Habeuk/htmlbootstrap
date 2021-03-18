@@ -2,7 +2,7 @@
 namespace Stephane888\HtmlBootstrap\Traits;
 
 // use Drupal\Core\Template\Attribute;
-use Drupal\debug_log\debugLog;
+use Stephane888\Debug\debugLog;
 use Stephane888\HtmlBootstrap\Controller\Cards;
 
 trait DrupalUtility {
@@ -113,7 +113,39 @@ trait DrupalUtility {
 
   public function loadTopHeaderDatas(&$options, $group, $theme_name, $display)
   {
-    ;
+    // debugLog::kintDebugDrupal($display, "DrupalUtility::loadTopHeaderDatas");
+    /**
+     * $Options doit correspondre.
+     */
+    if (! empty($display['layout']['fields']) && ! empty($display['provider']) && $display['provider'] == 'layout') {
+      $options = $this->renderLayout($display['layout']['typelayout'], $display['layout']['fields']);
+    }
+  }
+
+  /**
+   * Genere le rendu du layout à partir des informations stockes dans le theme.
+   */
+  public function renderLayout(String $typelayout, array $regionsValues)
+  {
+    $render = [];
+    $layoutPluginManager = \Drupal::service('plugin.manager.core.layout');
+    if ($layoutPluginManager->hasDefinition($typelayout)) {
+      $layoutInstance = $layoutPluginManager->createInstance($typelayout);
+      $regions = $layoutInstance->getPluginDefinition()->getRegions();
+      foreach ($regions as $region => $infos) {
+        if (isset($regionsValues[$region])) {
+          if ($infos['fieldtype'] == 'string') {
+            $render[$region] = [
+              '#markup' => $regionsValues[$region]
+            ];
+          } else {
+            $render[$region] = $regionsValues[$region];
+          }
+        }
+      }
+      return $layoutInstance->build($render);
+    }
+    return $render;
   }
 
   /**

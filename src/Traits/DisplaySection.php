@@ -6,6 +6,33 @@ use Stephane888\HtmlBootstrap\LoaderDrupal;
 trait DisplaySection {
 
   // \\ to update in defaultTheme.
+
+  /**
+   *
+   * @param object $LoaderDrupal
+   * @param object $variables
+   */
+  protected static function getLayoutManager(LoaderDrupal $LoaderDrupal, &$variables, $group)
+  {
+    $theme_name = static::$theme_name;
+    $i = 0;
+    $values = theme_get_setting($theme_name . '_' . $group, static::$theme_name);
+    /**
+     * Gestion de l'affichage.
+     */
+    if (isset($values['displays']))
+      foreach ($values['displays'] as $display) {
+        $i ++;
+        /**
+         * Get datas and put it in options.
+         */
+        if ($LoaderDrupal->filterByRouteName($display['route']) && ! empty($display['layout']['fields']) && $display['provider'] == 'layout') {
+          $variables['page'][$display['region']][$theme_name . '_' . $group][$i] = $LoaderDrupal->renderLayout($display['layout']['typelayout'], $display['layout']['fields']);
+          $variables['page'][$display['region']][$theme_name . '_' . $group]["#weight"] = $display['weight'];
+        }
+      }
+  }
+
   /**
    *
    * @param object $LoaderDrupal
@@ -27,14 +54,12 @@ trait DisplaySection {
       foreach ($values['displays'] as $display) {
         if (isset($display['status']) && $display['status']) {
           $i ++;
-          $options = [
-            'type' => $display['model']
-          ];
+          $options = [];
           /**
-           * get datas and put it in options.
+           * Get datas and put it in options.
            */
           $LoaderDrupal->loadTopHeaderDatas($options, $group, $theme_name, $display);
-          $variables['page'][$display['region']][$theme_name . '_' . $group][$i] = $LoaderDrupal->getSectionTopHeaders($options);
+          $variables['page'][$display['region']][$theme_name . '_' . $group][$i] = $options;
           $variables['page'][$display['region']][$theme_name . '_' . $group]["#weight"] = $display['weight'];
         }
       }
@@ -61,14 +86,19 @@ trait DisplaySection {
     if (isset($values['displays']))
       foreach ($values['displays'] as $display) {
         $i ++;
-        $options = [
-          'type' => $display['model']
-        ];
+
         /**
          * get datas and put it in options.
          */
-        $LoaderDrupal->loadHeaderDatas($options, $group, $theme_name, $display, $variables);
-        $variables['page'][$display['region']][$theme_name . '_' . $group][$i] = $LoaderDrupal->getSectionHeaders($options);
+        if (! empty($display['layout']['fields']) && $display['provider'] == 'layout') {
+          $variables['page'][$display['region']][$theme_name . '_' . $group][$i] = $LoaderDrupal->renderLayout($display['layout']['typelayout'], $display['layout']['fields']);
+        } else {
+          $options = [
+            'type' => $display['model']
+          ];
+          $LoaderDrupal->loadHeaderDatas($options, $group, $theme_name, $display, $variables);
+          $variables['page'][$display['region']][$theme_name . '_' . $group][$i] = $LoaderDrupal->getSectionHeaders($options);
+        }
         $variables['page'][$display['region']][$theme_name . '_' . $group]["#weight"] = $display['weight'];
       }
   }

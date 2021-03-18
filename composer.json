@@ -3,7 +3,7 @@
 	"description" : "Contient toutes les petites portions de code à des examples de page complete permettant d'accelerer le developpment avec bootstrap4.",
 	"type" : "library",
 	"license" : "MIT",
-	"version" : "1.2",
+	"version" : "1.2.1",
 	"authors" : [{
 			"name" : "stephane888",
 			"email" : "kksasteph888@gmail.com",

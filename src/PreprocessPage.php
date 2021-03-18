@@ -41,6 +41,13 @@ class PreprocessPage {
     $LoaderDrupal = new LoaderDrupal();
 
     /**
+     * Load content from layout manager.
+     */
+    if (theme_get_setting($theme_name . '_layout_manager_status', $theme_name)) {
+      static::getLayoutManager($LoaderDrupal, $variables, 'layout_manager');
+    }
+
+    /**
      * Get style for pages
      */
     if (theme_get_setting($theme_name . '_stylepage_status', $theme_name)) {

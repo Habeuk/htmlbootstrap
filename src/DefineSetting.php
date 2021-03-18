@@ -122,6 +122,17 @@ class DefineSetting {
     $this->addFormDisplay($form, $form_state);
   }
 
+  public function formLayoutManager(&$form, $vertical_tabs_group, $form_state)
+  {
+    //
+    $group = $this->group;
+    $theme_name = $this->themeName;
+    $ThemeUtility = new ThemeUtility();
+    $this->regions = $ThemeUtility->get_regions();
+    $this->addSection($form, $group, 'Manages layout', $vertical_tabs_group, $theme_name);
+    $this->addFormDisplay($form, $form_state);
+  }
+
   protected function init_form_slide($theme_name, $group)
   {
     $ThemeUtility = new ThemeUtility();
@@ -252,24 +263,30 @@ class DefineSetting {
       }
     }
     //
-    if (isset($values['display']['provider']) && $values['display']['provider'] == "layout") {
-      $layoutPluginManager = \Drupal::service('plugin.manager.core.layout');
+    if (isset($values['display']))
+      $this->prepareLayoutForm($values['display'], $theme_name, $group, $sous_group, $ThemeUtility, $form[$theme_name . '_' . $group][$sous_group]);
+  }
 
-      if (! empty($values['display']['layout'])) {
-        $typelayout = $values['display']['layout']['typelayout'];
+  protected function prepareLayoutForm($values, $theme_name, $group, $sous_group, $ThemeUtility, &$form)
+  {
+    if (isset($values['provider']) && $values['provider'] == "layout") {
+      $layoutPluginManager = \Drupal::service('plugin.manager.core.layout');
+      $typelayout = [];
+      if (! empty($values['layout'])) {
+        $typelayout = $values['layout']['typelayout'];
       }
-      $form[$theme_name . '_' . $group][$sous_group]['layout'] = [];
-      $ThemeUtility->addSelectTree('typelayout', $form[$theme_name . '_' . $group][$sous_group]['layout'], $layoutPluginManager->getLayoutOptions(), 'Selectionner le layout', $typelayout);
+      $form['layout'] = [];
+      $ThemeUtility->addSelectTree('typelayout', $form['layout'], $layoutPluginManager->getLayoutOptions(), 'Selectionner le layout', $typelayout);
       if ($typelayout) {
         $layoutValue = [];
-        if (! empty($values['display']['layout']['fields'])) {
-          $layoutValue = $values['display']['layout']['fields'];
+        if (! empty($values['layout']['fields'])) {
+          $layoutValue = $values['layout']['fields'];
         }
-        $form[$theme_name . '_' . $group][$sous_group]['layout']['fields'] = [];
-        $layout = $layoutPluginManager->createInstance($typelayout);
-        // debugLog::kintDebugDrupal($values['display'], "addTopHeaderDisplay::values");
-        // $typelayout = $values['display']['layout']['typelayout']=[];
-        Controller\LayoutBuilderForm::loadFields($layout->getPluginDefinition()->getRegions(), $form[$theme_name . '_' . $group][$sous_group]['layout']['fields'], $layoutValue);
+        $form['layout']['fields'] = [];
+        if ($layoutPluginManager->hasDefinition($typelayout)) {
+          $layout = $layoutPluginManager->createInstance($typelayout);
+          Controller\LayoutBuilderForm::loadFields($layout->getPluginDefinition()->getRegions(), $form['layout']['fields'], $layoutValue);
+        }
       }
     }
   }
@@ -301,7 +318,7 @@ class DefineSetting {
     );
 
     foreach ($this->DisplaysFields as $k_field => $DefaultValue) {
-      if ($k_field == 'model' || $k_field == 'region' || $k_field == 'weight' || $k_field == 'status') {
+      if ($k_field == 'model' || $k_field == 'region' || $k_field == 'weight' || $k_field == 'status' || $k_field == 'provider') {
         $this->AjaxWrapperProvider = $theme_name . '_' . $group . '_' . $sous_group;
         $this->AjaxCallbackProvider = '_' . $this->themeName . '_' . $this->group . '_provider';
         if (isset($values[$sous_group][$k_field])) {
@@ -375,7 +392,8 @@ class DefineSetting {
         $this->loadHeaderFieldsModels($values[$sous_group]['model'], $form[$theme_name . '_' . $group][$sous_group]['options'], $options);
       }
     }
-    // Controller\Comments::loadFields($model, $form, $options);
+    if (isset($values['display']))
+      $this->prepareLayoutForm($values['display'], $theme_name, $group, $sous_group, $ThemeUtility, $form[$theme_name . '_' . $group][$sous_group]);
   }
 
   protected function loadHeaderFieldsModels($model, &$form, $options)
@@ -651,6 +669,8 @@ class DefineSetting {
           }
         }
 
+        $this->prepareLayoutForm($value, $theme_name, $group, $sous_group, $ThemeUtility, $form[$theme_name . '_' . $group][$sous_group][$key]);
+
         /**
          * Remove display
          */
@@ -802,10 +822,20 @@ class DefineSetting {
     $displays[$i] = $this->DisplaysFields;
   }
 
-  protected function addSection(&$form, $group, $label, $vertical_tabs_group, $theme_name, $weight = 0)
+  /**
+   * Affiche le titre de la section sur la colonne vertical.
+   *
+   * @param array $form
+   * @param String $group
+   * @param String $label
+   * @param String $vertical_tabs_group
+   * @param String $theme_name
+   * @param number $weight
+   */
+  protected function addSection(array &$form, String $group, String $label, String $vertical_tabs_group, String $theme_name, $weight = 0)
   {
     /**
-     * add section
+     * Add section
      */
     $form[$theme_name . '_' . $group] = array(
       '#type' => 'details',
