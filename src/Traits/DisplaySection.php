@@ -22,11 +22,15 @@ trait DisplaySection {
      */
     if (isset($values['displays']))
       foreach ($values['displays'] as $display) {
+        // pour le moment on force, mais cela doit sefaire au niveau de : Stephane888\HtmlBootstrap\DefineSetting,
+        // il renvera un area vide, le temps qu'on ameliorer le processus.
+        if(empty($display['layout']['fields']))
+          $display['layout']['fields']=[];
         $i ++;
         /**
          * Get datas and put it in options.
          */
-        if ($LoaderDrupal->filterByRouteName($display['route']) && ! empty($display['layout']['fields']) && $display['provider'] == 'layout') {
+        if ($LoaderDrupal->filterByRouteName($display['route']) &&  $display['provider'] == 'layout') {
           $variables['page'][$display['region']][$theme_name . '_' . $group][$i] = $LoaderDrupal->renderLayout($display['layout']['typelayout'], $display['layout']['fields']);
           $variables['page'][$display['region']][$theme_name . '_' . $group]["#weight"] = $display['weight'];
         }

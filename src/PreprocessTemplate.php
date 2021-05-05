@@ -2,7 +2,7 @@
 namespace Stephane888\HtmlBootstrap;
 
 use Drupal\Core\Template\Attribute;
-use Drupal\debug_log\debugLog;
+use Stephane888\Debug\debugLog;
 
 class PreprocessTemplate {
 
@@ -44,9 +44,12 @@ class PreprocessTemplate {
       }
     } elseif ($hook == 'form_terremploi') {
       $variables['content']['txt']['moreoption'] = t('More criteria');
-    } elseif ($hook == 'ds_entity_view') {
-      // dump($variables);
-      // $variables['render_user'] = "Good";
+    } elseif ($hook == 'TopHeader') {
+      // debugLog::kintDebugDrupal($variables, $hook);
+    } else {
+      // dump($hook);
+      // debugLog::kintDebugDrupal($hook, $hook);
+      // debugLog::SaveLogsDrupal($hook, $hook);
     }
   }
 

@@ -163,7 +163,8 @@ class PreprocessPage {
         'my-5'
       ]);
       $variables['page']['content']['attributes'] = $_Attribute;
-    } elseif (! $this->is_front && $route_name == 'entity.webform.canonical') {
+    } // doit etre configurable.
+    elseif (! $this->is_front && $route_name == 'entity.webform.canonical') {
       /**
        * Pour les pages webfomrs.
        * [ Affichage statiques à modifier plus tard ].
@@ -446,18 +447,18 @@ class PreprocessPage {
       fclose($monfichier);
 
       // build custom style
-      $result = $parser->compile($scss_config_bootstrap . '@import "' . $theme_root . '/scss/accueill.scss";');
-      $filename = $theme_root . '/css/accueill.css';
-      $monfichier = fopen($filename, 'w+');
-      fputs($monfichier, $result);
-      fclose($monfichier);
+      // $result = $parser->compile($scss_config_bootstrap . '@import "' . $theme_root . '/scss/accueill.scss";');
+      // $filename = $theme_root . '/css/accueill.css';
+      // $monfichier = fopen($filename, 'w+');
+      // fputs($monfichier, $result);
+      // fclose($monfichier);
 
       // build custom style
-      $result = $parser->compile($scss_config_bootstrap . '@import "' . $theme_root . '/scss/sign-in.scss";');
-      $filename = $theme_root . '/css/sign-in.css';
-      $monfichier = fopen($filename, 'w+');
-      fputs($monfichier, $result);
-      fclose($monfichier);
+      // $result = $parser->compile($scss_config_bootstrap . '@import "' . $theme_root . '/scss/sign-in.scss";');
+      // $filename = $theme_root . '/css/sign-in.css';
+      // $monfichier = fopen($filename, 'w+');
+      // fputs($monfichier, $result);
+      // fclose($monfichier);
 
       // build custom style
       $result = $parser->compile($scss_config_bootstrap . '@import "' . $theme_root . '/scss/style-admin.scss";');
@@ -467,32 +468,32 @@ class PreprocessPage {
       fclose($monfichier);
 
       // build custom style
-      $result = $parser->compile($scss_config_bootstrap . '@import "' . $theme_root . '/scss/ckeditor_custom.scss";');
-      $filename = $theme_root . '/css/ckeditor_custom.css';
-      $monfichier = fopen($filename, 'w+');
-      fputs($monfichier, $result);
-      fclose($monfichier);
+      // $result = $parser->compile($scss_config_bootstrap . '@import "' . $theme_root . '/scss/ckeditor_custom.scss";');
+      // $filename = $theme_root . '/css/ckeditor_custom.css';
+      // $monfichier = fopen($filename, 'w+');
+      // fputs($monfichier, $result);
+      // fclose($monfichier);
 
       // build custom member-ship
-      $result = $parser->compile($scss_config_bootstrap . '@import "' . $theme_root . '/scss/member-ship.scss";');
-      $filename = $theme_root . '/css/member-ship.css';
-      $monfichier = fopen($filename, 'w+');
-      fputs($monfichier, $result);
-      fclose($monfichier);
+      // $result = $parser->compile($scss_config_bootstrap . '@import "' . $theme_root . '/scss/member-ship.scss";');
+      // $filename = $theme_root . '/css/member-ship.css';
+      // $monfichier = fopen($filename, 'w+');
+      // fputs($monfichier, $result);
+      // fclose($monfichier);
+
+      // // build custom member-ship
+      // $result = $parser->compile($scss_config_bootstrap . '@import "' . $theme_root . '/scss/page_node_scss.scss";');
+      // $filename = $theme_root . '/css/page-node.css';
+      // $monfichier = fopen($filename, 'w+');
+      // fputs($monfichier, $result);
+      // fclose($monfichier);
 
       // build custom member-ship
-      $result = $parser->compile($scss_config_bootstrap . '@import "' . $theme_root . '/scss/page_node_scss.scss";');
-      $filename = $theme_root . '/css/page-node.css';
-      $monfichier = fopen($filename, 'w+');
-      fputs($monfichier, $result);
-      fclose($monfichier);
-
-      // build custom member-ship
-      $result = $parser->compile($scss_config_bootstrap . '@import "' . $theme_root . '/scss/node_scss.scss";');
-      $filename = $theme_root . '/css/node.css';
-      $monfichier = fopen($filename, 'w+');
-      fputs($monfichier, $result);
-      fclose($monfichier);
+      // $result = $parser->compile($scss_config_bootstrap . '@import "' . $theme_root . '/scss/node_scss.scss";');
+      // $filename = $theme_root . '/css/node.css';
+      // $monfichier = fopen($filename, 'w+');
+      // fputs($monfichier, $result);
+      // fclose($monfichier);
 
       // build custom maintenance-page
       $result = $parser->compile($scss_config_bootstrap . '@import "' . $theme_root . '/scss/maintenance-page.scss";');
@@ -502,11 +503,11 @@ class PreprocessPage {
       fclose($monfichier);
 
       // build custom maintenance-page
-      $result = $parser->compile($scss_config_bootstrap . '@import "' . $theme_root . '/scss/page-content-over.scss";');
-      $filename = $theme_root . '/css/page-content-over.css';
-      $monfichier = fopen($filename, 'w+');
-      fputs($monfichier, $result);
-      fclose($monfichier);
+      // $result = $parser->compile($scss_config_bootstrap . '@import "' . $theme_root . '/scss/page-content-over.scss";');
+      // $filename = $theme_root . '/css/page-content-over.css';
+      // $monfichier = fopen($filename, 'w+');
+      // fputs($monfichier, $result);
+      // fclose($monfichier);
 
     /**
      * delete session

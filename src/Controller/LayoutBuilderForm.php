@@ -9,6 +9,7 @@ class LayoutBuilderForm {
   {
     $ThemeUtility = new ThemeUtility();
     foreach ($layoutRegions as $key => $region) {
+      if(isset($region['fieldtype']))
       switch ($region['fieldtype']) {
         case 'string':
           $FieldValue = (isset($options[$key])) ? $options[$key] : '';
