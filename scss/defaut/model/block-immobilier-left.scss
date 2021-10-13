@@ -1,9 +1,0 @@
-.hero-left{ 
-  .item{padding: $space_bottom 15px;}
-  .titre, .description { max-width:$width_small_read; height:100%; display: flex;     align-items: center;
-  padding-left:15px; padding-right:15px; flex-direction: column; justify-content: center;     position: relative;
-  z-index: 10;}
-  .description .sous-titre { margin-bottom:20px; }  
-  ul li { font-size: $font-size + 2px; line-height: 1.8; }
-  .img-bg{  @include afterCover( $bg_color:rgba(0,0,0,.5) ); background-size: cover; color: #fff; }  
-}

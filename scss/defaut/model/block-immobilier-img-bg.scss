@@ -1,6 +1,0 @@
-.hero-img-bg{
-  padding: $space_bottom 0;
-  color: #fff;  position:relative;  text-align:left;  background-position: center center;
-  .titre, .description{max-width:$width_read;}
-  @include beforeCover( $bg_color:rgba(0,0,0,.5) );  .description .sous-titre{margin-bottom:20px;}
-}
