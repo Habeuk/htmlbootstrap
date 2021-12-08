@@ -45,7 +45,9 @@ class ThemeUtility {
    * add textfield array
    */
   public function addTextfieldTree($name, &$form, $title, $default = '') {
-    $form[$name] = ['#type' => 'textfield', '#title' => t($title),
+    $form[$name] = [
+      '#type' => 'textfield',
+      '#title' => t($title),
       '#default_value' => $default
     ];
     if ($this->useOnAjax) {
@@ -57,7 +59,9 @@ class ThemeUtility {
    * add textfield array
    */
   public function addHiddenTree($name, &$form, $default = '') {
-    $form[$name] = ['#type' => 'hidden', '#value' => $default
+    $form[$name] = [
+      '#type' => 'hidden',
+      '#value' => $default
     ];
   }
   
@@ -68,11 +72,12 @@ class ThemeUtility {
    */
   public function addUrlTree($name, &$form, $title, $default) {
     $this->addContainerTree($name, $form, $title);
-    $form[$name]['link'] = ['#type' => 'textfield', // 'url' ce type a un
-                                                      // validateur et n'offre
-                                                      // pas
-                                                      // un avantage par rapport
-                                                      // à text.
+    $form[$name]['link'] = [
+      '#type' => 'textfield', // 'url' ce type a un
+                               // validateur et n'offre
+                               // pas
+                               // un avantage par rapport
+                               // à text.
       '#title' => 'Url',
       '#default_value' => !empty($default['link']) ? $default['link'] : '#'
     ];
@@ -89,17 +94,16 @@ class ThemeUtility {
   
   public function addButtonTree($name, &$form, $title, array $default) {
     $this->addContainerTree($name, $form, $title);
-    $this->addTextfieldTree('text', $form[$name], "Texte",
-        (isset($default['text'])) ? $default['text'] : '');
-    $this->addTextfieldTree('url', $form[$name], 'Url',
-        (isset($default['url'])) ? $default['url'] : '');
-    $this->addSelectTree('btn', $form[$name], $this->typeButton(), "Button",
-        (isset($default['btn'])) ? $default['btn'] : '');
+    $this->addTextfieldTree('text', $form[$name], "Texte", (isset($default['text'])) ? $default['text'] : '');
+    $this->addTextfieldTree('url', $form[$name], 'Url', (isset($default['url'])) ? $default['url'] : '');
+    $this->addSelectTree('btn', $form[$name], $this->typeButton(), "Button", (isset($default['btn'])) ? $default['btn'] : '');
   }
   
   public function addTextareaTree($name, &$form, $title, $value) {
     // dump($value);
-    $form[$name] = ['#type' => 'text_format', '#title' => t($title),
+    $form[$name] = [
+      '#type' => 'text_format',
+      '#title' => t($title),
       '#format' => (isset($value["format"])) ? $value["format"] : 'full_html',
       '#default_value' => (isset($value["value"])) ? $value["value"] : '',
       '#attributes' => []
@@ -111,19 +115,26 @@ class ThemeUtility {
    *
    * @see @FormElement("managed_file");
    */
-  public function addImageTree($name, &$form, $title, $imgs,
-      $path = 'htmlbootstrap') {
+  public function addImageTree($name, &$form, $title, $imgs, $path = 'htmlbootstrap') {
     // dump($imgs);
     $this->addContainerTree($name, $form, $title);
-    $form[$name]['fids'] = ['#type' => 'managed_file', '#title' => t($title),
+    $form[$name]['fids'] = [
+      '#type' => 'managed_file',
+      '#title' => t($title),
       '#default_value' => (!empty($imgs['fids'])) ? $imgs['fids'] : [],
       '#upload_location' => 'public://' . $path . '/' . $this->themeName
     ];
-    $this->addSelectTree('style', $form[$name], $this->image_styles, $title,
-        (!empty($imgs['style'])) ? $imgs['style'] : '');
-    $this->addTextfieldTree('class', $form[$name], "Class",
-        (isset($imgs['class'])) ? $imgs['class'] : '');
+    $this->addSelectTree('style', $form[$name], $this->image_styles, $title, (!empty($imgs['style'])) ? $imgs['style'] : '');
+    $this->addTextfieldTree('class', $form[$name], "Class", (isset($imgs['class'])) ? $imgs['class'] : '');
     $this->addCheckboxTree('inbg', $form[$name], 'Affiche en arriere plan');
+  }
+  
+  /**
+   *
+   * @param string $defaultValue
+   */
+  public function selectImageStyles($name, &$form, $title, $defaultValue) {
+    $this->addSelectTree($name, $form, $this->image_styles, $title, $defaultValue);
   }
   
   /**
@@ -148,35 +159,43 @@ class ThemeUtility {
   
   public function addLinkTree($name, array &$form, String $title, array $default) {
     $this->addContainerTree($name, $form, $title);
-    $this->addTextfieldTree('text', $form[$name], 'Text',
-        (isset($default['text'])) ? $default['text'] : '');
-    $this->addTextfieldTree('url', $form[$name], 'Url',
-        (isset($default['url'])) ? $default['url'] : '');
+    $this->addTextfieldTree('text', $form[$name], 'Text', (isset($default['text'])) ? $default['text'] : '');
+    $this->addTextfieldTree('url', $form[$name], 'Url', (isset($default['url'])) ? $default['url'] : '');
   }
   
-  public function addContainerTree($name, &$form, $title = 'Blocs',
-      $open = false) {
-    $form[$name] = ['#type' => 'details', '#title' => $title, '#open' => $open
+  public function addContainerTree($name, &$form, $title = 'Blocs', $open = false) {
+    $form[$name] = [
+      '#type' => 'details',
+      '#title' => $title,
+      '#open' => $open
     ];
   }
   
-  public function addSelectTree($name, array &$form, array $options, $title,
-      $default) {
-    $form[$name] = ['#type' => 'select', '#title' => t($title),
-      '#default_value' => $default, '#options' => $options, '#empty_value' => ''
+  public function addSelectTree($name, array &$form, array $options, $title, $default) {
+    $form[$name] = [
+      '#type' => 'select',
+      '#title' => t($title),
+      '#default_value' => $default,
+      '#options' => $options,
+      '#empty_value' => ''
     ];
   }
   
   public function addSelectBtnVariantTree($name, array &$form, $title, $default) {
     $options = $this->typeButton();
-    $form[$name] = ['#type' => 'select', '#title' => t($title),
-      '#default_value' => $default, '#options' => $options, '#empty_value' => ''
+    $form[$name] = [
+      '#type' => 'select',
+      '#title' => t($title),
+      '#default_value' => $default,
+      '#options' => $options,
+      '#empty_value' => ''
     ];
   }
   
-  public function addCheckboxTree($name, &$form, $title = 'Affiche ce block',
-      $default = 0) {
-    $form[$name] = ['#type' => 'checkbox', '#title' => t($title),
+  public function addCheckboxTree($name, &$form, $title = 'Affiche ce block', $default = 0) {
+    $form[$name] = [
+      '#type' => 'checkbox',
+      '#title' => t($title),
       '#default_value' => $default
     ];
   }
@@ -190,19 +209,21 @@ class ThemeUtility {
    * @param string $event
    * @param string $message
    */
-  public function AddAjaxTree($name, &$form, $callback, $wrapper,
-      $event = 'change', $message = 'Verifying entry...') {
+  public function AddAjaxTree($name, &$form, $callback, $wrapper, $event = 'change', $message = 'Verifying entry...') {
     $form[$name]['#ajax'] = [ // 'callback' => '::' . $callback, // cette
-    // methode est utilisé si le
-      // formulaire provient d'une classe.
+                               // methode est utilisé si le
+                               // formulaire provient d'une classe.
       'callback' => $callback, // on va lire la fonction de return dans le
                                 // THEMENAME.theme
       'disable-refocus' => FALSE, // Or TRUE to prevent re-focusing on the
                                    // triggering element.
-      'event' => $event, 'wrapper' => $wrapper, // This element is updated with
-                                                 // this AJAX
-                                                 // callback.
-      'progress' => ['type' => 'throbber', 'message' => $message
+      'event' => $event,
+      'wrapper' => $wrapper, // This element is updated with
+                              // this AJAX
+                              // callback.
+      'progress' => [
+        'type' => 'throbber',
+        'message' => $message
       ]
     ];
   }
@@ -210,14 +231,20 @@ class ThemeUtility {
   /**
    * add textarea
    */
-  public function _addTextareaTree($name, &$form, $title = 'Description',
-      $default = '') {
+  public function _addTextareaTree($name, &$form, $title = 'Description', $default = '') {
     $rand = new Random();
     $id = $rand->name(8, true);
-    $form[$name] = ['#type' => 'textarea', '#title' => t($title),
-      '#default_value' => $default, '#prefix' => '', '#suffix' => '',
-      '#attributes' => ['class' => ['search-form advanced-edit'
-      ], 'id' => 'id-' . $id . $name
+    $form[$name] = [
+      '#type' => 'textarea',
+      '#title' => t($title),
+      '#default_value' => $default,
+      '#prefix' => '',
+      '#suffix' => '',
+      '#attributes' => [
+        'class' => [
+          'search-form advanced-edit'
+        ],
+        'id' => 'id-' . $id . $name
       ]
     ];
     // $form[$name . 'edit-button'] = array(
@@ -241,7 +268,9 @@ class ThemeUtility {
   }
   
   public function addTextareaSimpleTree($name, &$form, $title, $default) {
-    $form[$name] = ['#type' => 'textarea', '#title' => t($title),
+    $form[$name] = [
+      '#type' => 'textarea',
+      '#title' => t($title),
       '#default_value' => $default
     ];
   }
@@ -249,11 +278,12 @@ class ThemeUtility {
   /**
    * add textfield
    */
-  public function add_checkbox($name, $group, &$form,
-      $title = 'Affiche ce block', $default = 0) {
+  public function add_checkbox($name, $group, &$form, $title = 'Affiche ce block', $default = 0) {
     $value = theme_get_setting($group . $name, 'multiservicem1');
     // text
-    $form[$group . $name] = ['#type' => 'checkbox', '#title' => t($title),
+    $form[$group . $name] = [
+      '#type' => 'checkbox',
+      '#title' => t($title),
       '#default_value' => (isset($value)) ? $value : $default
     ];
   }
@@ -261,16 +291,21 @@ class ThemeUtility {
   /**
    * add textarea
    */
-  public function add_textarea($name, $group, $form, $title = 'title',
-      $default = '', $prefix = '', $suffix = '') {
+  public function add_textarea($name, $group, $form, $title = 'title', $default = '', $prefix = '', $suffix = '') {
     $value = theme_get_setting($group . $name, 'multiservicem1');
     // dump($value);
     // text
-    $form[$group . $name] = ['#type' => 'textarea', '#title' => t($title),
+    $form[$group . $name] = [
+      '#type' => 'textarea',
+      '#title' => t($title),
       '#default_value' => (isset($value)) ? $value : $default,
-      '#prefix' => $prefix, '#suffix' => $suffix,
-      '#attributes' => ['class' => ['search-form'
-      ], 'id' => 'id-' . $group . $name
+      '#prefix' => $prefix,
+      '#suffix' => $suffix,
+      '#attributes' => [
+        'class' => [
+          'search-form'
+        ],
+        'id' => 'id-' . $group . $name
       ]
     ];
     return $form;
@@ -279,16 +314,20 @@ class ThemeUtility {
   /**
    * add textarea with formater
    */
-  public function add_textarea_html($name, $group, $form, $title = 'title',
-      $default = '') {
+  public function add_textarea_html($name, $group, $form, $title = 'title', $default = '') {
     $value = theme_get_setting($group . $name, 'multiservicem1');
     // dump($value);
     // text
-    $form[$group . $name] = ['#type' => 'text_format', '#title' => t($title),
+    $form[$group . $name] = [
+      '#type' => 'text_format',
+      '#title' => t($title),
       '#format' => (isset($value["format"])) ? $value["format"] : 'full_html',
       '#default_value' => (isset($value["value"])) ? $value["value"] : $default,
-      '#attributes' => ['class' => ['search-form'
-      ], 'id' => 'id-' . $group . $name
+      '#attributes' => [
+        'class' => [
+          'search-form'
+        ],
+        'id' => 'id-' . $group . $name
       ]
     ];
     return $form;
@@ -297,28 +336,36 @@ class ThemeUtility {
   /**
    * add textarea
    */
-  public function add_textarea_editeur($name, $group, $form, $title = 'title',
-      $default = '') {
+  public function add_textarea_editeur($name, $group, $form, $title = 'title', $default = '') {
     $value = theme_get_setting($group . $name, 'multiservicem1');
     
     // text
-    $form[$group . $name] = ['#type' => 'textarea', '#title' => t($title),
+    $form[$group . $name] = [
+      '#type' => 'textarea',
+      '#title' => t($title),
       '#default_value' => (!empty($value)) ? $value : $default,
-      '#attributes' => ['class' => ['search-form'
-      ], 'id' => 'id-' . $group . $name
+      '#attributes' => [
+        'class' => [
+          'search-form'
+        ],
+        'id' => 'id-' . $group . $name
       ]
     ];
-    $form[$name . 'edit-button'] = array('#type' => 'markup',
-      '#allowed_tags' => ['span', 'div'
+    $form[$name . 'edit-button'] = array(
+      '#type' => 'markup',
+      '#allowed_tags' => [
+        'span',
+        'div'
       ],
-      '#markup' => '<div> <span  class="button button--primary edit-via-vvvbejs" data-textarea-id="id-' .
-      $group . $name . '">editer</span> </div>'
+      '#markup' => '<div> <span  class="button button--primary edit-via-vvvbejs" data-textarea-id="id-' . $group . $name . '">editer</span> </div>'
     );
-    $form[$name . 'preview'] = array('#type' => 'markup',
-      '#allowed_tags' => ['iframe', 'div'
+    $form[$name . 'preview'] = array(
+      '#type' => 'markup',
+      '#allowed_tags' => [
+        'iframe',
+        'div'
       ],
-      '#markup' => '<div data-textarea-id="id-' . $group . $name .
-      '"><iframe ></iframe></div>'
+      '#markup' => '<div data-textarea-id="id-' . $group . $name . '"><iframe ></iframe></div>'
     );
     return $form;
   }
@@ -326,11 +373,12 @@ class ThemeUtility {
   /**
    * add textfield
    */
-  public function add_select($name, $group, &$form, $options = [],
-      $title = 'title', $default = '', $require = null) {
+  public function add_select($name, $group, &$form, $options = [], $title = 'title', $default = '', $require = null) {
     $value = theme_get_setting($group . $name, 'multiservicem1');
     // text
-    $form[$group . $name] = ['#type' => 'select', '#title' => t($title),
+    $form[$group . $name] = [
+      '#type' => 'select',
+      '#title' => t($title),
       '#default_value' => (isset($value) && $value != '') ? $value : $default,
       '#options' => $options
     ];
@@ -348,19 +396,21 @@ class ThemeUtility {
    * @param object $form
    * @param string $callback
    */
-  public function AddAjax($name, $group, &$form, $callback, $wrapper,
-      $event = 'change', $message = 'Verifying entry...') {
+  public function AddAjax($name, $group, &$form, $callback, $wrapper, $event = 'change', $message = 'Verifying entry...') {
     $form[$group . $name]['#ajax'] = [ // 'callback' => '::' . $callback, //
-    // cette methode est utilisé si le
-      // formulaire provient d'une classe.
+                                        // cette methode est utilisé si le
+                                        // formulaire provient d'une classe.
       'callback' => $callback, // on va lire la fonction de return dans le
                                 // THEMENAME.theme
       'disable-refocus' => FALSE, // Or TRUE to prevent re-focusing on the
                                    // triggering element.
-      'event' => $event, 'wrapper' => $wrapper, // This element is updated with
-                                                 // this AJAX
-                                                 // callback.
-      'progress' => ['type' => 'throbber', 'message' => $message
+      'event' => $event,
+      'wrapper' => $wrapper, // This element is updated with
+                              // this AJAX
+                              // callback.
+      'progress' => [
+        'type' => 'throbber',
+        'message' => $message
       ]
     ];
   }
@@ -369,7 +419,9 @@ class ThemeUtility {
    * add image
    */
   public function add_image($name, $group, $form, $title = 'image') {
-    $form[$group . $name] = ['#type' => 'managed_file', '#title' => t($title),
+    $form[$group . $name] = [
+      '#type' => 'managed_file',
+      '#title' => t($title),
       '#default_value' => theme_get_setting($group . $name, 'multiservicem1'),
       '#upload_location' => 'public://'
     ];
@@ -379,13 +431,11 @@ class ThemeUtility {
   /**
    * add image
    */
-  public function add_group_image($name, $group, $form, $nombre = 3,
-      $title = 'image') {
+  public function add_group_image($name, $group, $form, $nombre = 3, $title = 'image') {
     for ($i = 1; $i <= $nombre; $i++) {
       $name = $name . $i;
       $form[$group . $name] = [];
-      $form[$group . $name] = $this->add_image($name, $group,
-          $form[$group . $name], $title . ' ' . $i);
+      $form[$group . $name] = $this->add_image($name, $group, $form[$group . $name], $title . ' ' . $i);
     }
     return $form;
   }
@@ -396,57 +446,50 @@ class ThemeUtility {
     // //
     $name = $i . 'title';
     $form[$group . $name] = [];
-    $form[$group . $name] = $this->add_textfield($name, $group,
-        $form[$group . $name], 'Small title');
+    $form[$group . $name] = $this->add_textfield($name, $group, $form[$group . $name], 'Small title');
     // //
     $name = $i . 'titlebig';
     $form[$group . $name] = [];
-    $form[$group . $name] = $this->add_textfield($name, $group,
-        $form[$group . $name], 'Big title');
+    $form[$group . $name] = $this->add_textfield($name, $group, $form[$group . $name], 'Big title');
     // //
     $name = $i . 'description';
     $form[$group . $name] = [];
-    $form[$group . $name] = $this->add_textarea($name, $group,
-        $form[$group . $name], 'Description');
+    $form[$group . $name] = $this->add_textarea($name, $group, $form[$group . $name], 'Description');
     // //
     $name = $i . 'button';
     $form[$group . $name] = [];
-    $form[$group . $name] = $this->add_button($name, $group,
-        $form[$group . $name], $title = 'Button');
+    $form[$group . $name] = $this->add_button($name, $group, $form[$group . $name], $title = 'Button');
     // //
     $name = $i . 'image';
     $form[$group . $name] = [];
-    $form[$group . $name] = $this->add_group_image($name, $group,
-        $form[$group . $name], $nombre = 3);
+    $form[$group . $name] = $this->add_group_image($name, $group, $form[$group . $name], $nombre = 3);
     // //
     return $form;
   }
   
   /**
    */
-  public function list_service($group, $form, $i, $nombreBlock = 2,
-      $title = "bloc") {
+  public function list_service($group, $form, $i, $nombreBlock = 2, $title = "bloc") {
     for ($k = 1; $k <= $nombreBlock; $k++) {
       // // group field
       $ss_gp = $k . '-' . $i . 'bloc';
-      $form[$group . $ss_gp . 'gp'] = array('#type' => 'details',
-        '#title' => $title, '#open' => FALSE
+      $form[$group . $ss_gp . 'gp'] = array(
+        '#type' => 'details',
+        '#title' => $title,
+        '#open' => FALSE
       );
       // //
       $name = $k . '-' . $i . 'title';
       $form[$group . $name] = [];
-      $form[$group . $ss_gp . 'gp'][$group . $name] = $this->add_textfield(
-          $name, $group, $form[$group . $name], 'Title');
+      $form[$group . $ss_gp . 'gp'][$group . $name] = $this->add_textfield($name, $group, $form[$group . $name], 'Title');
       // //
       $name = $k . '-' . $i . 'icone';
       $form[$group . $name] = [];
-      $form[$group . $ss_gp . 'gp'][$group . $name] = $this->add_textfield(
-          $name, $group, $form[$group . $name], 'Icone');
+      $form[$group . $ss_gp . 'gp'][$group . $name] = $this->add_textfield($name, $group, $form[$group . $name], 'Icone');
       // //
       $name = $k . '-' . $i . 'desccription';
       $form[$group . $name] = [];
-      $form[$group . $ss_gp . 'gp'][$group . $name] = $this->add_textarea($name,
-          $group, $form[$group . $name], 'Desccription');
+      $form[$group . $ss_gp . 'gp'][$group . $name] = $this->add_textarea($name, $group, $form[$group . $name], 'Desccription');
     }
     return $form;
   }
@@ -454,18 +497,23 @@ class ThemeUtility {
   /**
    */
   public function typeButton() {
-    return ['btn btn-primary' => 'btn btn-primary',
+    return [
+      'btn btn-primary' => 'btn btn-primary',
       'btn btn-secondary' => 'btn btn-secondary',
       'btn btn-success' => 'btn btn-success',
       'btn btn-danger' => 'btn btn-danger',
-      'btn btn-warning' => 'btn btn-warning', 'btn btn-info' => 'btn btn-info',
-      'btn btn-light' => 'btn btn-light', 'btn btn-dark' => 'btn btn-dark',
-      'btn btn-link' => 'btn btn-link', 'btn' => 'btn'
+      'btn btn-warning' => 'btn btn-warning',
+      'btn btn-info' => 'btn btn-info',
+      'btn btn-light' => 'btn btn-light',
+      'btn btn-dark' => 'btn btn-dark',
+      'btn btn-link' => 'btn btn-link',
+      'btn' => 'btn'
     ];
   }
   
   public function fontAwasone() {
-    return ['fas fa-map-marker-alt' => 'fas fa-map-marker-alt',
+    return [
+      'fas fa-map-marker-alt' => 'fas fa-map-marker-alt',
       'fas fa-phone-alt' => 'fas fa-phone-alt',
       'fab fa-facebook-f' => 'fab fa-facebook-f',
       'fab fa-linkedin-in' => 'fab fa-linkedin-in',
@@ -480,14 +528,12 @@ class ThemeUtility {
    * load demo file
    */
   public function getContentFile($filename = '', $default = '') {
-    $filename = DRUPAL_ROOT . '/' . $this->themePath .
-        '/plugins/VvvebJs-master/demo/default/' . $filename;
+    $filename = DRUPAL_ROOT . '/' . $this->themePath . '/plugins/VvvebJs-master/demo/default/' . $filename;
     if (is_file($filename)) {
       $data = file_get_contents($filename);
       return $data;
     }
-    $default = DRUPAL_ROOT . '/' . $this->themePath .
-        '/plugins/VvvebJs-master/demo/default/' . $default;
+    $default = DRUPAL_ROOT . '/' . $this->themePath . '/plugins/VvvebJs-master/demo/default/' . $default;
     if (is_file($default)) {
       $data = file_get_contents($default);
       return $data;
@@ -507,7 +553,8 @@ class ThemeUtility {
     $images['styles'] = $image_styles;
     $table = 'file_usage'; // file_managed
     $query = Database::getConnection()->select($table, 'fi');
-    $query->fields('fi', ['id'
+    $query->fields('fi', [
+      'id'
     ]);
     $query->condition("module", 'multiservicem1');
     $fids = $query->execute()->fetchAll();
@@ -516,8 +563,7 @@ class ThemeUtility {
         $file = \Drupal\file\Entity\File::load($fid->id);
         if ($file) {
           foreach ($image_styles as $image_style) {
-            $images['images'][$fid->id][$image_style] = ImageStyle::load(
-                $image_style)->buildUrl($file->getFileUri());
+            $images['images'][$fid->id][$image_style] = ImageStyle::load($image_style)->buildUrl($file->getFileUri());
           }
         }
       }
@@ -526,8 +572,11 @@ class ThemeUtility {
   }
   
   public function listAnimationCSS() {
-    return ['fadeIn' => 'fadeIn', 'fadeInDown' => 'fadeInDown',
-      'fadeInDownBig' => 'fadeInDownBig', 'fadeInLeft' => 'fadeInLeft',
+    return [
+      'fadeIn' => 'fadeIn',
+      'fadeInDown' => 'fadeInDown',
+      'fadeInDownBig' => 'fadeInDownBig',
+      'fadeInLeft' => 'fadeInLeft',
       'fadeInUp' => 'fadeInUp'
     ];
   }
@@ -539,19 +588,23 @@ class ThemeUtility {
    * @param int $height
    * @param string $label
    */
-  function createStyleImage(string $image_style_name, int $width, int $height,
-      string $label) {
-    $style = \Drupal\image\Entity\ImageStyle::create(
-        array('name' => $image_style_name, 'label' => $label
-        ));
+  function createStyleImage(string $image_style_name, int $width, int $height, string $label) {
+    $style = \Drupal\image\Entity\ImageStyle::create(array(
+      'name' => $image_style_name,
+      'label' => $label
+    ));
     // Create effect
-    $configuration = array('uuid' => NULL, 'id' => 'image_scale_and_crop',
-      'weight' => 255, 'data' => array('width' => $width, 'height' => $height
+    $configuration = array(
+      'uuid' => NULL,
+      'id' => 'image_scale_and_crop',
+      'weight' => 255,
+      'data' => array(
+        'width' => $width,
+        'height' => $height
       )
     );
     //
-    $effect = \Drupal::service('plugin.manager.image.effect')->createInstance(
-        $configuration['id'], $configuration);
+    $effect = \Drupal::service('plugin.manager.image.effect')->createInstance($configuration['id'], $configuration);
     $style->addImageEffect($effect->getConfiguration());
     $style->save();
   }
@@ -563,14 +616,21 @@ class ThemeUtility {
    */
   function config_layout_theme() {
     $layout = [
-      'node_teaser_multiservicem1' => ['image' => 'image', 'statut' => 'statut',
-        'price' => 'price', 'quick_display' => 'quick_display',
+      'node_teaser_multiservicem1' => [
+        'image' => 'image',
+        'statut' => 'statut',
+        'price' => 'price',
+        'quick_display' => 'quick_display',
         'title' => 'title'
       ],
-      'block_multiservicem1_link' => ['main' => 'main', 'link' => 'link',
+      'block_multiservicem1_link' => [
+        'main' => 'main',
+        'link' => 'link',
         'image' => 'image'
       ],
-      'block_multiservicem1_profil' => ['left' => 'left', 'top' => 'top',
+      'block_multiservicem1_profil' => [
+        'left' => 'left',
+        'top' => 'top',
         'bottom' => 'bottom'
       ]
     ];
@@ -631,22 +691,18 @@ class ThemeUtility {
     $prefixe = \t('Day-d');
     if ($interval->m > 0) {
       if ($interval->d > 1) {
-        return $prefixe . ' ' . ($interval->m + ($interval->y * 12)) . ' ' .
-            \t('Month') . ' ' . $interval->d . ' ' . \t('days');
+        return $prefixe . ' ' . ($interval->m + ($interval->y * 12)) . ' ' . \t('Month') . ' ' . $interval->d . ' ' . \t('days');
       }
       else {
-        return $prefixe . ' ' . ($interval->m + ($interval->y * 12)) . ' ' .
-            \t('Month') . ' ' . $interval->d . ' ' . \t('day');
+        return $prefixe . ' ' . ($interval->m + ($interval->y * 12)) . ' ' . \t('Month') . ' ' . $interval->d . ' ' . \t('day');
       }
     }
     else {
       if ($interval->d > 0) {
-        return $prefixe . ' ' . $interval->d . \t('days') . ' ' . $interval->h .
-            ' H';
+        return $prefixe . ' ' . $interval->d . \t('days') . ' ' . $interval->h . ' H';
       }
       else {
-        return $prefixe . ' ' . $interval->d . \t('day') . ' ' . $interval->h .
-            ' H' . ' ' . $interval->i . ' mn';
+        return $prefixe . ' ' . $interval->d . \t('day') . ' ' . $interval->h . ' H' . ' ' . $interval->i . ' mn';
       }
     }
   }
@@ -656,25 +712,29 @@ class ThemeUtility {
    */
   public function add_button($name, $group, $form, $title = 'Button') {
     // group field
-    $form[$group . $name . 'group'] = array('#type' => 'details',
-      '#title' => $title, '#open' => FALSE
+    $form[$group . $name . 'group'] = array(
+      '#type' => 'details',
+      '#title' => $title,
+      '#open' => FALSE
     );
     // text
-    $form[$group . $name . 'group'][$group . $name] = ['#type' => 'textfield',
+    $form[$group . $name . 'group'][$group . $name] = [
+      '#type' => 'textfield',
       '#title' => t('text bouton'),
       '#default_value' => theme_get_setting($group . $name, 'multiservicem1')
     ];
     // link
     $form[$group . $name . 'group'][$group . $name . 'url'] = [
-      '#type' => 'textfield', '#title' => t('URL '),
-      '#default_value' => theme_get_setting($group . $name . 'url',
-          'multiservicem1')
+      '#type' => 'textfield',
+      '#title' => t('URL '),
+      '#default_value' => theme_get_setting($group . $name . 'url', 'multiservicem1')
     ];
     // class or attribute
     $form[$group . $name . 'group'][$group . $name . 'class'] = [
-      '#type' => 'select', '#title' => t('Class '),
-      '#default_value' => theme_get_setting($group . $name . 'class',
-          'multiservicem1'), '#options' => $this->typeButton()
+      '#type' => 'select',
+      '#title' => t('Class '),
+      '#default_value' => theme_get_setting($group . $name . 'class', 'multiservicem1'),
+      '#options' => $this->typeButton()
     ];
     // //
     return $form;
@@ -683,11 +743,12 @@ class ThemeUtility {
   /**
    * add textfield
    */
-  public function add_textfield($name, $group, &$form, $title = 'title',
-      $default = '') {
+  public function add_textfield($name, $group, &$form, $title = 'title', $default = '') {
     $value = theme_get_setting($group . $name, 'multiservicem1');
     // text
-    $form[$group . $name] = ['#type' => 'textfield', '#title' => t($title),
+    $form[$group . $name] = [
+      '#type' => 'textfield',
+      '#title' => t($title),
       '#default_value' => (isset($value) && $value != '') ? $value : $default
     ];
   }
