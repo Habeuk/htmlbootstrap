@@ -1,0 +1,35 @@
+
+/**
+ * boostrap normal.
+ */
+// importer les données bootstrap 4
+@import "../bootstrap-4/scss/bootstrap.scss";
+
+.alert-wrapper{position: relative;z-index: 10;}
+
+
+///////////////////
+/**
+ * modal for mdbootstrap
+ */
+ // Bootstrap
+@import "../plugins/bootstrap-material-design-master/scss/core/bootstrap/_functions.scss";
+@import "../plugins/bootstrap-material-design-master/scss/core/bootstrap/_variables.scss";
+@import "../plugins/bootstrap-material-design-master/scss/core/bootstrap/_rfs.scss";
+//code
+// CORE
+@import "../plugins/bootstrap-material-design-master/scss/core/_mixins.scss";
+// Your custom variables
+@import "../plugins/bootstrap-material-design-master/scss/_custom-variables.scss";
+@import "../plugins/bootstrap-material-design-master/scss/core/_colors.scss";
+@import "../plugins/bootstrap-material-design-master/scss/core/_variables.scss";
+@import "../plugins/bootstrap-material-design-master/scss/core/_global.scss";
+@import "../plugins/bootstrap-material-design-master/scss/core/_helpers.scss";
+@import "../plugins/bootstrap-material-design-master/scss/core/_typography.scss";
+@import "../plugins/bootstrap-material-design-master/scss/core/_masks.scss";
+@import "../plugins/bootstrap-material-design-master/scss/core/_waves.scss";
+@import "../plugins/bootstrap-material-design-master/scss/free/_modals.scss";
+
+
+
+$color_site:rgba(228,25,43,1);

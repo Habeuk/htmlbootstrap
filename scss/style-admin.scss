@@ -1,0 +1,40 @@
+// import var bootstrap
+@import "../bootstrap-4/scss/_functions.scss";
+@import "../bootstrap-4/scss/_variables.scss";
+@import "../bootstrap-4/scss/_mixins.scss";
+// load grid
+@import "../bootstrap-4/scss/_grid.scss";
+// load forms
+@import "../bootstrap-4/scss/_forms.scss";
+// load tulities
+@import "../bootstrap-4/scss/_utilities.scss";
+
+@import "defaut/models.scss";
+
+  .row-col-7{@include alterSpaceRowCol($padding_row-col-0:7px);}
+  .row-col-my-2{@include alterSpaceRowCol($padding_row-col-0:0.26rem);}
+  .row-col-0{@include alterSpaceRowCol($padding_row-col-0:0px);}
+
+#drupal-builder-iframe{
+	height: 100vh;
+	    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.51);
+    padding: 0 10px;
+    z-index: -9;
+    display:none;
+}
+#drupal-builder-iframe.active{display:block; z-index: 9999;}
+#vvveb-builder #top-panel{height: 62px;}
+#vvveb-builder #canvas, #vvveb-builder #left-panel, #vvveb-builder #right-panel{top: 62px;}
+#drupal-library-images-json{display:none;}
+#drupal-images{
+	.drupal-images-lists{ 
+		img:not(.active):hover{border: 5px solid rgb(82, 131, 220); box-shadow: 0px 3px 3px #b5b5b5; cursor:pointer;}
+		img.active{box-shadow: 0px 3px 3px #b5b5b5;}
+    }
+}
+html.vvvbeJSactive{position:fixed;}
