@@ -82,7 +82,8 @@ class ThemeUtility {
       '#default_value' => !empty($default['link']) ? $default['link'] : '#'
     ];
     $text = !empty($default['text']) ? $default['text'] : '';
-    $this->addTextfieldTree('text', $form[$name], 'Text', $text);
+    // $this->addTextfieldTree('text', $form[$name], 'Text', $text);
+    $this->addTextareaSimpleTree('text', $form[$name], 'Text', $text);
     $class = !empty($default['class']) ? $default['class'] : '';
     $this->addTextfieldTree('class', $form[$name], 'Class', $class);
   }
