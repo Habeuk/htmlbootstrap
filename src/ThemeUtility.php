@@ -230,7 +230,7 @@ class ThemeUtility {
   }
   
   /**
-   * add textarea
+   * Add textarea
    */
   public function _addTextareaTree($name, &$form, $title = 'Description', $default = '') {
     $rand = new Random();
@@ -281,7 +281,7 @@ class ThemeUtility {
    */
   public function add_checkbox($name, $group, &$form, $title = 'Affiche ce block', $default = 0) {
     $value = theme_get_setting($group . $name, 'multiservicem1');
-    // text
+    // Text
     $form[$group . $name] = [
       '#type' => 'checkbox',
       '#title' => t($title),
@@ -294,7 +294,6 @@ class ThemeUtility {
    */
   public function add_textarea($name, $group, $form, $title = 'title', $default = '', $prefix = '', $suffix = '') {
     $value = theme_get_setting($group . $name, 'multiservicem1');
-    // dump($value);
     // text
     $form[$group . $name] = [
       '#type' => 'textarea',
@@ -317,8 +316,7 @@ class ThemeUtility {
    */
   public function add_textarea_html($name, $group, $form, $title = 'title', $default = '') {
     $value = theme_get_setting($group . $name, 'multiservicem1');
-    // dump($value);
-    // text
+    // Text
     $form[$group . $name] = [
       '#type' => 'text_format',
       '#title' => t($title),
@@ -335,12 +333,11 @@ class ThemeUtility {
   }
   
   /**
-   * add textarea
+   * Add textarea
    */
   public function add_textarea_editeur($name, $group, $form, $title = 'title', $default = '') {
     $value = theme_get_setting($group . $name, 'multiservicem1');
-    
-    // text
+    // Text
     $form[$group . $name] = [
       '#type' => 'textarea',
       '#title' => t($title),
@@ -569,7 +566,19 @@ class ThemeUtility {
         }
       }
     }
-    return \json_encode($images);
+    return \json_encode($images, $image_style = null);
+  }
+  
+  function getImageUrlByFid(int $fid, $image_style = null) {
+    $file = \Drupal\file\Entity\File::load($fid);
+    if ($file) {
+      if ($image_style) {
+        return ImageStyle::load($image_style)->buildUrl($file->getFileUri());
+      }
+      else {
+        return $file->createFileUrl();
+      }
+    }
   }
   
   public function listAnimationCSS() {
@@ -670,9 +679,9 @@ class ThemeUtility {
     return system_region_list($this->themeName, $show = REGIONS_VISIBLE);
   }
   
-  // // **** Manage DATE
+  // **** Manage DATE
   /**
-   * get D-day
+   * Get D-day
    *
    * @params
    * @params $dateFin, $dateDebut=false by default
@@ -709,15 +718,15 @@ class ThemeUtility {
   }
   
   /**
-   * add button
+   * Add button
    */
   public function add_button($name, $group, $form, $title = 'Button') {
-    // group field
-    $form[$group . $name . 'group'] = array(
+    // Group field
+    $form[$group . $name . 'group'] = [
       '#type' => 'details',
       '#title' => $title,
       '#open' => FALSE
-    );
+    ];
     // text
     $form[$group . $name . 'group'][$group . $name] = [
       '#type' => 'textfield',
@@ -737,7 +746,7 @@ class ThemeUtility {
       '#default_value' => theme_get_setting($group . $name . 'class', 'multiservicem1'),
       '#options' => $this->typeButton()
     ];
-    // //
+    //
     return $form;
   }
   
