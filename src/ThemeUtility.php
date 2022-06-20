@@ -30,7 +30,8 @@ class ThemeUtility {
     // $this->regions = $this->get_regions();
     $this->themeObject = \Drupal::theme()->getActiveTheme();
     $this->themeName = $this->themeObject->getName();
-    $this->themePath = drupal_get_path('theme', $this->themeName);
+    // dump($this->themeName);
+    // $this->themePath = drupal_get_path('theme', $this->themeName);
   }
   
   public function AddRequireTree($name, &$form) {
@@ -164,11 +165,12 @@ class ThemeUtility {
     $this->addTextfieldTree('url', $form[$name], 'Url', (isset($default['url'])) ? $default['url'] : '');
   }
   
-  public function addContainerTree($name, &$form, $title = 'Blocs', $open = false) {
+  public function addContainerTree($name, &$form, $title = 'Blocs', $open = false, $tree = true) {
     $form[$name] = [
       '#type' => 'details',
       '#title' => $title,
-      '#open' => $open
+      '#open' => $open,
+      '#tree' => $tree
     ];
   }
   
@@ -524,6 +526,8 @@ class ThemeUtility {
   
   /**
    * load demo file
+   *
+   * @deprecated
    */
   public function getContentFile($filename = '', $default = '') {
     $filename = DRUPAL_ROOT . '/' . $this->themePath . '/plugins/VvvebJs-master/demo/default/' . $filename;

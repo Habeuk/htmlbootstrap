@@ -1,18 +1,21 @@
 <?php
+
 namespace Stephane888\HtmlBootstrap;
 
 use Drupal\Component\Utility\SortArray as DrupalSortArray;
-use Drupal\debug_log\debugLog;
 
+/**
+ *
+ * @author stephane
+ *        
+ */
 class SortArray {
-
-  public static function sortByWeightPropertyCustom($a, $b)
-  {
+  
+  public static function sortByWeightPropertyCustom($a, $b) {
     return DrupalSortArray::sortByKeyInt($a, $b, 'weight');
   }
-
-  public static function _sortFieldOfThemeAndSave(&$values, $form_state, $theme_name, $parent = true)
-  {
+  
+  public static function _sortFieldOfThemeAndSave(&$values, $form_state, $theme_name, $parent = true) {
     foreach ($values as $key => $value) {
       /**
        * on verifie si le champs appartient au theme.
@@ -41,7 +44,8 @@ class SortArray {
             $config->save();
           }
         }
-      } else {
+      }
+      else {
         /**
          * On ordonne si possible
          */
@@ -50,7 +54,7 @@ class SortArray {
            * on ordonne les enfants
            */
           static::_sortFieldOfThemeAndSave($value, $form_state, $theme_name, false);
-
+          
           uasort($value, [
             SortArray::class,
             'sortByWeightPropertyCustom'
@@ -63,4 +67,5 @@ class SortArray {
       }
     }
   }
+  
 }
