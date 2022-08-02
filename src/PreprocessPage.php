@@ -125,7 +125,14 @@ class PreprocessPage {
     $node = \Drupal::routeMatch()->getParameter('node');
     $displays = theme_get_setting($theme_name . '_pagenodesdisplay', $theme_name);
     $Attribute = new Attribute();
+    // dump($variables);
     $defaultClass = $this->getDisplaysClass($displays);
+    if (!empty($variables['page']['content']['displays_class'])) {
+      if (empty($defaultClass))
+        $defaultClass = [];
+      $defaultClass += $variables['page']['content']['displays_class'];
+      unset($variables['page']['content']['displays_class']);
+    }
     // $node =new \Drupal\node\Entity\Node();
     // dump($displays);
     if ($node) {
