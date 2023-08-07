@@ -1,24 +1,25 @@
 {
-	"name" : "stephane888/htmlbootstrap",
-	"description" : "Contient toutes les petites portions de code à des examples de page complete permettant d'accelerer le developpment avec bootstrap4.",
-	"type" : "library",
-	"license": "GPL-2.0-or-later",
-	"authors" : [{
-			"name" : "stephane888",
-			"email" : "kksasteph888@gmail.com",
-			"homepage" : "http://wb-universe.com",
-			"role" : "Developer"
-		}
-	],
-	"minimum-stability" : "stable",
-	"autoload" : {
-		"psr-4" : {
-			"Stephane888\\HtmlBootstrap\\" : "src/"
-		}
-	},
-"require" : {
-		"php" : ">=7.4",
-		"fzaninotto/faker" : "^1.9.1",
-		"scssphp/scssphp": "^1.0"
-	}
+  "name": "habeuk/htmlbootstrap",
+  "description": "Contient toutes les petites portions de code à des examples de page complete permettant d'accelerer le developpment avec bootstrap4.",
+  "type": "library",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "stephane888",
+      "email": "kksasteph888@gmail.com",
+      "homepage": "http://wb-universe.com",
+      "role": "Developer"
+    }
+  ],
+  "minimum-stability": "stable",
+  "autoload": {
+    "psr-4": {
+      "Stephane888\\HtmlBootstrap\\": "src/"
+    }
+  },
+  "require": {
+    "php": ">=7.4",
+    "fzaninotto/faker": "^1.9.1",
+    "scssphp/scssphp": "^1.0"
+  }
 }
