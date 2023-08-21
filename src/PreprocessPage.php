@@ -196,6 +196,19 @@ class PreprocessPage {
       $variables['page']['content']['attributes'] = $_Attribute;
       // dump($variables);
     }
+    elseif ('commerce_checkout.form' == $route_name) {
+      $Attribute->addClass('page-orther-custom');
+      $Attribute->addClass('commerce_checkout');
+      $Attribute->addClass([
+        'padding-top',
+        'bg-white',
+        'shadow-lg width-tablet',
+        'mx-auto my-5',
+        'p-3 p-md-5'
+      ]);
+      $Attribute->addClass($defaultClass);
+      $variables['page']['content']['attributes'] = $Attribute;
+    }
     elseif ('view.frontpage.page_1' != $route_name) {
       $Attribute->addClass('page-orther-custom');
       $Attribute->addClass($defaultClass);
