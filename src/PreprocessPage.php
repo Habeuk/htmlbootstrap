@@ -2,6 +2,7 @@
 
 namespace Stephane888\HtmlBootstrap;
 
+use Stephane888\HtmlBootstrap\HelpMigrate;
 use Stephane888\HtmlBootstrap\Traits\DisplaySection;
 use Symfony\Component\HttpFoundation\Session\Session;
 use ScssPhp\ScssPhp\Compiler;
@@ -9,7 +10,6 @@ use Drupal\Core\Template\Attribute;
 use Stephane888\HtmlBootstrap\ThemeUtility;
 use PhpParser\Node\Stmt\Foreach_;
 use Stephane888\HtmlBootstrap\LoaderDrupal;
-use Stephane888\HtmlBootstrap\HelpMigrate;
 
 class PreprocessPage {
   protected $is_front = false;
@@ -22,7 +22,7 @@ class PreprocessPage {
       if (!$displays) {
         $displays = theme_get_setting($theme_name . '_pagenodesdisplay', $theme_name);
       }
-      $url_theme = HelpMigrate::getPatch('theme', $theme_name);
+      $url_theme = HelpMigrate::getPath('theme', $theme_name);
       $LoaderDrupal = new LoaderDrupal();
       $LoaderDrupal->createFiles($displays, $url_theme);
     }
@@ -285,7 +285,7 @@ class PreprocessPage {
           'width' => null,
           'height' => null
         ],
-        'path' => HelpMigrate::getPatch('theme', $theme_name) . '/templates/layouts'
+        'path' => HelpMigrate::getPath('theme', $theme_name) . '/templates/layouts'
         // 'path' => 'templates/layouts'
       ],
       'header_bg' => [
@@ -297,7 +297,7 @@ class PreprocessPage {
           'attributes' => [],
           'orther_vars' => []
         ],
-        'path' => HelpMigrate::getPatch('theme', $theme_name) . '/templates/Suggestions/sections/PageNodesDisplay/headerBg'
+        'path' => HelpMigrate::getPath('theme', $theme_name) . '/templates/Suggestions/sections/PageNodesDisplay/headerBg'
       ],
       'item_list_custom' => [
         'variables' => [
@@ -317,7 +317,7 @@ class PreprocessPage {
           'orther_vars' => [],
           'attributes_mobile' => []
         ],
-        'path' => HelpMigrate::getPatch('theme', $theme_name) . '/templates/Suggestions/sections/imgLeftRight/StaticImage'
+        'path' => HelpMigrate::getPath('theme', $theme_name) . '/templates/Suggestions/sections/imgLeftRight/StaticImage'
       ],
       'zone_custom_template' => [
         'variables' => [
@@ -327,7 +327,7 @@ class PreprocessPage {
           'attributes' => [],
           'orther_vars' => []
         ],
-        'path' => HelpMigrate::getPatch('theme', $theme_name) . '/templates/Suggestions/sections/imgLeftRight/ZoneCustomTemplate'
+        'path' => HelpMigrate::getPath('theme', $theme_name) . '/templates/Suggestions/sections/imgLeftRight/ZoneCustomTemplate'
       ],
       'footer_menu_rx' => [
         'variables' => [
@@ -339,7 +339,7 @@ class PreprocessPage {
           'attributes' => [],
           'orther_vars' => []
         ],
-        'path' => HelpMigrate::getPatch('theme', $theme_name) . '/templates/Suggestions/sections/Footers/FooterMenuRx'
+        'path' => HelpMigrate::getPath('theme', $theme_name) . '/templates/Suggestions/sections/Footers/FooterMenuRx'
       ],
       'top_header_default' => [
         'variables' => [
@@ -347,7 +347,7 @@ class PreprocessPage {
           'attributes' => [],
           'orther_vars' => []
         ],
-        'path' => HelpMigrate::getPatch('theme', $theme_name) . '/templates/Suggestions/sections/TopHeaders/Default'
+        'path' => HelpMigrate::getPath('theme', $theme_name) . '/templates/Suggestions/sections/TopHeaders/Default'
       ],
       'dropdown_menu' => [
         'variables' => [
@@ -356,7 +356,7 @@ class PreprocessPage {
           'attributes' => [],
           'orther_vars' => []
         ],
-        'path' => HelpMigrate::getPatch('theme', $theme_name) . '/templates/Suggestions/Bootstrap'
+        'path' => HelpMigrate::getPath('theme', $theme_name) . '/templates/Suggestions/Bootstrap'
       ],
       'bloc_contact' => [
         'variables' => [
@@ -369,7 +369,7 @@ class PreprocessPage {
           'attribute_form' => [],
           'orther_vars' => []
         ],
-        'path' => HelpMigrate::getPatch('theme', $theme_name) . '/templates/Suggestions/sections/imgLeftRight/blocContact'
+        'path' => HelpMigrate::getPath('theme', $theme_name) . '/templates/Suggestions/sections/imgLeftRight/blocContact'
       ]
     ];
   }
@@ -390,7 +390,7 @@ class PreprocessPage {
        */
       $parser = new Compiler();
       // build bootstrap end default style theme
-      $theme_root = DRUPAL_ROOT . '/' . \HelpMigrate::getPatch('theme', $theme_name);
+      $theme_root = DRUPAL_ROOT . '/' . \HelpMigrate::getPath('theme', $theme_name);
 
       /**
        * Formattes les fichiers scss du theme enfants
@@ -555,7 +555,7 @@ class PreprocessPage {
 
       if (\array_key_first($themes) == "wb_universe") {
 
-        $theme_root = DRUPAL_ROOT . '/' . \HelpMigrate::getPatch('theme', $ThemeUtility->themeName);
+        $theme_root = DRUPAL_ROOT . '/' . \HelpMigrate::getPath('theme', $ThemeUtility->themeName);
         // dump($theme_root_parent);
         $theme_scss = $theme_root . '/scss/autos';
         if (\file_exists($theme_root . '/scss/_variables_custom.scss')) {

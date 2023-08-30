@@ -31,7 +31,7 @@ class ThemeUtility {
     $this->themeObject = \Drupal::theme()->getActiveTheme();
     $this->themeName = $this->themeObject->getName();
     // dump($this->themeName);
-    // $this->themePath = HelpMigrate::getPatch('theme', $this->themeName);
+    // $this->themePath = HelpMigrate::getPath('theme', $this->themeName);
   }
 
   public function AddRequireTree($name, &$form) {

@@ -1,14 +1,17 @@
-<?
+<?php
 
 namespace Stephane888\HtmlBootstrap;
 
 class HelpMigrate {
-
-    protected $patchResolver;
-    public static function getPatch($type, $name) {
-        if (!$this->patchResolver) {
-            $this->pathResolver = \Drupal::service('extension.path.resolver');
+    /**
+     *
+     * @var \Drupal\Core\Extension\ExtensionPathResolver
+     */
+    protected static $pathResolver;
+    public static function getPath($type, $name) {
+        if (!self::$pathResolver) {
+            self::$pathResolver = \Drupal::service('extension.path.resolver');
         }
-        return $this->patchResolver->getPatch($type, $name);
+        return self::$pathResolver->getPath($type, $name);
     }
 }

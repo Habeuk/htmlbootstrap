@@ -177,7 +177,7 @@ class CarouselCards implements ControllerInterface {
         'title' => $faker->unique()->realText(rand(40, 50)),
         'date' => 'MAR 21, 2019',
         'img' => [
-          'url' => '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . $img_url
+          'url' => '/' . HelpMigrate::getPath('theme', $this->themeObject->getName()) . $img_url
         ],
         'link' => '#' // optional
       ];

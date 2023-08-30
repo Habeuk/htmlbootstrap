@@ -377,25 +377,25 @@ class Sliders implements ControllerInterface {
       [
         'content' => $this->templateCenterVertHori('Slider 1', 'bg-cover'),
         'image' => [
-          'img_url' => '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/Sliders/slidecover/slider1-demo2.jpg'
+          'img_url' => '/' . HelpMigrate::getPath('theme', $this->themeObject->getName()) . '/defaultfile/Sliders/slidecover/slider1-demo2.jpg'
         ]
       ],
       [
         'content' => $this->templateCenterVertHori('Slider 2', 'bg-cover'),
         'image' => [
-          'img_url' => '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/Sliders/slidecover/Snowy_Owl_Tom_Ingram.jpg'
+          'img_url' => '/' . HelpMigrate::getPath('theme', $this->themeObject->getName()) . '/defaultfile/Sliders/slidecover/Snowy_Owl_Tom_Ingram.jpg'
         ]
       ],
       [
         'content' => $this->templateCenterVertHori('Slider 3', 'bg-cover'),
         'image' => [
-          'img_url' => '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/Sliders/slidecover/Ann_and_Chris_Short_Eared_Owl.jpg'
+          'img_url' => '/' . HelpMigrate::getPath('theme', $this->themeObject->getName()) . '/defaultfile/Sliders/slidecover/Ann_and_Chris_Short_Eared_Owl.jpg'
         ]
       ],
       [
         'content' => $this->templateCenterVertHori('Slider 4', 'bg-cover'),
         'image' => [
-          'img_url' => '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/Sliders/slidecover/Jessica_Drossin_Balance.jpg'
+          'img_url' => '/' . HelpMigrate::getPath('theme', $this->themeObject->getName()) . '/defaultfile/Sliders/slidecover/Jessica_Drossin_Balance.jpg'
         ]
       ]
     ];
@@ -468,25 +468,25 @@ class Sliders implements ControllerInterface {
       [
         'content' => $this->templateCenterVertHori('Slider 1', 'bg-cover'),
         'image' => [
-          'img_url' => '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/CarouselBootstrap/images/banner1.jpg'
+          'img_url' => '/' . HelpMigrate::getPath('theme', $this->themeObject->getName()) . '/defaultfile/CarouselBootstrap/images/banner1.jpg'
         ]
       ],
       [
         'content' => $this->templateCenterVertHori('Slider 2', 'bg-cover'),
         'image' => [
-          'img_url' => '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/CarouselBootstrap/images/banner2.jpg'
+          'img_url' => '/' . HelpMigrate::getPath('theme', $this->themeObject->getName()) . '/defaultfile/CarouselBootstrap/images/banner2.jpg'
         ]
       ],
       [
         'content' => $this->templateCenterVertHori('Slider 3', 'bg-cover'),
         'image' => [
-          'img_url' => '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/CarouselBootstrap/images/banner3.jpg'
+          'img_url' => '/' . HelpMigrate::getPath('theme', $this->themeObject->getName()) . '/defaultfile/CarouselBootstrap/images/banner3.jpg'
         ]
       ],
       [
         'content' => $this->templateCenterVertHori('Slider 4', 'bg-cover'),
         'image' => [
-          'img_url' => '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/CarouselBootstrap/images/banner4.jpg'
+          'img_url' => '/' . HelpMigrate::getPath('theme', $this->themeObject->getName()) . '/defaultfile/CarouselBootstrap/images/banner4.jpg'
         ]
       ]
     ];

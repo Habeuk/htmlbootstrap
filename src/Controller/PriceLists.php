@@ -206,8 +206,8 @@ class PriceLists implements ControllerInterface {
       $number = 3;
       $cards = $this->loadDefaultData_Model1($number);
     }
-    $whatsapp_url = '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/logos/logo-whatsapp100x100.png';
-    $mentor_url = '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/PriceLists/Model1/mentor-1.png';
+    $whatsapp_url = '/' . HelpMigrate::getPath('theme', $this->themeObject->getName()) . '/defaultfile/logos/logo-whatsapp100x100.png';
+    $mentor_url = '/' . HelpMigrate::getPath('theme', $this->themeObject->getName()) . '/defaultfile/PriceLists/Model1/mentor-1.png';
     $filename = \file_get_contents($this->BasePath . '/Sections/PriceLists/Model1/Drupal.html.twig');
     LoaderDrupal::addStyle(\file_get_contents($this->BasePath . '/Sections/PriceLists/Model1/style.scss'), 'PriceLists-Model1');
     LoaderDrupal::addScript(\file_get_contents($this->BasePath . '/Sections/PriceLists/Model1/script.js'), 'PriceLists-Model1');

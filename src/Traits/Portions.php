@@ -205,7 +205,7 @@ trait Portions {
       '#type' => 'inline_template',
       '#template' => '<img src="{{img_url}}" class="img-fluid {{classe}}" alt="{{alt}}" />',
       '#context' => [
-        'img_url' => '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . $img_url,
+        'img_url' => '/' . HelpMigrate::getPath('theme', $this->themeObject->getName()) . $img_url,
         'alt' => $alt,
         'classe' => $classe
       ]

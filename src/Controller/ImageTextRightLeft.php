@@ -515,7 +515,7 @@ class ImageTextRightLeft implements ControllerInterface {
       $img = $this->getImageUrlByFid($options['img'], $this->themeObject->getName() . '_513x500');
     } else {
       $img = [
-        'img_url' => '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/ImageTextRightLeft/ModelM2/21205351-portrait-de-confiance-jeune-homme-d-affaires-avec-les-bras-croisés-dans-le-bureau.jpg',
+        'img_url' => '/' . HelpMigrate::getPath('theme', $this->themeObject->getName()) . '/defaultfile/ImageTextRightLeft/ModelM2/21205351-portrait-de-confiance-jeune-homme-d-affaires-avec-les-bras-croisés-dans-le-bureau.jpg',
         'img_alt' => '',
         'img_class' => ''
       ];
@@ -527,7 +527,7 @@ class ImageTextRightLeft implements ControllerInterface {
       $img_small = $this->getImageUrlByFid($options['img_small'], $this->themeObject->getName() . '_228x158');
     } else {
       $img_small = [
-        'img_url' => '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/ImageTextRightLeft/ModelM2/portrait-homme-affaires-afro-americain-attrayant-souriant-exterieur_33839-1295.jpg',
+        'img_url' => '/' . HelpMigrate::getPath('theme', $this->themeObject->getName()) . '/defaultfile/ImageTextRightLeft/ModelM2/portrait-homme-affaires-afro-americain-attrayant-souriant-exterieur_33839-1295.jpg',
         'img_alt' => '',
         'img_class' => ''
       ];
@@ -895,7 +895,7 @@ class ImageTextRightLeft implements ControllerInterface {
       $img = $this->getImageUrlByFid($options['img'], $this->themeObject->getName() . '_slider_home_small');
     } else {
       $img = [
-        'img_url' => '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/bg/688263.jpg',
+        'img_url' => '/' . HelpMigrate::getPath('theme', $this->themeObject->getName()) . '/defaultfile/bg/688263.jpg',
         'img_alt' => '',
         'img_class' => ''
       ];
@@ -982,7 +982,7 @@ class ImageTextRightLeft implements ControllerInterface {
       $img = $this->getImageUrlByFid($options['img'], $this->themeObject->getName() . '_570x394');
     } else {
       $img = [
-        'img_url' => '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/ImageTextRightLeft/ModelM2/portrait-homme-affaires-afro-americain-attrayant-souriant-exterieur_33839-1295.jpg',
+        'img_url' => '/' . HelpMigrate::getPath('theme', $this->themeObject->getName()) . '/defaultfile/ImageTextRightLeft/ModelM2/portrait-homme-affaires-afro-americain-attrayant-souriant-exterieur_33839-1295.jpg',
         'img_alt' => '',
         'img_class' => ''
       ];
@@ -1029,7 +1029,7 @@ class ImageTextRightLeft implements ControllerInterface {
     if (isset($options['background_url'])) {
       $background_url = $options['background_url'];
     } else {
-      $background_url = '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/bg/white-fence.jpg';
+      $background_url = '/' . HelpMigrate::getPath('theme', $this->themeObject->getName()) . '/defaultfile/bg/white-fence.jpg';
     }
 
     /**
@@ -1082,7 +1082,7 @@ class ImageTextRightLeft implements ControllerInterface {
       $img_url = $this->getImageUrlByFid($options['img_url']);
       $img_url = $img_url["img_url"];
     } else {
-      $img_url = '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/ImageTextRightLeft/ModelM1/flash-screenshot.png';
+      $img_url = '/' . HelpMigrate::getPath('theme', $this->themeObject->getName()) . '/defaultfile/ImageTextRightLeft/ModelM1/flash-screenshot.png';
     }
     /**
      * Get content img_alt

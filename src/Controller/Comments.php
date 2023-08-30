@@ -62,7 +62,7 @@ class Comments implements ControllerInterface {
       '#context' => [
         'cards' => $cards,
         'title' => $title,
-        'img_bg' => '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/Comments/CarouselM1/testimonial-quote.png' // quate
+        'img_bg' => '/' . HelpMigrate::getPath('theme', $this->themeObject->getName()) . '/defaultfile/Comments/CarouselM1/testimonial-quote.png' // quate
       ]
     ];
   }

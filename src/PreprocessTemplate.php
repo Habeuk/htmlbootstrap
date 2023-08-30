@@ -80,7 +80,7 @@ class PreprocessTemplate {
   protected function buildMaintenancePage($theme_name) {
     $wrapper_attribute = new Attribute();
     $img = [
-      'img_url' => '/' . HelpMigrate::getPatch('theme', $theme_name) . '/images/istock-172454785.jpg',
+      'img_url' => '/' . HelpMigrate::getPath('theme', $theme_name) . '/images/istock-172454785.jpg',
       'img_alt' => '',
       'img_class' => ''
     ];

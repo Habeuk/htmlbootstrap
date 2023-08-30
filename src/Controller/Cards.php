@@ -211,7 +211,7 @@ class Cards implements ControllerInterface {
           $cards = $this->loadDefaultData($nombre_item);
           $card_class_block = "col-md-6 col-lg-3";
         }
-        $icon_pdf = '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/Cards/Model3/pdf-icon-11549528510ilxx4eex38.png';
+        $icon_pdf = '/' . HelpMigrate::getPath('theme', $this->themeObject->getName()) . '/defaultfile/Cards/Model3/pdf-icon-11549528510ilxx4eex38.png';
         $fileName = \file_get_contents($this->BasePath . '/Sections/Cards/Model3/Drupal.html.twig');
         LoaderDrupal::addStyle(\file_get_contents($this->BasePath . '/Sections/Cards/Model3/style.scss'), 'CardsModel3');
         LoaderDrupal::addScript(\file_get_contents($this->BasePath . '/Sections/Cards/Model3/script.js'), 'CardsModel3');
@@ -260,11 +260,11 @@ class Cards implements ControllerInterface {
     $faker->seed(12956812258);
     for ($i = 0; $i < $number; $i++) {
       $img_url = (isset($imgs[$i])) ? $imgs[$i] : 'themes://defaultfile/CarouselCards/Modele1/photodune-6590781-product-launch-flat-illustration-2-700x400.jpg';
-      // $img_url0 = file_create_url(HelpMigrate::getPatch('theme', $this->themeObject->getName()) . $img_url) . '?itok=_DGxyx-M';
+      // $img_url0 = file_create_url(HelpMigrate::getPath('theme', $this->themeObject->getName()) . $img_url) . '?itok=_DGxyx-M';
       // dump($img_url0);
       // $img_url0 = \Drupal\image\Entity\ImageStyle::load($image_style)->buildUrl($img_url);
       // dump(file_uri_scheme('themes://mon-image.jpg'));
-      $img_url = '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . $img_url;
+      $img_url = '/' . HelpMigrate::getPath('theme', $this->themeObject->getName()) . $img_url;
       // $img_url0 = ImageStyleTheme::load($image_style);
 
       $cards[] = [
@@ -330,7 +330,7 @@ class Cards implements ControllerInterface {
         'link' => '#', // optional
         'button' => 'Telecharger',
         'img' => [
-          'src' => (isset($imgs[$i])) ? '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . $imgs[$i] : '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/CarouselCards/Modele3/fruits--nutrition--sante--bien-etre-jbgatj.jpg'
+          'src' => (isset($imgs[$i])) ? '/' . HelpMigrate::getPath('theme', $this->themeObject->getName()) . $imgs[$i] : '/' . HelpMigrate::getPath('theme', $this->themeObject->getName()) . '/defaultfile/CarouselCards/Modele3/fruits--nutrition--sante--bien-etre-jbgatj.jpg'
         ]
       ];
     }
