@@ -9,48 +9,49 @@ use Drupal\Core\Template\Attribute;
 use Stephane888\HtmlBootstrap\ThemeUtility;
 use PhpParser\Node\Stmt\Foreach_;
 use Stephane888\HtmlBootstrap\LoaderDrupal;
+use Stephane888\HtmlBootstrap\HelpMigrate;
 
 class PreprocessPage {
   protected $is_front = false;
   protected static $theme_name;
-  
+
   use DisplaySection;
-  
+
   public function createTemplates($theme_name, $displays = null, $force = false) {
     if ((isset($_GET['template']) && $_GET['template'] == 'build') || $force) {
       if (!$displays) {
         $displays = theme_get_setting($theme_name . '_pagenodesdisplay', $theme_name);
       }
-      $url_theme = \drupal_get_path('theme', $theme_name);
+      $url_theme = HelpMigrate::getPatch('theme', $theme_name);
       $LoaderDrupal = new LoaderDrupal();
       $LoaderDrupal->createFiles($displays, $url_theme);
     }
   }
-  
+
   public function setThemeName($theme_name) {
     static::$theme_name = $theme_name;
   }
-  
+
   public function loadSection($theme_name, &$variables) {
     $this->setThemeName($theme_name);
     if ($variables['is_front'])
       $this->is_front = $variables['is_front'];
     $LoaderDrupal = new LoaderDrupal();
-    
+
     /**
      * Load content from layout manager.
      */
     if (theme_get_setting($theme_name . '_layout_manager_status', $theme_name)) {
       static::getLayoutManager($LoaderDrupal, $variables, 'layout_manager');
     }
-    
+
     /**
      * Get style for pages
      */
     if (theme_get_setting($theme_name . '_stylepage_status', $theme_name)) {
       static::getStylePage($LoaderDrupal, $variables);
     }
-    
+
     /**
      * get top headers
      * Not use for now.
@@ -76,48 +77,48 @@ class PreprocessPage {
     if (theme_get_setting($theme_name . '_cards_status', $theme_name)) {
       static::getCards($LoaderDrupal, $variables);
     }
-    
+
     /**
      * get PriceLists
      */
     if (theme_get_setting($theme_name . '_pricelists_status', $theme_name)) {
       static::getPriceLists($LoaderDrupal, $variables);
     }
-    
+
     /**
      * Get CallActions
      */
     if (theme_get_setting($theme_name . '_callactions_status', $theme_name)) {
       static::getCallActions($LoaderDrupal, $variables);
     }
-    
+
     /**
      * Get carouselcards
      */
     if (theme_get_setting($theme_name . '_carouselcards_status', $theme_name)) {
       static::getCarouselCards($LoaderDrupal, $variables);
     }
-    
+
     /**
      * Get Comments
      */
     if (theme_get_setting($theme_name . '_comments_status', $theme_name)) {
       static::getComments($LoaderDrupal, $variables);
     }
-    
+
     /**
      */
     if (theme_get_setting($theme_name . '_imagetextrightleft_status', $theme_name)) {
       static::getImageTextRightLeft($LoaderDrupal, $variables);
     }
-    
+
     /**
      * Get footers
      */
     if (theme_get_setting($theme_name . '_footers_status', $theme_name)) {
       static::getFooters($LoaderDrupal, $variables);
     }
-    
+
     /**
      * load plugins page (node)
      */
@@ -140,32 +141,28 @@ class PreprocessPage {
       $Attribute->addClass('page-node-custom');
       if ($defaultClassEntity) {
         $Attribute->addClass($defaultClassEntity);
-      }
-      else {
+      } else {
         // dump($defaultClass);
         $Attribute->addClass($defaultClass);
       }
-      
+
       $variables['page']['content']['attributes'] = $Attribute;
       $wrapper_attribute = new Attribute();
       $wrapper_attribute->addClass('region-content');
       $variables['page']['content']['wrapper_attribute'] = $wrapper_attribute;
-      
+
       // loadPagePlugins
       $LoaderDrupal->loadPagePlugins($variables, $displays, $node, $theme_name);
       // dump($node->bundle());
-    }
-    elseif ('entity.taxonomy_term.canonical' == $route_name) {
+    } elseif ('entity.taxonomy_term.canonical' == $route_name) {
       if (!empty($variables['page']['content']['attributes'])) {
         $variables['page']['content']['attributes']->addClass('page-term-custom');
-      }
-      else {
+      } else {
         $Attribute->addClass('page-term-custom');
         $Attribute->addClass($defaultClass);
         $variables['page']['content']['attributes'] = $Attribute;
       }
-    }
-    elseif (!$this->is_front && \strstr($route_name, 'user.')) {
+    } elseif (!$this->is_front && \strstr($route_name, 'user.')) {
       /**
        * En attendant de trouver une meilleur approche pour les pages de
        * connextions, on ajoute une classe.
@@ -195,8 +192,7 @@ class PreprocessPage {
       $variables['page']['content']['entete']['#weight'] = -100;
       $variables['page']['content']['attributes'] = $_Attribute;
       // dump($variables);
-    }
-    elseif ('commerce_checkout.form' == $route_name) {
+    } elseif ('commerce_checkout.form' == $route_name) {
       $Attribute->addClass('page-orther-custom');
       $Attribute->addClass('commerce_checkout');
       $Attribute->addClass([
@@ -208,28 +204,26 @@ class PreprocessPage {
       ]);
       $Attribute->addClass($defaultClass);
       $variables['page']['content']['attributes'] = $Attribute;
-    }
-    elseif ('view.frontpage.page_1' != $route_name) {
+    } elseif ('view.frontpage.page_1' != $route_name) {
       $Attribute->addClass('page-orther-custom');
       $Attribute->addClass($defaultClass);
       $variables['page']['content']['attributes'] = $Attribute;
     }
   }
-  
+
   public function getDisplaysClass($displays, $content_type = null) {
     if (!$content_type) {
       if (!empty($displays['all-content-type']['status'])) {
         return (!empty($displays['all-content-type']['classes'])) ? $displays['all-content-type']['classes'] : '';
       }
-    }
-    elseif ($content_type) {
+    } elseif ($content_type) {
       if (!empty($displays[$content_type]['status'])) {
         return (!empty($displays[$content_type]['classes'])) ? $displays[$content_type]['classes'] : '';
       }
     }
     return false;
   }
-  
+
   /**
    * permet de :
    * - Retirer le message par defaut quand il nya pas de contenu + plus le
@@ -255,7 +249,7 @@ class PreprocessPage {
       unset($variables['page']['content'][$theme_name . '_page_title']);
       unset($variables['page']['content'][$theme_name . '_content']);
     }
-    
+
     /**
      * Remove edit for all user except admibistrator
      */
@@ -263,7 +257,7 @@ class PreprocessPage {
       unset($variables['page']['content'][$theme_name . '_local_tasks']);
     }
   }
-  
+
   public function AddLibrary(&$variables, $theme_name = 'themeconsultant') {
     /**
      * Ajout les fichiers de style et Scripts.
@@ -275,7 +269,7 @@ class PreprocessPage {
       $variables['page']['content']['#attached']['library'][] = $theme_name . '/page-node';
     }
   }
-  
+
   public static function LoadTemplates($theme_name) {
     return [
       // views-view-field-cutom
@@ -291,7 +285,7 @@ class PreprocessPage {
           'width' => null,
           'height' => null
         ],
-        'path' => drupal_get_path('theme', $theme_name) . '/templates/layouts'
+        'path' => HelpMigrate::getPatch('theme', $theme_name) . '/templates/layouts'
         // 'path' => 'templates/layouts'
       ],
       'header_bg' => [
@@ -303,7 +297,7 @@ class PreprocessPage {
           'attributes' => [],
           'orther_vars' => []
         ],
-        'path' => drupal_get_path('theme', $theme_name) . '/templates/Suggestions/sections/PageNodesDisplay/headerBg'
+        'path' => HelpMigrate::getPatch('theme', $theme_name) . '/templates/Suggestions/sections/PageNodesDisplay/headerBg'
       ],
       'item_list_custom' => [
         'variables' => [
@@ -323,7 +317,7 @@ class PreprocessPage {
           'orther_vars' => [],
           'attributes_mobile' => []
         ],
-        'path' => drupal_get_path('theme', $theme_name) . '/templates/Suggestions/sections/imgLeftRight/StaticImage'
+        'path' => HelpMigrate::getPatch('theme', $theme_name) . '/templates/Suggestions/sections/imgLeftRight/StaticImage'
       ],
       'zone_custom_template' => [
         'variables' => [
@@ -333,7 +327,7 @@ class PreprocessPage {
           'attributes' => [],
           'orther_vars' => []
         ],
-        'path' => drupal_get_path('theme', $theme_name) . '/templates/Suggestions/sections/imgLeftRight/ZoneCustomTemplate'
+        'path' => HelpMigrate::getPatch('theme', $theme_name) . '/templates/Suggestions/sections/imgLeftRight/ZoneCustomTemplate'
       ],
       'footer_menu_rx' => [
         'variables' => [
@@ -345,7 +339,7 @@ class PreprocessPage {
           'attributes' => [],
           'orther_vars' => []
         ],
-        'path' => drupal_get_path('theme', $theme_name) . '/templates/Suggestions/sections/Footers/FooterMenuRx'
+        'path' => HelpMigrate::getPatch('theme', $theme_name) . '/templates/Suggestions/sections/Footers/FooterMenuRx'
       ],
       'top_header_default' => [
         'variables' => [
@@ -353,7 +347,7 @@ class PreprocessPage {
           'attributes' => [],
           'orther_vars' => []
         ],
-        'path' => drupal_get_path('theme', $theme_name) . '/templates/Suggestions/sections/TopHeaders/Default'
+        'path' => HelpMigrate::getPatch('theme', $theme_name) . '/templates/Suggestions/sections/TopHeaders/Default'
       ],
       'dropdown_menu' => [
         'variables' => [
@@ -362,7 +356,7 @@ class PreprocessPage {
           'attributes' => [],
           'orther_vars' => []
         ],
-        'path' => drupal_get_path('theme', $theme_name) . '/templates/Suggestions/Bootstrap'
+        'path' => HelpMigrate::getPatch('theme', $theme_name) . '/templates/Suggestions/Bootstrap'
       ],
       'bloc_contact' => [
         'variables' => [
@@ -375,16 +369,16 @@ class PreprocessPage {
           'attribute_form' => [],
           'orther_vars' => []
         ],
-        'path' => drupal_get_path('theme', $theme_name) . '/templates/Suggestions/sections/imgLeftRight/blocContact'
+        'path' => HelpMigrate::getPatch('theme', $theme_name) . '/templates/Suggestions/sections/imgLeftRight/blocContact'
       ]
     ];
   }
-  
+
   public function Preprocess_field__image(&$variables, $theme_name) {
     // dump($variables);
     $variables['#attached']['library'][] = $theme_name . '/owlcarousel';
   }
-  
+
   /**
    * load scss csss
    */
@@ -396,13 +390,13 @@ class PreprocessPage {
        */
       $parser = new Compiler();
       // build bootstrap end default style theme
-      $theme_root = DRUPAL_ROOT . '/' . \drupal_get_path('theme', $theme_name);
-      
+      $theme_root = DRUPAL_ROOT . '/' . \HelpMigrate::getPatch('theme', $theme_name);
+
       /**
        * Formattes les fichiers scss du theme enfants
        */
       $scss_config_bootstrap = $this->childrenThemeFormarteScss($parser, $theme_root);
-      
+
       /**
        *
        * @var string $result
@@ -412,7 +406,7 @@ class PreprocessPage {
       $monfichier = fopen($filename, 'w+');
       fputs($monfichier, $result);
       fclose($monfichier);
-      
+
       // build custom style
       if (LOAD_SCSS_BY_SESSION && $this->is_front) {
         // dump('_load_scss');
@@ -468,14 +462,14 @@ class PreprocessPage {
           fclose($monfichier);
         }
       }
-      
+
       // build custom style
       $result = $parser->compile($scss_config_bootstrap . '@import "' . $theme_root . '/scss/style.scss";');
       $filename = $theme_root . '/css/style.css';
       $monfichier = fopen($filename, 'w+');
       fputs($monfichier, $result);
       fclose($monfichier);
-      
+
       // build custom style
       // $result = $parser->compile($scss_config_bootstrap . '@import "' .
       // $theme_root . '/scss/accueill.scss";');
@@ -496,7 +490,7 @@ class PreprocessPage {
       $monfichier = fopen($filename, 'w+');
       fputs($monfichier, $result);
       fclose($monfichier);
-      
+
       // build custom style
       // $result = $parser->compile($scss_config_bootstrap . '@import "' .
       // $theme_root . '/scss/ckeditor_custom.scss";');
@@ -531,7 +525,7 @@ class PreprocessPage {
       $monfichier = fopen($filename, 'w+');
       fputs($monfichier, $result);
       fclose($monfichier);
-      
+
       // build custom maintenance-page
       // $result = $parser->compile($scss_config_bootstrap . '@import "' .
       // $theme_root . '/scss/page-content-over.scss";');
@@ -539,14 +533,14 @@ class PreprocessPage {
       // $monfichier = fopen($filename, 'w+');
       // fputs($monfichier, $result);
       // fclose($monfichier);
-    
-    /**
-     * delete session
-     */
+
+      /**
+       * delete session
+       */
       // $this->_delete_scss();
     }
   }
-  
+
   /**
    * Permet de formater les fichiers css present dans le theme enfants.
    * retourne le fichier de configuration, pour pouvoir surcharcher les valeurs
@@ -558,10 +552,10 @@ class PreprocessPage {
     $themes = $ThemeUtility->themeObject->getBaseThemeExtensions();
     $scss_config_bootstrap = '';
     if (!empty($themes)) {
-      
+
       if (\array_key_first($themes) == "wb_universe") {
-        
-        $theme_root = DRUPAL_ROOT . '/' . \drupal_get_path('theme', $ThemeUtility->themeName);
+
+        $theme_root = DRUPAL_ROOT . '/' . \HelpMigrate::getPatch('theme', $ThemeUtility->themeName);
         // dump($theme_root_parent);
         $theme_scss = $theme_root . '/scss/autos';
         if (\file_exists($theme_root . '/scss/_variables_custom.scss')) {
@@ -570,7 +564,7 @@ class PreprocessPage {
         // Creer le fichier style-auto.css à partir du contenu du dossier
         // /scss/autos.
         if (\file_exists($theme_scss)) {
-          
+
           // $style = file_get_contents($theme_root_parent .
           // '/scss/style.scss');
           $style = $scss_config_bootstrap . '@import "' . $theme_root_parent . '/scss/loader_model_module2.scss"; ';
@@ -596,7 +590,7 @@ class PreprocessPage {
     }
     return $scss_config_bootstrap;
   }
-  
+
   protected function _delete_scss() {
     dump('delete');
     $Session = new Session();
@@ -607,5 +601,4 @@ class PreprocessPage {
       $Session->remove('theme-script');
     }
   }
-  
 }

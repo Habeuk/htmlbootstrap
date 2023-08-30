@@ -1,9 +1,11 @@
 <?php
+
 namespace Stephane888\HtmlBootstrap\Controller;
 
 use Stephane888\HtmlBootstrap\LoaderDrupal;
 use Stephane888\HtmlBootstrap\Traits\Portions;
 use Stephane888\HtmlBootstrap\ThemeUtility;
+use Stephane888\HtmlBootstrap\HelpMigrate;
 
 class CarouselCards implements ControllerInterface {
   use Portions;
@@ -12,8 +14,7 @@ class CarouselCards implements ControllerInterface {
 
   protected $themeObject = null;
 
-  function __construct($path = null)
-  {
+  function __construct($path = null) {
     $this->BasePath = $path;
     $this->themeObject = \Drupal::theme()->getActiveTheme();
   }
@@ -21,8 +22,7 @@ class CarouselCards implements ControllerInterface {
   /**
    * Using default template 'inline_template'
    */
-  public function loadFile($options)
-  {
+  public function loadFile($options) {
     /**
      * Get datas
      */
@@ -81,15 +81,13 @@ class CarouselCards implements ControllerInterface {
     ];
   }
 
-  public static function listModels()
-  {
+  public static function listModels() {
     return [
       'Modele1' => 'Modele1'
     ];
   }
 
-  public static function loadFieldsNodes($model, &$form, $options)
-  {
+  public static function loadFieldsNodes($model, &$form, $options) {
     $ThemeUtility = new ThemeUtility();
     $ManageNode = new ManageNode();
     if ('Modele1' == $model) {
@@ -98,31 +96,31 @@ class CarouselCards implements ControllerInterface {
        * le champs titre
        */
       $name = 'title';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addTextfieldTree($name, $form, 'Titre', $FieldValue);
       /**
        * le champs titre
        */
       $name = 'txt_link';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addTextfieldTree($name, $form, 'txt link', $FieldValue);
       /**
        * le champs link
        */
       $name = 'link';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addTextfieldTree($name, $form, 'link', $FieldValue);
       /**
        * le champs nombre_item
        */
       $name = 'nombre_item';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : 6;
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : 6;
       $ThemeUtility->addTextfieldTree($name, $form, 'Nombre de blocs', $FieldValue);
       /**
        * le champs selection du type de contenu
        */
       $name = 'content_type';
-      $FieldValue = $bundle = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = $bundle = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addSelectTree($name, $form, $contentTypes, 'Selectionner le type de contenu', $FieldValue);
       if ($bundle != '') {
         $listsFields = $ManageNode->getFieldsNode($bundle);
@@ -136,23 +134,23 @@ class CarouselCards implements ControllerInterface {
          * le champs titre
          */
         $name = 'title';
-        $FieldValue = (! empty($options[$container][$name])) ? $options[$container][$name] : '';
+        $FieldValue = (!empty($options[$container][$name])) ? $options[$container][$name] : '';
         $ThemeUtility->addSelectTree($name, $form[$container], $listsFields, 'Champs Titre', $FieldValue);
         /**
          * le champs img
          */
         $name = 'img';
-        $FieldValue = (! empty($options[$container][$name])) ? $options[$container][$name] : '';
+        $FieldValue = (!empty($options[$container][$name])) ? $options[$container][$name] : '';
         $ThemeUtility->addSelectTree($name, $form[$container], $listsFields, 'Champs Image', $FieldValue);
-      /**
-       * le champs titre
-       */
+        /**
+         * le champs titre
+         */
         // $name = 'date';
         // $FieldValue = (! empty($options[$container][$name])) ? $options[$container][$name] : '';
         // $ThemeUtility->addSelectTree($name, $form[$container], $listsFields, 'Date de creation ( laisser vide pour auto remplissage )', $FieldValue);
-      /**
-       * le champs titre
-       */
+        /**
+         * le champs titre
+         */
         // $name = 'link';
         // $FieldValue = (! empty($options[$container][$name])) ? $options[$container][$name] : '';
         // $ThemeUtility->addSelectTree($name, $form[$container], $listsFields, 'Champs Link ( laisser vide pour auto remplissage )', $FieldValue);
@@ -160,8 +158,7 @@ class CarouselCards implements ControllerInterface {
     }
   }
 
-  public static function loadFields($model, &$form, $options)
-  {
+  public static function loadFields($model, &$form, $options) {
     $ThemeUtility = new ThemeUtility();
   }
 
@@ -169,19 +166,18 @@ class CarouselCards implements ControllerInterface {
    *
    * @param number $number
    */
-  protected function loadDefaultData($number = 7)
-  {
+  protected function loadDefaultData($number = 7) {
     $icones = $this->defaultImg();
     $cards = [];
     $faker = \Faker\Factory::create();
     $faker->seed(12548512475); // permet de generer le meme texte durant une session.
-    for ($i = 0; $i < $number; $i ++) {
+    for ($i = 0; $i < $number; $i++) {
       $img_url = (isset($icones[$i])) ? $icones[$i] : '/defaultfile/CarouselCards/Modele1/photodune-6590781-product-launch-flat-illustration-2-700x400.jpg';
       $cards[] = [
         'title' => $faker->unique()->realText(rand(40, 50)),
         'date' => 'MAR 21, 2019',
         'img' => [
-          'url' => '/' . drupal_get_path('theme', $this->themeObject->getName()) . $img_url
+          'url' => '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . $img_url
         ],
         'link' => '#' // optional
       ];
@@ -189,8 +185,7 @@ class CarouselCards implements ControllerInterface {
     return $cards;
   }
 
-  protected function defaultImg()
-  {
+  protected function defaultImg() {
     return [
       '/defaultfile/CarouselCards/Modele1/Fotolia_30806367_Subscription_Monthly_XL-700x400.jpg',
       '/defaultfile/CarouselCards/Modele1/Fotolia_32338952_Subscription_Monthly_XL-700x400.jpg',

@@ -5,7 +5,7 @@ namespace Stephane888\HtmlBootstrap;
 use Drupal\Core\Database\Database;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\Component\Utility\Random;
-
+use Stephane888\HtmlBootstrap\HelpMigrate;
 // use Drupal\Core\Theme\ActiveTheme;
 class ThemeUtility {
   public $image_styles = false;
@@ -31,7 +31,7 @@ class ThemeUtility {
     $this->themeObject = \Drupal::theme()->getActiveTheme();
     $this->themeName = $this->themeObject->getName();
     // dump($this->themeName);
-    // $this->themePath = drupal_get_path('theme', $this->themeName);
+    // $this->themePath = HelpMigrate::getPatch('theme', $this->themeName);
   }
 
   public function AddRequireTree($name, &$form) {
@@ -75,10 +75,10 @@ class ThemeUtility {
     $this->addContainerTree($name, $form, $title);
     $form[$name]['link'] = [
       '#type' => 'textfield', // 'url' ce type a un
-                               // validateur et n'offre
-                               // pas
-                               // un avantage par rapport
-                               // à text.
+      // validateur et n'offre
+      // pas
+      // un avantage par rapport
+      // à text.
       '#title' => 'Url',
       '#default_value' => !empty($default['link']) ? $default['link'] : '#'
     ];
@@ -231,16 +231,16 @@ class ThemeUtility {
    */
   public function AddAjaxTree($name, &$form, $callback, $wrapper, $event = 'change', $message = 'Verifying entry...') {
     $form[$name]['#ajax'] = [ // 'callback' => '::' . $callback, // cette
-                               // methode est utilisé si le
-                               // formulaire provient d'une classe.
+      // methode est utilisé si le
+      // formulaire provient d'une classe.
       'callback' => $callback, // on va lire la fonction de return dans le
-                                // THEMENAME.theme
+      // THEMENAME.theme
       'disable-refocus' => FALSE, // Or TRUE to prevent re-focusing on the
-                                   // triggering element.
+      // triggering element.
       'event' => $event,
       'wrapper' => $wrapper, // This element is updated with
-                              // this AJAX
-                              // callback.
+      // this AJAX
+      // callback.
       'progress' => [
         'type' => 'throbber',
         'message' => $message
@@ -415,16 +415,16 @@ class ThemeUtility {
    */
   public function AddAjax($name, $group, &$form, $callback, $wrapper, $event = 'change', $message = 'Verifying entry...') {
     $form[$group . $name]['#ajax'] = [ // 'callback' => '::' . $callback, //
-                                        // cette methode est utilisé si le
-                                        // formulaire provient d'une classe.
+      // cette methode est utilisé si le
+      // formulaire provient d'une classe.
       'callback' => $callback, // on va lire la fonction de return dans le
-                                // THEMENAME.theme
+      // THEMENAME.theme
       'disable-refocus' => FALSE, // Or TRUE to prevent re-focusing on the
-                                   // triggering element.
+      // triggering element.
       'event' => $event,
       'wrapper' => $wrapper, // This element is updated with
-                              // this AJAX
-                              // callback.
+      // this AJAX
+      // callback.
       'progress' => [
         'type' => 'throbber',
         'message' => $message
@@ -595,8 +595,7 @@ class ThemeUtility {
     if ($file) {
       if ($image_style) {
         return ImageStyle::load($image_style)->buildUrl($file->getFileUri());
-      }
-      else {
+      } else {
         return $file->createFileUrl();
       }
     }
@@ -710,8 +709,7 @@ class ThemeUtility {
   public function JourJ($dateFin, $dateDebut = false) {
     if ($dateDebut) {
       $date1 = new \DateTime();
-    }
-    else {
+    } else {
       $date1 = new \DateTime($dateDebut);
     }
     $date2 = new \DateTime($dateFin);
@@ -723,16 +721,13 @@ class ThemeUtility {
     if ($interval->m > 0) {
       if ($interval->d > 1) {
         return $prefixe . ' ' . ($interval->m + ($interval->y * 12)) . ' ' . \t('Month') . ' ' . $interval->d . ' ' . \t('days');
-      }
-      else {
+      } else {
         return $prefixe . ' ' . ($interval->m + ($interval->y * 12)) . ' ' . \t('Month') . ' ' . $interval->d . ' ' . \t('day');
       }
-    }
-    else {
+    } else {
       if ($interval->d > 0) {
         return $prefixe . ' ' . $interval->d . \t('days') . ' ' . $interval->h . ' H';
-      }
-      else {
+      } else {
         return $prefixe . ' ' . $interval->d . \t('day') . ' ' . $interval->h . ' H' . ' ' . $interval->i . ' mn';
       }
     }
@@ -783,5 +778,4 @@ class ThemeUtility {
       '#default_value' => (isset($value) && $value != '') ? $value : $default
     ];
   }
-
 }

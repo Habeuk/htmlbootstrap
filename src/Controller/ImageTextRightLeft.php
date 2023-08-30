@@ -1,4 +1,5 @@
 <?php
+
 namespace Stephane888\HtmlBootstrap\Controller;
 
 use Stephane888\HtmlBootstrap\Traits\Portions;
@@ -8,6 +9,7 @@ use Stephane888\HtmlBootstrap\ThemeUtility;
 use Drupal\Core\Template\Attribute;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Stephane888\HtmlBootstrap\PreprocessTemplate;
+use Stephane888\HtmlBootstrap\HelpMigrate;
 
 class ImageTextRightLeft implements ControllerInterface {
   use Portions;
@@ -17,8 +19,7 @@ class ImageTextRightLeft implements ControllerInterface {
 
   protected $themeObject = null;
 
-  function __construct($path = null)
-  {
+  function __construct($path = null) {
     $this->BasePath = $path;
     $this->themeObject = \Drupal::theme()->getActiveTheme();
   }
@@ -27,8 +28,7 @@ class ImageTextRightLeft implements ControllerInterface {
    * Load file headers and pass variable.
    * Using default template 'inline_template'
    */
-  public function loadFile($options)
-  {
+  public function loadFile($options) {
     /**
      * Get type
      */
@@ -90,8 +90,7 @@ class ImageTextRightLeft implements ControllerInterface {
     }
   }
 
-  public static function listModels()
-  {
+  public static function listModels() {
     return [
       'default' => 'default',
       'ModelM1' => "ModelM1 (model avec l'image à droite ou gauche)",
@@ -103,61 +102,60 @@ class ImageTextRightLeft implements ControllerInterface {
     ];
   }
 
-  public static function loadFields($model, &$form, $options)
-  {
+  public static function loadFields($model, &$form, $options) {
     $ThemeUtility = new ThemeUtility();
     if ($model == 'ModelM1') {
       /**
        * le champs description
        */
       $name = 'display_small';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : 0;
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : 0;
       $ThemeUtility->addCheckboxTree($name, $form, 'display_small', $FieldValue);
       /**
        * le champs description
        */
       $name = 'img_before';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : 0;
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : 0;
       $ThemeUtility->addCheckboxTree($name, $form, 'img_before', $FieldValue);
       /**
        * le champs titre
        */
       $name = 'title';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addTextfieldTree($name, $form, 'Titre', $FieldValue);
       /**
        * le champs description
        */
       $name = 'text';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addTextareaSimpleTree($name, $form, 'Description', $FieldValue);
 
       /**
        * le champs titre
        */
       $name = 'button';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addTextfieldTree($name, $form, 'button text', $FieldValue);
 
       /**
        * le champs titre
        */
       $name = 'button_link';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addTextfieldTree($name, $form, 'button link', $FieldValue);
 
       /**
        * le champs image
        */
       $name = 'img_url';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addImageTree($name, $form, 'Image', $FieldValue);
 
       /**
        * le champs description
        */
       $name = 'img_in_bg';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : 0;
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : 0;
       $ThemeUtility->addCheckboxTree($name, $form, 'img_in_bg', $FieldValue);
 
       /**
@@ -167,110 +165,110 @@ class ImageTextRightLeft implements ControllerInterface {
       $options__align_item = [
         'd-flex align-items-center' => 'aligne au centre ( verticalment)'
       ];
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : 0;
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : 0;
       $ThemeUtility->addSelectTree($name, $form, $options__align_item, 'align_item', $FieldValue);
 
       /**
        * le champs titre
        */
       $name = 'col_text';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : 'col-lg-6';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : 'col-lg-6';
       $ThemeUtility->addTextfieldTree($name, $form, 'class col_text ', $FieldValue);
 
       /**
        * le champs titre
        */
       $name = 'col_image';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : 'col-lg-6';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : 'col-lg-6';
       $ThemeUtility->addTextfieldTree($name, $form, 'class col_image ', $FieldValue);
 
       /**
        * le champs titre
        */
       $name = 'button_btn';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : 'btn-outline-success';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : 'btn-outline-success';
       $ThemeUtility->addTextfieldTree($name, $form, 'class btn_color ', $FieldValue);
     } elseif ($model == 'ModelM2') {
       /**
        * le champs sup_title
        */
       $name = 'sup_title';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addTextfieldTree($name, $form, 'titre au dessus', $FieldValue);
       /**
        * le champs titre
        */
       $name = 'title';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addTextfieldTree($name, $form, 'Titre', $FieldValue);
       /**
        * le champs button_link
        */
       $name = 'button_link';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '#';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '#';
       $ThemeUtility->addTextfieldTree($name, $form, 'Lien du bouton ', $FieldValue);
       /**
        * le champs button
        */
       $name = 'button';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addTextfieldTree($name, $form, 'contenu du bouton ', $FieldValue);
       /**
        * le champs image
        */
       $name = 'img';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addImageTree($name, $form, 'Image', $FieldValue);
     } elseif ($model == 'ModelM3') {
       /**
        * le champs image
        */
       $name = 'img';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addImageTree($name, $form, 'Image', $FieldValue);
       /**
        * le champs img_small
        */
       $name = 'img_small';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addImageTree($name, $form, 'Image Small', $FieldValue);
 
       /**
        * le champs sup_title
        */
       $name = 'sup_title';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addTextfieldTree($name, $form, 'titre au dessus dans le bloc', $FieldValue);
 
       /**
        * le champs header_title
        */
       $name = 'header_title';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addTextfieldTree($name, $form, 'titre de l\'entete ', $FieldValue);
 
       /**
        * le champs header_description
        */
       $name = 'header_description';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addTextfieldTree($name, $form, 'Description de l\'entete ', $FieldValue);
       /**
        * le champs header_description
        */
       $name = 'header_description';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addTextareaSimpleTree($name, $form, 'Description de l\'entete ', $FieldValue);
 
       /**
        * le champs nombre_item
        */
       $name = 'nombre_item';
-      $nombre_item = $FieldValue = (! empty($options[$name])) ? $options[$name] : 3;
+      $nombre_item = $FieldValue = (!empty($options[$name])) ? $options[$name] : 3;
       $ThemeUtility->addTextfieldTree($name, $form, 'Nombre de lists', $FieldValue);
       $container = 'lists';
 
-      for ($i = 0; $i < $nombre_item; $i ++) {
+      for ($i = 0; $i < $nombre_item; $i++) {
         $form[$container][$i] = [
           '#type' => 'details',
           '#title' => 'Blocs : ' . ($i + 1),
@@ -280,7 +278,7 @@ class ImageTextRightLeft implements ControllerInterface {
          * le champs titre
          */
         $name = 'text';
-        $FieldValue = (! empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
+        $FieldValue = (!empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
         $ThemeUtility->addTextfieldTree($name, $form[$container][$i], 'Titre', $FieldValue);
       }
 
@@ -288,53 +286,53 @@ class ImageTextRightLeft implements ControllerInterface {
        * le champs title
        */
       $name = 'title';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addTextfieldTree($name, $form, 'Titre ', $FieldValue);
 
       /**
        * le champs title
        */
       $name = 'description';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addTextareaSimpleTree($name, $form, 'Description ', $FieldValue);
 
       /**
        * le champs title
        */
       $name = 'button';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addTextfieldTree($name, $form, 'Button ', $FieldValue);
 
       /**
        * le champs button_link
        */
       $name = 'button_link';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addTextfieldTree($name, $form, 'Button link', $FieldValue);
     } elseif ($model == 'static_image') {
       /**
        * le champs sup_title
        */
       $name = 'sup_title';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addTextfieldTree($name, $form, 'titre au dessus', $FieldValue);
       /**
        * le champs titre
        */
       $name = 'title';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addTextfieldTree($name, $form, 'Titre', $FieldValue);
       /**
        * le champs sup_title
        */
       $name = 'sub_title';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addTextfieldTree($name, $form, 'titre en dessous', $FieldValue);
       /**
        * le champs image
        */
       $name = 'img';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addImageTree($name, $form, 'Image', $FieldValue);
     } elseif ($model == 'content_text') {
       $styles_images = PreprocessTemplate::loadAllStyleMedia();
@@ -342,14 +340,14 @@ class ImageTextRightLeft implements ControllerInterface {
        * text
        */
       $name = 'text';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addTextareaSimpleTree($name, $form, 'Texte', $FieldValue);
 
       /**
        * le champs description
        */
       $name = 'show_bg';
-      $FieldValue = $show_bg = (! empty($options[$name])) ? $options[$name] : 0;
+      $FieldValue = $show_bg = (!empty($options[$name])) ? $options[$name] : 0;
       $ThemeUtility->addCheckboxTree($name, $form, 'img_in_bg', $FieldValue);
       if ($show_bg) {
         /**
@@ -375,27 +373,27 @@ class ImageTextRightLeft implements ControllerInterface {
        * text
        */
       $name = 'title_header';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addTextfieldTree($name, $form, 'Texte', $FieldValue);
 
       /**
        * text
        */
       $name = 'desc_header';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addTextareaSimpleTree($name, $form, 'Texte', $FieldValue);
       /**
        * le champs titre
        */
       $name = 'col_address';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : 'col-lg-6';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : 'col-lg-6';
       $ThemeUtility->addTextfieldTree($name, $form, 'class col_address ', $FieldValue);
 
       /**
        * le champs titre
        */
       $name = 'col_forms';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : 'col-lg-6';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : 'col-lg-6';
       $ThemeUtility->addTextfieldTree($name, $form, 'class col_forms ', $FieldValue);
 
       /**
@@ -411,7 +409,7 @@ class ImageTextRightLeft implements ControllerInterface {
        * le champs description
        */
       $name = 'show_bg';
-      $FieldValue = $show_bg = (! empty($options[$name])) ? $options[$name] : 0;
+      $FieldValue = $show_bg = (!empty($options[$name])) ? $options[$name] : 0;
       $ThemeUtility->addCheckboxTree($name, $form, 'img_in_bg', $FieldValue);
       if ($show_bg) {
         /**
@@ -434,11 +432,11 @@ class ImageTextRightLeft implements ControllerInterface {
        * le champs nombre_item
        */
       $name = 'nombre_item';
-      $nombre_item = $FieldValue = (! empty($options[$name])) ? $options[$name] : 3;
+      $nombre_item = $FieldValue = (!empty($options[$name])) ? $options[$name] : 3;
       $ThemeUtility->addTextfieldTree($name, $form, 'Nombre de bloc d\'infos ', $FieldValue);
       $container = 'cards';
 
-      for ($i = 0; $i < $nombre_item; $i ++) {
+      for ($i = 0; $i < $nombre_item; $i++) {
         $form[$container][$i] = [
           '#type' => 'details',
           '#title' => 'Blocs : ' . ($i + 1),
@@ -448,28 +446,27 @@ class ImageTextRightLeft implements ControllerInterface {
          * le champs titre
          */
         $name = 'text';
-        $FieldValue = (! empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
+        $FieldValue = (!empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
         $ThemeUtility->addTextfieldTree($name, $form[$container][$i], 'Titre', $FieldValue);
 
         /**
          * le champs titre
          */
         $name = 'icone';
-        $FieldValue = (! empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
+        $FieldValue = (!empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
         $ThemeUtility->addTextfieldTree($name, $form[$container][$i], 'Titre', $FieldValue);
 
         /**
          * le champs titre
          */
         $name = 'description';
-        $FieldValue = (! empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
+        $FieldValue = (!empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
         $ThemeUtility->addTextareaSimpleTree($name, $form[$container][$i], 'Titre', $FieldValue);
       }
     }
   }
 
-  public static function loadFieldsNodes($model, &$form, $options)
-  {
+  public static function loadFieldsNodes($model, &$form, $options) {
     $ThemeUtility = new ThemeUtility();
     $ManageNode = new ManageNode();
     if ('content_text' == $model) {
@@ -479,7 +476,7 @@ class ImageTextRightLeft implements ControllerInterface {
        * le champs selection du type de contenu
        */
       $name = 'content_type';
-      $FieldValue = $bundle = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = $bundle = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addSelectTree($name, $form, $contentTypes, 'Selectionner le type de contenu', $FieldValue);
       if ($bundle != '') {
         $listsFields = $ManageNode->getFieldsNode($bundle);
@@ -488,21 +485,20 @@ class ImageTextRightLeft implements ControllerInterface {
          * le champs titre
          */
         $name = 'text';
-        $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+        $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
         $ThemeUtility->addSelectTree($name, $form, $listsFields, 'Champs Texte', $FieldValue);
 
         /**
          * le champs sup_title
          */
         $name = 'nid';
-        $FieldValue = (! empty($options[$name])) ? $options[$name] : 1;
+        $FieldValue = (!empty($options[$name])) ? $options[$name] : 1;
         $ThemeUtility->addTextfieldTree($name, $form, 'Nid', $FieldValue);
       }
     }
   }
 
-  protected function loadModelM3($options)
-  {
+  protected function loadModelM3($options) {
     /**
      * Get content img_before
      */
@@ -519,7 +515,7 @@ class ImageTextRightLeft implements ControllerInterface {
       $img = $this->getImageUrlByFid($options['img'], $this->themeObject->getName() . '_513x500');
     } else {
       $img = [
-        'img_url' => '/' . drupal_get_path('theme', $this->themeObject->getName()) . '/defaultfile/ImageTextRightLeft/ModelM2/21205351-portrait-de-confiance-jeune-homme-d-affaires-avec-les-bras-croisés-dans-le-bureau.jpg',
+        'img_url' => '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/ImageTextRightLeft/ModelM2/21205351-portrait-de-confiance-jeune-homme-d-affaires-avec-les-bras-croisés-dans-le-bureau.jpg',
         'img_alt' => '',
         'img_class' => ''
       ];
@@ -531,7 +527,7 @@ class ImageTextRightLeft implements ControllerInterface {
       $img_small = $this->getImageUrlByFid($options['img_small'], $this->themeObject->getName() . '_228x158');
     } else {
       $img_small = [
-        'img_url' => '/' . drupal_get_path('theme', $this->themeObject->getName()) . '/defaultfile/ImageTextRightLeft/ModelM2/portrait-homme-affaires-afro-americain-attrayant-souriant-exterieur_33839-1295.jpg',
+        'img_url' => '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/ImageTextRightLeft/ModelM2/portrait-homme-affaires-afro-americain-attrayant-souriant-exterieur_33839-1295.jpg',
         'img_alt' => '',
         'img_class' => ''
       ];
@@ -585,7 +581,7 @@ class ImageTextRightLeft implements ControllerInterface {
       $lists = [];
       $faker = \Faker\Factory::create();
       $faker->seed(129888882258);
-      for ($i = 0; $i <= 2; $i ++) {
+      for ($i = 0; $i <= 2; $i++) {
         $lists[] = [
           'text' => $faker->unique()->realText(rand(15, 30))
         ];
@@ -639,8 +635,7 @@ class ImageTextRightLeft implements ControllerInterface {
     ];
   }
 
-  protected function loadContentText($options)
-  {
+  protected function loadContentText($options) {
     /**
      * Get content title
      */
@@ -708,8 +703,7 @@ class ImageTextRightLeft implements ControllerInterface {
     ];
   }
 
-  protected function loadBlocContact($options)
-  {
+  protected function loadBlocContact($options) {
     /**
      * Get content title
      */
@@ -822,8 +816,7 @@ class ImageTextRightLeft implements ControllerInterface {
     ];
   }
 
-  protected function getBlocContact()
-  {
+  protected function getBlocContact() {
     return [
       [
         'text' => 'Office Location',
@@ -848,8 +841,7 @@ class ImageTextRightLeft implements ControllerInterface {
     ];
   }
 
-  protected function getBlocContactForms()
-  {
+  protected function getBlocContactForms() {
     return '<form action="assets/mail/contact.php" method="POST" class="contact-form">
                             <div class="col-md-12">
                                 <div class="row">
@@ -894,8 +886,7 @@ class ImageTextRightLeft implements ControllerInterface {
                         </form>';
   }
 
-  protected function loadStaticImage($options)
-  {
+  protected function loadStaticImage($options) {
     // dump($options);
     /**
      * Get content img_before
@@ -904,7 +895,7 @@ class ImageTextRightLeft implements ControllerInterface {
       $img = $this->getImageUrlByFid($options['img'], $this->themeObject->getName() . '_slider_home_small');
     } else {
       $img = [
-        'img_url' => '/' . drupal_get_path('theme', $this->themeObject->getName()) . '/defaultfile/bg/688263.jpg',
+        'img_url' => '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/bg/688263.jpg',
         'img_alt' => '',
         'img_class' => ''
       ];
@@ -940,7 +931,7 @@ class ImageTextRightLeft implements ControllerInterface {
     $wrapper_attribute->addClass([
       'lazyload'
     ]);
-    if (! empty($img['img_url'])) {
+    if (!empty($img['img_url'])) {
       $style = "background-image:url('" . $img['img_url'] . "')";
       $wrapper_attribute->setAttribute('style', $style);
       $imgs = $this->getImagesSliderResponssive($options['img'], $this->themeObject->getName());
@@ -974,8 +965,7 @@ class ImageTextRightLeft implements ControllerInterface {
    * @param string $options
    * @return array
    */
-  protected function loadModelM2($options)
-  {
+  protected function loadModelM2($options) {
     /**
      * Get content img_before
      */
@@ -992,7 +982,7 @@ class ImageTextRightLeft implements ControllerInterface {
       $img = $this->getImageUrlByFid($options['img'], $this->themeObject->getName() . '_570x394');
     } else {
       $img = [
-        'img_url' => '/' . drupal_get_path('theme', $this->themeObject->getName()) . '/defaultfile/ImageTextRightLeft/ModelM2/portrait-homme-affaires-afro-americain-attrayant-souriant-exterieur_33839-1295.jpg',
+        'img_url' => '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/ImageTextRightLeft/ModelM2/portrait-homme-affaires-afro-americain-attrayant-souriant-exterieur_33839-1295.jpg',
         'img_alt' => '',
         'img_class' => ''
       ];
@@ -1039,7 +1029,7 @@ class ImageTextRightLeft implements ControllerInterface {
     if (isset($options['background_url'])) {
       $background_url = $options['background_url'];
     } else {
-      $background_url = '/' . drupal_get_path('theme', $this->themeObject->getName()) . '/defaultfile/bg/white-fence.jpg';
+      $background_url = '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/bg/white-fence.jpg';
     }
 
     /**
@@ -1068,8 +1058,7 @@ class ImageTextRightLeft implements ControllerInterface {
    * @param array $options
    * @return string[]|string[][]
    */
-  protected function loadModelM1($options)
-  {
+  protected function loadModelM1($options) {
     /**
      * Get content img_before
      */
@@ -1093,7 +1082,7 @@ class ImageTextRightLeft implements ControllerInterface {
       $img_url = $this->getImageUrlByFid($options['img_url']);
       $img_url = $img_url["img_url"];
     } else {
-      $img_url = '/' . drupal_get_path('theme', $this->themeObject->getName()) . '/defaultfile/ImageTextRightLeft/ModelM1/flash-screenshot.png';
+      $img_url = '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/ImageTextRightLeft/ModelM1/flash-screenshot.png';
     }
     /**
      * Get content img_alt
@@ -1215,7 +1204,7 @@ class ImageTextRightLeft implements ControllerInterface {
     }
     $Attribute_text = new Attribute();
     $Attribute_text->addClass($col_text);
-    if (! empty($align_text)) {
+    if (!empty($align_text)) {
       $Attribute_text->addClass($align_text);
     }
     return [

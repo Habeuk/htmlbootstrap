@@ -1,9 +1,11 @@
 <?php
+
 namespace Stephane888\HtmlBootstrap\Controller;
 
 use Stephane888\HtmlBootstrap\Traits\Portions;
 use Stephane888\HtmlBootstrap\LoaderDrupal;
 use Stephane888\HtmlBootstrap\ThemeUtility;
+use Stephane888\HtmlBootstrap\HelpMigrate;
 
 class PriceLists implements ControllerInterface {
   use Portions;
@@ -12,8 +14,7 @@ class PriceLists implements ControllerInterface {
 
   protected $themeObject = null;
 
-  function __construct($path = null)
-  {
+  function __construct($path = null) {
     $this->BasePath = $path;
     $this->themeObject = \Drupal::theme()->getActiveTheme();
   }
@@ -23,8 +24,7 @@ class PriceLists implements ControllerInterface {
    * {@inheritdoc}
    * @see \Stephane888\HtmlBootstrap\Controller\ControllerInterface::loadFile()
    */
-  public function loadFile($options)
-  {
+  public function loadFile($options) {
     /**
      * Get type
      */
@@ -40,8 +40,7 @@ class PriceLists implements ControllerInterface {
    * {@inheritdoc}
    * @see \Stephane888\HtmlBootstrap\Controller\ControllerInterface::listModels()
    */
-  public static function listModels()
-  {
+  public static function listModels() {
     return [
       'Model1' => 'Model1'
     ];
@@ -52,8 +51,7 @@ class PriceLists implements ControllerInterface {
    * {@inheritdoc}
    * @see \Stephane888\HtmlBootstrap\Controller\ControllerInterface::loadFields()
    */
-  public static function loadFields($model, &$form, $options)
-  {
+  public static function loadFields($model, &$form, $options) {
     $ThemeUtility = new ThemeUtility();
     if ($model == 'Model1') {
       // dump($options);
@@ -61,19 +59,19 @@ class PriceLists implements ControllerInterface {
        * le champs titre
        */
       $name = 'title';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : 'Selectionner un pack';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : 'Selectionner un pack';
       $ThemeUtility->addTextfieldTree($name, $form, 'Titre', $FieldValue);
       /**
        * class card_class_block
        */
       $name = 'card_class_block';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : 'col-md-6 col-lg-4';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : 'col-md-6 col-lg-4';
       $ThemeUtility->addTextfieldTree($name, $form, 'Class colonne bootstrap', $FieldValue);
       /**
        * le champs nombre_item
        */
       $name = 'nombre_item';
-      $nombre_list = $FieldValue = (! empty($options[$name])) ? $options[$name] : 8;
+      $nombre_list = $FieldValue = (!empty($options[$name])) ? $options[$name] : 8;
       $ThemeUtility->addTextfieldTree($name, $form, 'Nombre d\'elements dans la liste', $FieldValue);
       /**
        * Nombre de bloc 3.
@@ -81,7 +79,7 @@ class PriceLists implements ControllerInterface {
       $nombre_item = 3;
       $container = 'cards';
       $lists = 'lists';
-      for ($i = 0; $i < $nombre_item; $i ++) {
+      for ($i = 0; $i < $nombre_item; $i++) {
         $form[$container][$i] = [
           '#type' => 'details',
           '#title' => 'Blocs : ' . ($i + 1),
@@ -96,46 +94,46 @@ class PriceLists implements ControllerInterface {
          * le champs show_price_promo
          */
         $name = 'show_price_promo';
-        $FieldValue = (! empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : 0;
+        $FieldValue = (!empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : 0;
         $ThemeUtility->addCheckboxTree($name, $form[$container][$i], 'Affiche le prix promo', $FieldValue);
         /**
          * le champs titre
          */
         $name = 'title_small';
-        $FieldValue = (! empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : 'Pack';
+        $FieldValue = (!empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : 'Pack';
         $ThemeUtility->addTextfieldTree($name, $form[$container][$i], 'Petit titre', $FieldValue);
         /**
          * le champs titre
          */
         $name = 'title';
-        $FieldValue = (! empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
+        $FieldValue = (!empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
         $ThemeUtility->addTextfieldTree($name, $form[$container][$i], 'Titre', $FieldValue);
 
         /**
          * le champs price_promo
          */
         $name = 'price_promo';
-        $FieldValue = (! empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : '50 900 Fcfa';
+        $FieldValue = (!empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : '50 900 Fcfa';
         $ThemeUtility->addTextfieldTree($name, $form[$container][$i], 'Prix promo', $FieldValue);
         /**
          * le champs price
          */
         $name = 'price';
-        $FieldValue = (! empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : '150 000 Fcfa';
+        $FieldValue = (!empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : '150 000 Fcfa';
         $ThemeUtility->addTextfieldTree($name, $form[$container][$i], 'Prix', $FieldValue);
 
         /**
          * le champs price_promo
          */
         $name = 'price_suffix';
-        $FieldValue = (! empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : 'par an';
+        $FieldValue = (!empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : 'par an';
         $ThemeUtility->addTextfieldTree($name, $form[$container][$i], 'suffixe ', $FieldValue);
         // dump($options[$container][$i][$lists]);
         $options[$container][$i][$lists] = static::RebuildIndexInt($options[$container][$i][$lists]);
 
-        for ($j = 0; $j < $nombre_list; $j ++) {
+        for ($j = 0; $j < $nombre_list; $j++) {
           $name = 'title';
-          $label = (! empty($options[$container][$i][$lists][$j][$name])) ? $options[$container][$i][$lists][$j][$name] : '';
+          $label = (!empty($options[$container][$i][$lists][$j][$name])) ? $options[$container][$i][$lists][$j][$name] : '';
           $form[$container][$i][$lists][$j] = [
             '#type' => 'details',
             '#title' => 'Option : ' . $label,
@@ -145,33 +143,32 @@ class PriceLists implements ControllerInterface {
            * Le champs titre
            */
           $name = 'title';
-          $FieldValue = (! empty($options[$container][$i][$lists][$j][$name])) ? $options[$container][$i][$lists][$j][$name] : '';
+          $FieldValue = (!empty($options[$container][$i][$lists][$j][$name])) ? $options[$container][$i][$lists][$j][$name] : '';
           $ThemeUtility->addTextfieldTree($name, $form[$container][$i][$lists][$j], 'Titre', $FieldValue);
           /**
            * Le champs description
            */
           $name = 'text';
-          $FieldValue = (! empty($options[$container][$i][$lists][$j][$name])) ? $options[$container][$i][$lists][$j][$name] : '';
+          $FieldValue = (!empty($options[$container][$i][$lists][$j][$name])) ? $options[$container][$i][$lists][$j][$name] : '';
           $ThemeUtility->addTextareaSimpleTree($name, $form[$container][$i][$lists][$j], 'Description', $FieldValue);
           /**
            * Le champs titre
            */
           $name = 'icone';
-          $FieldValue = (! empty($options[$container][$i][$lists][$j][$name])) ? $options[$container][$i][$lists][$j][$name] : '<i class="fas fa-check active"></i>';
+          $FieldValue = (!empty($options[$container][$i][$lists][$j][$name])) ? $options[$container][$i][$lists][$j][$name] : '<i class="fas fa-check active"></i>';
           $ThemeUtility->addTextfieldTree($name, $form[$container][$i][$lists][$j], 'Icone "fas fa-check active"> | "fas fa-times disable"', $FieldValue);
           /**
            * Le champs poid
            */
           $name = 'weight';
-          $FieldValue = (! empty($options[$container][$i][$lists][$j][$name])) ? $options[$container][$i][$lists][$j][$name] : $j;
+          $FieldValue = (!empty($options[$container][$i][$lists][$j][$name])) ? $options[$container][$i][$lists][$j][$name] : $j;
           $ThemeUtility->addTextfieldTree($name, $form[$container][$i][$lists][$j], 'poid', $FieldValue);
         }
       }
     }
   }
 
-  public static function RebuildIndexInt($options)
-  {
+  public static function RebuildIndexInt($options) {
     $new_options = [];
     foreach ($options as $val) {
       $new_options[] = $val;
@@ -179,8 +176,7 @@ class PriceLists implements ControllerInterface {
     return $new_options;
   }
 
-  protected function loadModelM1($options)
-  {
+  protected function loadModelM1($options) {
     /**
      * Get Datas
      */
@@ -210,8 +206,8 @@ class PriceLists implements ControllerInterface {
       $number = 3;
       $cards = $this->loadDefaultData_Model1($number);
     }
-    $whatsapp_url = '/' . drupal_get_path('theme', $this->themeObject->getName()) . '/defaultfile/logos/logo-whatsapp100x100.png';
-    $mentor_url = '/' . drupal_get_path('theme', $this->themeObject->getName()) . '/defaultfile/PriceLists/Model1/mentor-1.png';
+    $whatsapp_url = '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/logos/logo-whatsapp100x100.png';
+    $mentor_url = '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/PriceLists/Model1/mentor-1.png';
     $filename = \file_get_contents($this->BasePath . '/Sections/PriceLists/Model1/Drupal.html.twig');
     LoaderDrupal::addStyle(\file_get_contents($this->BasePath . '/Sections/PriceLists/Model1/style.scss'), 'PriceLists-Model1');
     LoaderDrupal::addScript(\file_get_contents($this->BasePath . '/Sections/PriceLists/Model1/script.js'), 'PriceLists-Model1');
@@ -228,12 +224,11 @@ class PriceLists implements ControllerInterface {
     ];
   }
 
-  protected function loadDefaultData_Model1($number = 3)
-  {
+  protected function loadDefaultData_Model1($number = 3) {
     $cards = [];
     $faker = \Faker\Factory::create();
     $faker->seed(129888882258);
-    for ($i = 0; $i < $number; $i ++) {
+    for ($i = 0; $i < $number; $i++) {
       $cards[$i] = [
         'title_small' => 'Pack',
         'title' => $faker->unique()->word,
@@ -249,12 +244,11 @@ class PriceLists implements ControllerInterface {
     return $cards;
   }
 
-  protected function loadDefaultData_Model1_lists($number = 5, $active = 5)
-  {
+  protected function loadDefaultData_Model1_lists($number = 5, $active = 5) {
     $lists = [];
     $faker = \Faker\Factory::create();
     $faker->seed(129888882258);
-    for ($i = 0; $i < $number; $i ++) {
+    for ($i = 0; $i < $number; $i++) {
       $lists[$i] = [
         'icone' => ($active >= $i) ? '<i class="fas fa-check active"></i>' : '<i class="fas fa-times disable"></i>',
         'title' => $faker->unique()->realText(rand(20, 60)),

@@ -1,9 +1,11 @@
 <?php
+
 namespace Stephane888\HtmlBootstrap\Traits;
 
 use Stephane888\HtmlBootstrap\LoaderDrupal;
 use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Core\Template\Attribute;
+use Stephane888\HtmlBootstrap\HelpMigrate;
 
 trait Portions {
 
@@ -30,13 +32,11 @@ trait Portions {
    *
    * @return string[][]
    */
-  public function getdefault_rx_logos()
-  {
+  public function getdefault_rx_logos() {
     return static::getdefault_rx_logos_static();
   }
 
-  public static function getdefault_rx_logos_static()
-  {
+  public static function getdefault_rx_logos_static() {
     return [
       [
         'icone' => '<i class="fab fa-facebook-f"></i>',
@@ -61,8 +61,7 @@ trait Portions {
     ];
   }
 
-  public static function loadMenu($menu_name)
-  {
+  public static function loadMenu($menu_name) {
     $MenuTreeParameters = new MenuTreeParameters();
     $menu_tree = \Drupal::menuTree();
     $menuTreeFooter = $menu_tree->load($menu_name, $MenuTreeParameters);
@@ -77,8 +76,7 @@ trait Portions {
    *
    * @param array $param
    */
-  public function template_rx_logos($rx_logos, $template)
-  {
+  public function template_rx_logos($rx_logos, $template) {
     $fileName = '';
     if ($template == 'circle_animate') {
       LoaderDrupal::addStyle(\file_get_contents($this->BasePath . '/Utility/RxLogos/CircleAnimate/style.scss'), 'template_rx_logos');
@@ -99,8 +97,7 @@ trait Portions {
     ];
   }
 
-  public static function model_rx_logos()
-  {
+  public static function model_rx_logos() {
     return [
       'circle_animate' => 'circle_animate',
       'flat' => 'flat Big',
@@ -108,8 +105,7 @@ trait Portions {
     ];
   }
 
-  public function template_fb_page_plugin($options)
-  {
+  public function template_fb_page_plugin($options) {
     /**
      * name_page
      */
@@ -169,8 +165,7 @@ trait Portions {
   /**
    * Template to center content.
    */
-  public function templateCenterVertHori($datas, $classe = null)
-  {
+  public function templateCenterVertHori($datas, $classe = null) {
     return [
       '#type' => 'inline_template',
       '#template' => '<div class="d-flex w-100 h-100 align-items-center justify-content-center {{classe}}">{{ datas | raw}}</div>',
@@ -184,8 +179,7 @@ trait Portions {
   /**
    * template to center content.
    */
-  public function template_inline_template($datas, $classe = null)
-  {
+  public function template_inline_template($datas, $classe = null) {
     return [
       '#type' => 'inline_template',
       '#template' => '<div class="{{classe}}">{{datas | raw}}</div>',
@@ -203,16 +197,15 @@ trait Portions {
    * @param string $alt
    * @return string[]
    */
-  public function template_img($img_url, $alt = '', $classe = '')
-  {
-    if (! $this->themeObject) {
+  public function template_img($img_url, $alt = '', $classe = '') {
+    if (!$this->themeObject) {
       die('');
     }
     return [
       '#type' => 'inline_template',
       '#template' => '<img src="{{img_url}}" class="img-fluid {{classe}}" alt="{{alt}}" />',
       '#context' => [
-        'img_url' => '/' . drupal_get_path('theme', $this->themeObject->getName()) . $img_url,
+        'img_url' => '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . $img_url,
         'alt' => $alt,
         'classe' => $classe
       ]
@@ -224,8 +217,7 @@ trait Portions {
    *
    * @return string
    */
-  public function getFauxTexte()
-  {
+  public function getFauxTexte() {
     return "
       Lorem ipsum dolor sit amet consectetur adipisicing elit sedc dnmo eiusmod tempor incididunt ut labore et dolore magna
       aliqua uta enim ad minim ven iam quis nostrud exercitation ullamco labor nisi ut aliquip exea commodo consequat duis
@@ -237,12 +229,11 @@ trait Portions {
       ";
   }
 
-  public function getImageUrlByFid($fid, $image_style = null)
-  {
-    if (! empty($fid[0])) {
+  public function getImageUrlByFid($fid, $image_style = null) {
+    if (!empty($fid[0])) {
       $file = \Drupal\file\Entity\File::load($fid[0]);
       if ($file) {
-        if (! empty($image_style) && \Drupal\image\Entity\ImageStyle::load($image_style)) {
+        if (!empty($image_style) && \Drupal\image\Entity\ImageStyle::load($image_style)) {
           $img_url = \Drupal\image\Entity\ImageStyle::load($image_style)->buildUrl($file->getFileUri());
         } else {
           $img_url = file_create_url($file->getFileUri());
@@ -256,33 +247,30 @@ trait Portions {
     return [];
   }
 
-  public function getImagesSliderResponssive($fid, $theme_name)
-  {
+  public function getImagesSliderResponssive($fid, $theme_name) {
     $imgs = [];
     $styles = $this->style_image;
     $i = 0;
     foreach ($styles as $style) {
       $imgs[$i] = $this->getImageUrlByFid($fid, $theme_name . '_' . $style['image_style']);
       $imgs[$i]['size'] = $style['size'];
-      $i ++;
+      $i++;
     }
     return $imgs;
   }
 
-  public function getResponsiveImageUrlByFid($fid, $style_image)
-  {
+  public function getResponsiveImageUrlByFid($fid, $style_image) {
     $imgs = [];
     $i = 0;
     foreach ($style_image as $key => $style) {
       $imgs[$i] = $this->getImageUrlByFid($fid, $key);
       $imgs[$i]['size'] = $style['size'];
-      $i ++;
+      $i++;
     }
     return $imgs;
   }
 
-  public function setBackgroundBgset(Attribute &$wrapper_attribute, $imgs = [])
-  {
+  public function setBackgroundBgset(Attribute &$wrapper_attribute, $imgs = []) {
     $image_responsive = '';
     foreach ($imgs as $img_list) {
       $image_responsive .= $img_list['img_url'] . ' ' . $img_list['size'] . ',';
@@ -291,8 +279,7 @@ trait Portions {
     $wrapper_attribute->setAttribute('data-sizes', 'auto');
   }
 
-  public function setSyleImage($styles)
-  {
+  public function setSyleImage($styles) {
     $this->style_image = $styles;
   }
 
@@ -304,13 +291,11 @@ trait Portions {
    * @param string $tag
    * @return string[]
    */
-  public function template_htmltag($string, $tag = 'p', $class = null, $id = null)
-  {
+  public function template_htmltag($string, $tag = 'p', $class = null, $id = null) {
     return static::template_htmltag__static($string, $tag, $class, $id);
   }
 
-  public static function template_htmltag__static($string, $tag = 'p', $class = null, $id = null)
-  {
+  public static function template_htmltag__static($string, $tag = 'p', $class = null, $id = null) {
     $html = [
       '#type' => 'html_tag',
       '#tag' => $tag,
@@ -332,8 +317,7 @@ trait Portions {
    * @param array $links
    * @return string[]
    */
-  public function buildDropdownMenu($links, $class = '')
-  {
+  public function buildDropdownMenu($links, $class = '') {
     $attribute = new Attribute();
     $menu = [
       '#theme' => 'menu',
@@ -346,9 +330,9 @@ trait Portions {
       '#items' => []
     ];
     $data_dropdown_menu = '';
-    if (! empty($links)) {
+    if (!empty($links)) {
       $first_link = reset($links);
-      if (! isset($first_link['label'])) {
+      if (!isset($first_link['label'])) {
         $links = $this->TransformdToDropdownMenu($links);
       }
     }
@@ -379,8 +363,7 @@ trait Portions {
     ];
   }
 
-  protected function TransformdToDropdownMenu($links)
-  {
+  protected function TransformdToDropdownMenu($links) {
     $first_item = true;
     $new_links = [];
     foreach ($links as $key => $link) {
@@ -393,11 +376,10 @@ trait Portions {
     return $new_links;
   }
 
-  protected function getUrlImageFromNodeItem(\Drupal\file\Plugin\Field\FieldType\FileFieldItemList $items, $style = "")
-  {
+  protected function getUrlImageFromNodeItem(\Drupal\file\Plugin\Field\FieldType\FileFieldItemList $items, $style = "") {
     $result = $items->getValue();
     $result = reset($result);
-    if (! empty($result['target_id'])) {
+    if (!empty($result['target_id'])) {
       return $this->getImageUrlByFid([
         $result['target_id']
       ]);
@@ -411,8 +393,7 @@ trait Portions {
    * @param string $Scss_file
    * @param string $css_file
    */
-  public function buildCss($Scss_file, $css_file)
-  {
+  public function buildCss($Scss_file, $css_file) {
     require_once DRUPAL_ROOT . '/../vendor/stephane888/htmlbootstrap/vendor/autoload.php';
     $parser = new \ScssPhp\ScssPhp\Compiler();
     $data = '@import "' . DRUPAL_ROOT . '/../vendor/stephane888/htmlbootstrap/scss/defaut/loader_model_module.scss";';
@@ -431,13 +412,12 @@ trait Portions {
    *          doit contenir la clee à utilisé dans le template et le machine name du champs ['image'=>'field_image']
    * @return array
    */
-  protected function loadFieldsNode(\Drupal\node\Entity\Node $node, $options)
-  {
+  protected function loadFieldsNode(\Drupal\node\Entity\Node $node, $options) {
     $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
     if ($language && $node->hasTranslation($language)) {
       foreach ($options as $key => $field) {
 
-        if (! empty($field)) {
+        if (!empty($field)) {
           $translation = $node->getTranslation($language);
           $options[$key] = $translation->{$field}->view([
             'label' => 'hidden'
@@ -448,7 +428,7 @@ trait Portions {
       }
     } else {
       foreach ($options as $key => $field) {
-        if (! empty($field)) {
+        if (!empty($field)) {
           $options[$key] = $node->{$field}->view([
             'label' => 'hidden'
           ]);

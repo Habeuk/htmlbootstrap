@@ -1,4 +1,5 @@
 <?php
+
 namespace Stephane888\HtmlBootstrap\Controller;
 
 use Stephane888\HtmlBootstrap\LoaderDrupal;
@@ -7,6 +8,7 @@ use Stephane888\HtmlBootstrap\Entity\ImageStyleTheme;
 use Stephane888\HtmlBootstrap\ThemeUtility;
 use Drupal\Core\Template\Attribute;
 use Stephane888\HtmlBootstrap\PreprocessTemplate;
+use Stephane888\HtmlBootstrap\HelpMigrate;
 
 class Cards implements ControllerInterface {
   use Portions;
@@ -15,8 +17,7 @@ class Cards implements ControllerInterface {
 
   protected $themeObject = null;
 
-  function __construct($path = null)
-  {
+  function __construct($path = null) {
     $this->BasePath = $path;
     $this->themeObject = \Drupal::theme()->getActiveTheme();
   }
@@ -24,8 +25,7 @@ class Cards implements ControllerInterface {
   /**
    * Using default template 'inline_template'
    */
-  public function loadFile($options)
-  {
+  public function loadFile($options) {
     /**
      * get datas
      */
@@ -211,7 +211,7 @@ class Cards implements ControllerInterface {
           $cards = $this->loadDefaultData($nombre_item);
           $card_class_block = "col-md-6 col-lg-3";
         }
-        $icon_pdf = '/' . drupal_get_path('theme', $this->themeObject->getName()) . '/defaultfile/Cards/Model3/pdf-icon-11549528510ilxx4eex38.png';
+        $icon_pdf = '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/Cards/Model3/pdf-icon-11549528510ilxx4eex38.png';
         $fileName = \file_get_contents($this->BasePath . '/Sections/Cards/Model3/Drupal.html.twig');
         LoaderDrupal::addStyle(\file_get_contents($this->BasePath . '/Sections/Cards/Model3/style.scss'), 'CardsModel3');
         LoaderDrupal::addScript(\file_get_contents($this->BasePath . '/Sections/Cards/Model3/script.js'), 'CardsModel3');
@@ -237,11 +237,10 @@ class Cards implements ControllerInterface {
    * @param number $number
    * @return string[][]
    */
-  protected function loadDefaultData_StepModel1($number = 3)
-  {
+  protected function loadDefaultData_StepModel1($number = 3) {
     $cards = [];
     $faker = \Faker\Factory::create();
-    for ($i = 0; $i < $number; $i ++) {
+    for ($i = 0; $i < $number; $i++) {
       $cards[$i] = [
         'text' => $faker->unique()->realText(rand(70, 90))
       ];
@@ -252,21 +251,20 @@ class Cards implements ControllerInterface {
   /**
    * Load defalut vertical PostsVerticalM1
    */
-  protected function loadDefaultData__PostsVerticalM1($number = 3)
-  {
+  protected function loadDefaultData__PostsVerticalM1($number = 3) {
     // $image_style = 'thumbnail';
     // $attributes = \Drupal\image\Entity\ImageStyle::load($image_style)->buildUrl();
     $imgs = $this->defaultImg();
     $cards = [];
     $faker = \Faker\Factory::create();
     $faker->seed(12956812258);
-    for ($i = 0; $i < $number; $i ++) {
+    for ($i = 0; $i < $number; $i++) {
       $img_url = (isset($imgs[$i])) ? $imgs[$i] : 'themes://defaultfile/CarouselCards/Modele1/photodune-6590781-product-launch-flat-illustration-2-700x400.jpg';
-      // $img_url0 = file_create_url(drupal_get_path('theme', $this->themeObject->getName()) . $img_url) . '?itok=_DGxyx-M';
+      // $img_url0 = file_create_url(HelpMigrate::getPatch('theme', $this->themeObject->getName()) . $img_url) . '?itok=_DGxyx-M';
       // dump($img_url0);
       // $img_url0 = \Drupal\image\Entity\ImageStyle::load($image_style)->buildUrl($img_url);
       // dump(file_uri_scheme('themes://mon-image.jpg'));
-      $img_url = '/' . drupal_get_path('theme', $this->themeObject->getName()) . $img_url;
+      $img_url = '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . $img_url;
       // $img_url0 = ImageStyleTheme::load($image_style);
 
       $cards[] = [
@@ -287,17 +285,16 @@ class Cards implements ControllerInterface {
    * @param string $cards
    * @param string $options
    */
-  protected function perfomDatas($cards, $options)
-  {
+  protected function perfomDatas($cards, $options) {
     foreach ($cards as $key => $card) {
       $attribute = new Attribute();
-      if (! empty($options['align_card_text'])) {
+      if (!empty($options['align_card_text'])) {
         $attribute->addClass($options['align_card_text']);
       }
-      if (! empty($card['link'])) {
+      if (!empty($card['link'])) {
         $attribute->addClass('card-link');
       }
-      if (! empty($options['show_shadow'])) {
+      if (!empty($options['show_shadow'])) {
         $attribute->addClass('card-image');
       }
       if ($options['sous_models'] == 'image') {
@@ -319,14 +316,13 @@ class Cards implements ControllerInterface {
    *
    * @param number $number
    */
-  protected function loadDefaultData($number = 8)
-  {
+  protected function loadDefaultData($number = 8) {
     $imgs = $this->defaultImgBooks();
     $icones = $this->defaultIcone();
     $cards = [];
     $faker = \Faker\Factory::create();
     $faker->seed(12548512475); // permet de generer le meme texte durant une session.
-    for ($i = 0; $i < $number; $i ++) {
+    for ($i = 0; $i < $number; $i++) {
       $cards[] = [
         'title' => $faker->unique()->realText(rand(15, 30)),
         'text' => $faker->text,
@@ -334,15 +330,14 @@ class Cards implements ControllerInterface {
         'link' => '#', // optional
         'button' => 'Telecharger',
         'img' => [
-          'src' => (isset($imgs[$i])) ? '/' . drupal_get_path('theme', $this->themeObject->getName()) . $imgs[$i] : '/' . drupal_get_path('theme', $this->themeObject->getName()) . '/defaultfile/CarouselCards/Modele3/fruits--nutrition--sante--bien-etre-jbgatj.jpg'
+          'src' => (isset($imgs[$i])) ? '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . $imgs[$i] : '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/CarouselCards/Modele3/fruits--nutrition--sante--bien-etre-jbgatj.jpg'
         ]
       ];
     }
     return $cards;
   }
 
-  public static function listModels()
-  {
+  public static function listModels() {
     return [
       'IconeModelFlat' => 'IconeModelFlat',
       'PostsVerticalM1' => 'PostsVerticalM1',
@@ -353,8 +348,7 @@ class Cards implements ControllerInterface {
     ];
   }
 
-  public static function loadFieldsNodes($model, &$form, $options)
-  {
+  public static function loadFieldsNodes($model, &$form, $options) {
     $ThemeUtility = new ThemeUtility();
     $ManageNode = new ManageNode();
     if ('CardsModel3' == $model) {
@@ -363,33 +357,33 @@ class Cards implements ControllerInterface {
        * le champs titre
        */
       $name = 'title';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addTextfieldTree($name, $form, 'Titre', $FieldValue);
       /**
        * le champs description
        */
       $name = 'description';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addTextareaSimpleTree($name, $form, 'Description', $FieldValue);
 
       /**
        * le champs description
        */
       $name = 'message';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addTextareaSimpleTree($name, $form, 'Message', $FieldValue);
 
       /**
        * le champs nombre_item
        */
       $name = 'nombre_item';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : 4;
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : 4;
       $ThemeUtility->addTextfieldTree($name, $form, 'Nombre de blocs', $FieldValue);
       /**
        * le champs selection du type de contenu
        */
       $name = 'content_type';
-      $FieldValue = $bundle = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = $bundle = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addSelectTree($name, $form, $contentTypes, 'Selectionner le type de contenu', $FieldValue);
       if ($bundle != '') {
         $listsFields = $ManageNode->getFieldsNode($bundle);
@@ -403,39 +397,38 @@ class Cards implements ControllerInterface {
          * le champs titre
          */
         $name = 'title';
-        $FieldValue = (! empty($options[$container][$name])) ? $options[$container][$name] : '';
+        $FieldValue = (!empty($options[$container][$name])) ? $options[$container][$name] : '';
         $ThemeUtility->addSelectTree($name, $form[$container], $listsFields, 'Champs Titre', $FieldValue);
         /**
          * le champs titre
          */
         $name = 'text';
-        $FieldValue = (! empty($options[$container][$name])) ? $options[$container][$name] : '';
+        $FieldValue = (!empty($options[$container][$name])) ? $options[$container][$name] : '';
         $ThemeUtility->addSelectTree($name, $form[$container], $listsFields, 'Champs description courte', $FieldValue);
         /**
          * le champs image
          */
         $name = 'img';
-        $FieldValue = (! empty($options[$container][$name])) ? $options[$container][$name] : '';
+        $FieldValue = (!empty($options[$container][$name])) ? $options[$container][$name] : '';
         $ThemeUtility->addSelectTree($name, $form[$container], $listsFields, 'Champs image', $FieldValue);
 
         /**
          * le champs nombre_item
          */
         $name = 'button';
-        $FieldValue = (! empty($options[$container][$name])) ? $options[$container][$name] : 'Télécharger';
+        $FieldValue = (!empty($options[$container][$name])) ? $options[$container][$name] : 'Télécharger';
         $ThemeUtility->addTextfieldTree($name, $form[$container], 'texte download', $FieldValue);
       }
     }
   }
 
-  public static function loadFields($model, &$form, $options)
-  {
+  public static function loadFields($model, &$form, $options) {
     $ThemeUtility = new ThemeUtility();
     /**
      * class card_class_block
      */
     $name = 'card_class_block';
-    $FieldValue = (! empty($options[$name])) ? $options[$name] : 'col-md-6 col-lg-3';
+    $FieldValue = (!empty($options[$name])) ? $options[$name] : 'col-md-6 col-lg-3';
     $ThemeUtility->addTextfieldTree($name, $form, 'Class colonne bootstrap', $FieldValue);
     if ($model == 'IconeModelFlat') {
       /**
@@ -513,10 +506,10 @@ class Cards implements ControllerInterface {
        * Nombre de blocs.
        */
       $name = 'nombre_card';
-      $FieldValue = $nombre_item = (! empty($options[$name])) ? $options[$name] : 3;
+      $FieldValue = $nombre_item = (!empty($options[$name])) ? $options[$name] : 3;
       $ThemeUtility->addTextfieldTree($name, $form, 'Nombre de bloc', $FieldValue);
       $container = 'cards';
-      for ($i = 0; $i < $nombre_item; $i ++) {
+      for ($i = 0; $i < $nombre_item; $i++) {
         $form[$container][$i] = [
           '#type' => 'details',
           '#title' => 'Blocs : ' . ($i + 1),
@@ -569,24 +562,24 @@ class Cards implements ControllerInterface {
        * le champs titre
        */
       $name = 'title';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addTextfieldTree($name, $form, 'Titre', $FieldValue);
       /**
        * le champs description
        */
       $name = 'description';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addTextareaSimpleTree($name, $form, 'Description', $FieldValue);
 
       /**
        * le champs nombre_item
        */
       $name = 'nombre_item';
-      $nombre_item = $FieldValue = (! empty($options[$name])) ? $options[$name] : 4;
+      $nombre_item = $FieldValue = (!empty($options[$name])) ? $options[$name] : 4;
       $ThemeUtility->addTextfieldTree($name, $form, 'Nombre de blocs', $FieldValue);
       $container = 'cards';
 
-      for ($i = 0; $i < $nombre_item; $i ++) {
+      for ($i = 0; $i < $nombre_item; $i++) {
         $form[$container][$i] = [
           '#type' => 'details',
           '#title' => 'Blocs : ' . ($i + 1),
@@ -596,25 +589,25 @@ class Cards implements ControllerInterface {
          * le champs titre
          */
         $name = 'title';
-        $FieldValue = (! empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
+        $FieldValue = (!empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
         $ThemeUtility->addTextfieldTree($name, $form[$container][$i], 'Titre', $FieldValue);
         /**
          * le champs text
          */
         $name = 'text';
-        $FieldValue = (! empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
+        $FieldValue = (!empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
         $ThemeUtility->addTextareaSimpleTree($name, $form[$container][$i], 'Description ', $FieldValue);
         /**
          * le champs icone
          */
         $name = 'icone';
-        $FieldValue = (! empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
+        $FieldValue = (!empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
         $ThemeUtility->addTextfieldTree($name, $form[$container][$i], 'Icone fontawesome', $FieldValue);
         /**
          * le champs link
          */
         $name = 'link';
-        $FieldValue = (! empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
+        $FieldValue = (!empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
         $ThemeUtility->addTextfieldTree($name, $form[$container][$i], 'Lien vers le contenu', $FieldValue);
       }
     } elseif ($model == 'StepModel1') {
@@ -622,22 +615,22 @@ class Cards implements ControllerInterface {
        * le champs titre
        */
       $name = 'title';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : '';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : '';
       $ThemeUtility->addTextfieldTree($name, $form, 'Titre', $FieldValue);
       /**
        * class card_class_block
        */
       $name = 'card_class_block';
-      $FieldValue = (! empty($options[$name])) ? $options[$name] : 'col-lg-3';
+      $FieldValue = (!empty($options[$name])) ? $options[$name] : 'col-lg-3';
       $ThemeUtility->addTextfieldTree($name, $form, 'Class colonne bootstrap', $FieldValue);
       /**
        * Le champs nombre_item
        */
       $name = 'nombre_item';
-      $nombre_item = $FieldValue = (! empty($options[$name])) ? $options[$name] : 4;
+      $nombre_item = $FieldValue = (!empty($options[$name])) ? $options[$name] : 4;
       $ThemeUtility->addTextfieldTree($name, $form, 'Nombre de blocs', $FieldValue);
       $container = 'cards';
-      for ($i = 0; $i < $nombre_item; $i ++) {
+      for ($i = 0; $i < $nombre_item; $i++) {
         $form[$container][$i] = [
           '#type' => 'details',
           '#title' => 'Blocs : ' . ($i + 1),
@@ -647,14 +640,13 @@ class Cards implements ControllerInterface {
          * Le champs text
          */
         $name = 'text';
-        $FieldValue = (! empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
+        $FieldValue = (!empty($options[$container][$i][$name])) ? $options[$container][$i][$name] : '';
         $ThemeUtility->addTextareaSimpleTree($name, $form[$container][$i], 'Description ', $FieldValue);
       }
     }
   }
 
-  protected function defaultIcone()
-  {
+  protected function defaultIcone() {
     return [
       '<i class="fab fa-accusoft"></i>',
       '<i class="fab fa-adn"></i>',
@@ -667,8 +659,7 @@ class Cards implements ControllerInterface {
     ];
   }
 
-  protected function defaultImg()
-  {
+  protected function defaultImg() {
     return [
       // 'Peuple-Migrateur-Galatee-Films-3921.jpg',
       '/defaultfile/CarouselCards/Modele1/Fotolia_32338952_Subscription_Monthly_XL-700x400.jpg',
@@ -681,8 +672,7 @@ class Cards implements ControllerInterface {
     ];
   }
 
-  protected function defaultImgBooks()
-  {
+  protected function defaultImgBooks() {
     return [
       '/defaultfile/Cards/Model3/101-smoothies-pour-votre-sante.jpg',
       // '/defaultfile/Cards/Model3/51dQOVYoG2L._SX374_BO1,204,203,200_.jpg',

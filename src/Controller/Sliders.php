@@ -1,4 +1,5 @@
 <?php
+
 namespace Stephane888\HtmlBootstrap\Controller;
 
 use Stephane888\HtmlBootstrap\LoaderDrupal;
@@ -8,6 +9,7 @@ use Stephane888\HtmlBootstrap\ThemeUtility;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Stephane888\HtmlBootstrap\PreprocessTemplate;
 use Drupal\Core\Template\Attribute;
+use Stephane888\HtmlBootstrap\HelpMigrate;
 
 class Sliders implements ControllerInterface {
   use Portions;
@@ -17,22 +19,19 @@ class Sliders implements ControllerInterface {
 
   protected $themeObject = null;
 
-  function __construct($path = null)
-  {
+  function __construct($path = null) {
     $this->BasePath = $path;
     $this->themeObject = \Drupal::theme()->getActiveTheme();
   }
 
-  public static function listModels()
-  {
+  public static function listModels() {
     return [
       'CarouselBootstrap' => 'Carousel Bootstrap',
       'slidecover' => 'slide cover screen'
     ];
   }
 
-  public static function loadFields($model, &$form, $options)
-  {
+  public static function loadFields($model, &$form, $options) {
     $ThemeUtility = new ThemeUtility();
     if ('slidecover' == $model) {
       /**
@@ -114,10 +113,10 @@ class Sliders implements ControllerInterface {
        * Le champs nombre de slide.
        */
       $name = 'nombre_slide';
-      $FieldValue = $nombre_item = (! empty($options[$name])) ? $options[$name] : 3;
+      $FieldValue = $nombre_item = (!empty($options[$name])) ? $options[$name] : 3;
       $ThemeUtility->addTextfieldTree($name, $form, 'nombre_slide', $FieldValue);
       $container = 'carousels';
-      for ($i = 0; $i < $nombre_item; $i ++) {
+      for ($i = 0; $i < $nombre_item; $i++) {
         $form[$container][$i] = [
           '#type' => 'details',
           '#title' => 'Slide test : ' . ($i + 1),
@@ -148,8 +147,7 @@ class Sliders implements ControllerInterface {
   /**
    * Using default template 'inline_template'
    */
-  public function loadFile($options)
-  {
+  public function loadFile($options) {
     if (isset($options['type'])) {
       if ($options['type'] == 'CarouselBootstrap') {
         return $this->CarouselBootstrap($options);
@@ -159,8 +157,7 @@ class Sliders implements ControllerInterface {
     }
   }
 
-  protected function slidecover($options)
-  {
+  protected function slidecover($options) {
     /**
      * get id czrousel
      */
@@ -264,12 +261,12 @@ class Sliders implements ControllerInterface {
     $image_bg = true;
     $slide = false;
     $Attribute = new Attribute();
-    if (! $no_cover) {
+    if (!$no_cover) {
       $Attribute->addClass('no_cover');
     }
 
     if ($content_provider == 'block') {
-      if (! empty($options['blocks'])) {
+      if (!empty($options['blocks'])) {
         $blocks = [];
         $i = 0;
         foreach ($options['blocks'] as $block) {
@@ -277,7 +274,7 @@ class Sliders implements ControllerInterface {
           $block_attribute = new Attribute();
           $block_attribute->addClass('kksa888_block');
           $blocks[$i]['attribute'] = $block_attribute;
-          $i ++;
+          $i++;
         }
       }
     } else {
@@ -308,8 +305,7 @@ class Sliders implements ControllerInterface {
     ];
   }
 
-  protected function CarouselBootstrap($options)
-  {
+  protected function CarouselBootstrap($options) {
 
     /**
      * get content.
@@ -376,38 +372,36 @@ class Sliders implements ControllerInterface {
     ];
   }
 
-  public function getDefaultSlideData()
-  {
+  public function getDefaultSlideData() {
     return [
       [
         'content' => $this->templateCenterVertHori('Slider 1', 'bg-cover'),
         'image' => [
-          'img_url' => '/' . drupal_get_path('theme', $this->themeObject->getName()) . '/defaultfile/Sliders/slidecover/slider1-demo2.jpg'
+          'img_url' => '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/Sliders/slidecover/slider1-demo2.jpg'
         ]
       ],
       [
         'content' => $this->templateCenterVertHori('Slider 2', 'bg-cover'),
         'image' => [
-          'img_url' => '/' . drupal_get_path('theme', $this->themeObject->getName()) . '/defaultfile/Sliders/slidecover/Snowy_Owl_Tom_Ingram.jpg'
+          'img_url' => '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/Sliders/slidecover/Snowy_Owl_Tom_Ingram.jpg'
         ]
       ],
       [
         'content' => $this->templateCenterVertHori('Slider 3', 'bg-cover'),
         'image' => [
-          'img_url' => '/' . drupal_get_path('theme', $this->themeObject->getName()) . '/defaultfile/Sliders/slidecover/Ann_and_Chris_Short_Eared_Owl.jpg'
+          'img_url' => '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/Sliders/slidecover/Ann_and_Chris_Short_Eared_Owl.jpg'
         ]
       ],
       [
         'content' => $this->templateCenterVertHori('Slider 4', 'bg-cover'),
         'image' => [
-          'img_url' => '/' . drupal_get_path('theme', $this->themeObject->getName()) . '/defaultfile/Sliders/slidecover/Jessica_Drossin_Balance.jpg'
+          'img_url' => '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/Sliders/slidecover/Jessica_Drossin_Balance.jpg'
         ]
       ]
     ];
   }
 
-  public static function defineStyleMedia($model, $theme_name)
-  {
+  public static function defineStyleMedia($model, $theme_name) {
     $styles = self::responsiveImage($model);
     $final_styles = [];
     foreach ($styles as $key => $value) {
@@ -418,8 +412,7 @@ class Sliders implements ControllerInterface {
     return PreprocessTemplate::CreateStyles($final_styles);
   }
 
-  public static function responsiveImage($model)
-  {
+  public static function responsiveImage($model) {
     $style = [];
     if ($model == 'slidecover') {
       $style = [
@@ -470,38 +463,36 @@ class Sliders implements ControllerInterface {
     return $style;
   }
 
-  public function getDefaultCarouselData()
-  {
+  public function getDefaultCarouselData() {
     return [
       [
         'content' => $this->templateCenterVertHori('Slider 1', 'bg-cover'),
         'image' => [
-          'img_url' => '/' . drupal_get_path('theme', $this->themeObject->getName()) . '/defaultfile/CarouselBootstrap/images/banner1.jpg'
+          'img_url' => '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/CarouselBootstrap/images/banner1.jpg'
         ]
       ],
       [
         'content' => $this->templateCenterVertHori('Slider 2', 'bg-cover'),
         'image' => [
-          'img_url' => '/' . drupal_get_path('theme', $this->themeObject->getName()) . '/defaultfile/CarouselBootstrap/images/banner2.jpg'
+          'img_url' => '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/CarouselBootstrap/images/banner2.jpg'
         ]
       ],
       [
         'content' => $this->templateCenterVertHori('Slider 3', 'bg-cover'),
         'image' => [
-          'img_url' => '/' . drupal_get_path('theme', $this->themeObject->getName()) . '/defaultfile/CarouselBootstrap/images/banner3.jpg'
+          'img_url' => '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/CarouselBootstrap/images/banner3.jpg'
         ]
       ],
       [
         'content' => $this->templateCenterVertHori('Slider 4', 'bg-cover'),
         'image' => [
-          'img_url' => '/' . drupal_get_path('theme', $this->themeObject->getName()) . '/defaultfile/CarouselBootstrap/images/banner4.jpg'
+          'img_url' => '/' . HelpMigrate::getPatch('theme', $this->themeObject->getName()) . '/defaultfile/CarouselBootstrap/images/banner4.jpg'
         ]
       ]
     ];
   }
 
-  protected function getImage($options)
-  {
+  protected function getImage($options) {
     $first = true;
     if (isset($options['image_bg'])) {
       $image_bg = $options['image_bg'];
@@ -516,7 +507,7 @@ class Sliders implements ControllerInterface {
       $responsive_image = false;
     }
     foreach ($carousels as $key => $carousel) {
-      if (! empty($carousel['image'])) {
+      if (!empty($carousel['image'])) {
 
         $Attribute = new Attribute();
         if ($first) {
