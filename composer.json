@@ -19,7 +19,6 @@
   },
   "require": {
     "php": ">=7.4",
-    "fzaninotto/faker": "^1.9.1",
-    "scssphp/scssphp": "^1.0"
+    "fzaninotto/faker": "^1.9.1"
   }
 }
