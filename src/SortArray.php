@@ -7,7 +7,7 @@ use Drupal\Component\Utility\SortArray as DrupalSortArray;
 /**
  *
  * @author stephane
- *        
+ * @deprecated delete in 4x wb_universe
  */
 class SortArray {
   

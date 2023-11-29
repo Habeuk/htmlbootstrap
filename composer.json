@@ -18,7 +18,6 @@
     }
   },
   "require": {
-    "php": ">=7.4",
     "fzaninotto/faker": "^1.9.1"
   }
 }

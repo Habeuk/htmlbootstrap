@@ -6,13 +6,18 @@ use Drupal\Core\Template\Attribute;
 use Stephane888\Debug\debugLog;
 use Stephane888\HtmlBootstrap\HelpMigrate;
 
+/**
+ *
+ * @author stephane
+ * @deprecated delete in 4x wb_universe.
+ */
 class PreprocessTemplate {
-
+  
   public function Preprocess(&$variables, $hook, $theme_name) {
-
-    /**
-     * On commande tout , car c'est plus necessaire.
-     */
+  
+  /**
+   * On commande tout , car c'est plus necessaire.
+   */
     // if ($hook == 'static_image') {
     // // dump($variables);
     // } /**
@@ -63,7 +68,7 @@ class PreprocessTemplate {
     // // debugLog::SaveLogsDrupal($hook, $hook);
     // }
   }
-
+  
   public static function CreateStyles($styles) {
     $ThemeUtility = new ThemeUtility();
     foreach ($styles as $key => $style) {
@@ -72,11 +77,11 @@ class PreprocessTemplate {
       }
     }
   }
-
+  
   public static function loadAllStyleMedia() {
     return \Drupal::entityQuery('image_style')->execute();
   }
-
+  
   protected function buildMaintenancePage($theme_name) {
     $wrapper_attribute = new Attribute();
     $img = [
@@ -110,11 +115,12 @@ class PreprocessTemplate {
       '#attributes' => $wrapper_attribute
     ];
   }
-
+  
   protected function textCustom() {
     return '<div class="rx-test d-flex align-items-center justify-content-end">
     		<a href="https://linkedin.com/company/terremploi"><i class="fab fa-linkedin-in"></i></a>
     		<a href="https://fb.me/terremploi"><i class="fab fa-facebook-f"></i></a>
     </div>';
   }
+  
 }

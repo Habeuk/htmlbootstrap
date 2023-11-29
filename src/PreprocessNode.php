@@ -1,10 +1,15 @@
 <?php
+
 namespace Stephane888\HtmlBootstrap;
 
+/**
+ *
+ * @author stephane
+ * @deprecated delete in 4x wb_universe.
+ */
 class PreprocessNode {
-
-  public function ApplySettingPlugins(&$variables, $theme_name)
-  {
+  
+  public function ApplySettingPlugins(&$variables, $theme_name) {
     $displays = theme_get_setting($theme_name . '_pagenodesdisplay', $theme_name);
     // dump($displays);
     $variables["node"];
@@ -22,13 +27,14 @@ class PreprocessNode {
       }
       if (isset($displays[$machine_name]['nodes'])) {
         foreach ($displays[$machine_name]['nodes'] as $key => $value) {
-          if (! empty($value['options_nodes'])) {
+          if (!empty($value['options_nodes'])) {
             $wbu_content = [];
             foreach ($value['options_nodes'] as $key_field => $field_name) {
               if (\strstr($field_name, 'field_') && isset($content[$field_name])) {
                 $wbu_content[$key_field] = $content[$field_name];
                 unset($variables["content"][$field_name]);
-              } else {
+              }
+              else {
                 $wbu_content[$key_field] = $field_name;
               }
             }
@@ -58,4 +64,5 @@ class PreprocessNode {
       // dump($variables['wbu_content']);
     }
   }
+  
 }

@@ -6,7 +6,7 @@ use Drupal\Core\Template\Attribute;
 
 /**
  *
- * @deprecated delete before 4x wb_universe.
+ * @deprecated delete in 4x wb_universe.
  * @author stephane
  *        
  */

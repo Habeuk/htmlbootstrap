@@ -1,8 +1,8 @@
 <?php
+
 /**
- * Search grep -rnw '/siteweb/PluginsModules/stephane888' -e 'MenuCenter/style.scss'
- *
- *
+ * Search grep -rnw '/siteweb/PluginsModules/stephane888' -e
+ * 'MenuCenter/style.scss'
  */
 namespace Stephane888\HtmlBootstrap;
 
@@ -25,204 +25,181 @@ use Stephane888\HtmlBootstrap\Traits\DrupalUtility;
 /**
  *
  * @author stephane
- *        
+ * @deprecated delete in 4x wb_universe
  */
 class LoaderDrupal {
-
   protected $BasePath = '';
-
   private $loadScss = false;
   // use Examples;
   use DrupalUtility;
-
-  function __construct()
-  {
+  
+  function __construct() {
     $this->BasePath = __DIR__;
     // $Session = new Session();
     // $Session->remove('theme-style');
     $this->checkLoadScss()->getDefautStyle();
   }
-
+  
   /**
    * ||___________________ SECTION HEADERS _____________________||
    */
-
+  
   /**
    * get top headers
    */
-  public function getSectionTopHeaders($options)
-  {
+  public function getSectionTopHeaders($options) {
     $Headers = new TopHeaders($this->BasePath);
     return $Headers->loadFile($options);
   }
-
+  
   /**
    * Section headers [logo center]
    */
-  public function getSectionHeaders($options)
-  {
+  public function getSectionHeaders($options) {
     $Headers = new Headers($this->BasePath);
     return $Headers->loadFile($options);
   }
-
+  
   /**
    * ||___________________ SECTION CONTENT _____________________||
    */
-
+  
   /**
    * Section Sliders
    */
-  public function getSectionSliders($options)
-  {
+  public function getSectionSliders($options) {
     $Sliders = new Sliders($this->BasePath);
     return $Sliders->loadFile($options);
   }
-
+  
   /**
    * get cards
    */
-  public function getCards($options)
-  {
+  public function getCards($options) {
     $Sliders = new Cards($this->BasePath);
     return $Sliders->loadFile($options);
   }
-
+  
   /**
    * get CarouselCards
    */
-  public function getCarouselCards($options)
-  {
+  public function getCarouselCards($options) {
     $Sliders = new CarouselCards($this->BasePath);
     return $Sliders->loadFile($options);
   }
-
+  
   /**
    * get CallActions
    */
-  public function getCallActions($options)
-  {
+  public function getCallActions($options) {
     $Sliders = new CallActions($this->BasePath);
     return $Sliders->loadFile($options);
   }
-
+  
   /**
    * get Comments
    */
-  public function getComments($options)
-  {
+  public function getComments($options) {
     $Sliders = new Comments($this->BasePath);
     return $Sliders->loadFile($options);
   }
-
+  
   /**
    * get Footers
    */
-  public function getFooters($options)
-  {
+  public function getFooters($options) {
     $Sliders = new Footers($this->BasePath);
     return $Sliders->loadFile($options);
   }
-
+  
   /**
    * load default slider
    */
-  public function getImageTextRightLeft($options)
-  {
+  public function getImageTextRightLeft($options) {
     $ImageTextRightLeft = new ImageTextRightLeft($this->BasePath);
     return $ImageTextRightLeft->loadFile($options);
   }
-
+  
   /**
    * load default slider
    */
-  public function getPriceLists($options)
-  {
+  public function getPriceLists($options) {
     $PriceLists = new PriceLists($this->BasePath);
     return $PriceLists->loadFile($options);
   }
-
+  
   /**
    * load default StylePage
    */
-  public function getStylePage($options)
-  {
+  public function getStylePage($options) {
     $PriceLists = new StylePage($this->BasePath);
     return $PriceLists->loadFile($options);
   }
-
-  public function createFiles($displays, $dir)
-  {
+  
+  public function createFiles($displays, $dir) {
     $PageNodesDisplay = new PageNodesDisplay($this->BasePath);
     $PageNodesDisplay->genereFiles($displays, $dir);
   }
-
-  public function loadPagePlugins(&$variables, $displays, $node, $theme_name)
-  {
+  
+  public function loadPagePlugins(&$variables, $displays, $node, $theme_name) {
     $PageNodesDisplay = new PageNodesDisplay($this->BasePath);
     $PageNodesDisplay->loadPagePlugins($variables, $displays, $node, $theme_name);
   }
-
+  
   /**
    * Ajoute les styles.
    */
-  public static function addStyle($style, $key)
-  {
+  public static function addStyle($style, $key) {
     if (LOAD_SCSS_BY_SESSION) {
       static::addData('theme-style', $style, $key);
     }
   }
-
-  public static function addScript($script, $key)
-  {
+  
+  public static function addScript($script, $key) {
     if (LOAD_SCSS_BY_SESSION) {
       static::addData('theme-script', $script, $key);
     }
   }
-
-  public static function addData($session_key, $data, $key)
-  {
+  
+  public static function addData($session_key, $data, $key) {
     $Session = new Session();
     $datas = $Session->get($session_key, []);
     $datas[$key] = $data;
     $Session->set($session_key, $datas);
   }
-
-  public static function getSessionValue($session_key)
-  {
+  
+  public static function getSessionValue($session_key) {
     $Session = new Session();
     return $Session->get($session_key, null);
   }
-
-  public static function DeleteSessionValue($session_key)
-  {
+  
+  public static function DeleteSessionValue($session_key) {
     $Session = new Session();
     return $Session->remove($session_key);
   }
-
-  public static function file_save($filename, $result)
-  {
+  
+  public static function file_save($filename, $result) {
     $monfichier = fopen($filename, 'w+');
     fputs($monfichier, $result);
     fclose($monfichier);
   }
-
-  public static function file_delete($filename)
-  {
+  
+  public static function file_delete($filename) {
     return unlink($filename);
   }
-
-  public static function deleteSession($key)
-  {
+  
+  public static function deleteSession($key) {
     $Session = new Session();
     if (\is_array($key)) {
       foreach ($key as $k) {
         $Session->remove($k);
       }
-    } else {
+    }
+    else {
       $Session->remove($key);
     }
   }
-
+  
   /**
    * Filtre l'affichage en function de la nom de la route.
    *
@@ -231,13 +208,13 @@ class LoaderDrupal {
    * @param string $listes_parameters
    * @return boolean
    */
-  public function filterByRouteName($route = '', $parameter = '', $type_node = '')
-  {
+  public function filterByRouteName($route = '', $parameter = '', $type_node = '') {
     $RouteName = \Drupal::routeMatch()->getRouteName();
     $node = \Drupal::routeMatch()->getParameter('node');
     if ($node) {
       $nid = $node->id();
-    } else {
+    }
+    else {
       $nid = '';
     }
     $route_frontPage = "view.frontpage.page_1";
@@ -245,7 +222,7 @@ class LoaderDrupal {
     // strpos
     if ($route == '')
       return true;
-
+    
     /**
      * page d'accuiel
      */
@@ -268,30 +245,30 @@ class LoaderDrupal {
     }
     return false;
   }
-
+  
   // debug 1
-  private function checkLoadScss()
-  {
+  private function checkLoadScss() {
     if (isset($_GET['build']) && $_GET['build'] == 'scss') {
       $this->loadScss = true;
     }
     return $this;
   }
-
-  private function getDefautStyle()
-  {
+  
+  private function getDefautStyle() {
     if ($this->loadScss) {
       $Session = new Session();
-
+      
       if (defined('KEY_LOAD_SCSS') && KEY_LOAD_SCSS == 'loarder2') {
         $styles = $Session->get('theme-style', []);
         $styles['init'] = '@import "defaut/loader_model1.scss";';
         $Session->set('theme-style', $styles);
-      } else {
+      }
+      else {
         $styles = $Session->get('theme-style', []);
         $styles['init'] = '@import "defaut/models.scss";';
         $Session->set('theme-style', $styles);
       }
     }
   }
+  
 }

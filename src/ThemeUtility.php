@@ -6,15 +6,21 @@ use Drupal\Core\Database\Database;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\Component\Utility\Random;
 use Stephane888\HtmlBootstrap\HelpMigrate;
+
 // use Drupal\Core\Theme\ActiveTheme;
+/**
+ *
+ * @author stephane
+ * @deprecated delete in 4x wb_universe
+ */
 class ThemeUtility {
   public $image_styles = false;
-
+  
   // public $regions = [];
   public $themeName;
   public $themePath;
   public $themeObject;
-
+  
   /**
    * Lors de la mise à jour via ajax, la nouvelle données doit etre inserer dans
    * #value;
@@ -22,7 +28,7 @@ class ThemeUtility {
    * @var boolean
    */
   private $useOnAjax = false;
-
+  
   /**
    */
   public function __construct() {
@@ -33,15 +39,15 @@ class ThemeUtility {
     // dump($this->themeName);
     // $this->themePath = HelpMigrate::getPath('theme', $this->themeName);
   }
-
+  
   public function AddRequireTree($name, &$form) {
     $form[$name]['#required'] = true;
   }
-
+  
   public function ActiveUseAjax() {
     $this->useOnAjax = true;
   }
-
+  
   /**
    * add textfield array
    */
@@ -55,7 +61,7 @@ class ThemeUtility {
       $form[$name]["#value"] = $default;
     }
   }
-
+  
   /**
    * add textfield array
    */
@@ -65,7 +71,7 @@ class ThemeUtility {
       '#value' => $default
     ];
   }
-
+  
   /**
    * add textfield array
    *
@@ -75,10 +81,10 @@ class ThemeUtility {
     $this->addContainerTree($name, $form, $title);
     $form[$name]['link'] = [
       '#type' => 'textfield', // 'url' ce type a un
-      // validateur et n'offre
-      // pas
-      // un avantage par rapport
-      // à text.
+                               // validateur et n'offre
+                               // pas
+                               // un avantage par rapport
+                               // à text.
       '#title' => 'Url',
       '#default_value' => !empty($default['link']) ? $default['link'] : '#'
     ];
@@ -88,7 +94,7 @@ class ThemeUtility {
     $class = !empty($default['class']) ? $default['class'] : '';
     $this->addTextfieldTree('class', $form[$name], 'Class', $class);
   }
-
+  
   public function AddFieldfontAwasone($name, &$form, $title, $default) {
     $options = $this->fontAwasone();
     $this->addContainerTree($name, $form, $title);
@@ -110,14 +116,14 @@ class ThemeUtility {
     $show_text = isset($default['show_text']) ? !empty($default['show_text']) : 0;
     $this->addCheckboxTree('show_text', $form[$name], 'show_text', $show_text);
   }
-
+  
   public function addButtonTree($name, &$form, $title, array $default) {
     $this->addContainerTree($name, $form, $title);
     $this->addTextfieldTree('text', $form[$name], "Texte", (isset($default['text'])) ? $default['text'] : '');
     $this->addTextfieldTree('url', $form[$name], 'Url', (isset($default['url'])) ? $default['url'] : '');
     $this->addSelectTree('btn', $form[$name], $this->typeButton(), "Button", (isset($default['btn'])) ? $default['btn'] : '');
   }
-
+  
   public function addTextareaTree($name, &$form, $title, $value) {
     // dump($value);
     $form[$name] = [
@@ -128,7 +134,7 @@ class ThemeUtility {
       '#attributes' => []
     ];
   }
-
+  
   /**
    * add image
    *
@@ -147,7 +153,7 @@ class ThemeUtility {
     $this->addTextfieldTree('class', $form[$name], "Class", (isset($imgs['class'])) ? $imgs['class'] : '');
     $this->addCheckboxTree('inbg', $form[$name], 'Affiche en arriere plan');
   }
-
+  
   /**
    *
    * @param string $defaultValue
@@ -155,7 +161,7 @@ class ThemeUtility {
   public function selectImageStyles($name, &$form, $title, $defaultValue) {
     $this->addSelectTree($name, $form, $this->image_styles, $title, $defaultValue);
   }
-
+  
   /**
    * Creer un groupe de lien
    *
@@ -175,13 +181,13 @@ class ThemeUtility {
       $this->addLinkTree($i, $form[$name]['links'], 'Lien : ' . $j, $link);
     }
   }
-
+  
   public function addLinkTree($name, array &$form, String $title, array $default) {
     $this->addContainerTree($name, $form, $title);
     $this->addTextfieldTree('text', $form[$name], 'Text', (isset($default['text'])) ? $default['text'] : '');
     $this->addTextfieldTree('url', $form[$name], 'Url', (isset($default['url'])) ? $default['url'] : '');
   }
-
+  
   public function addContainerTree($name, &$form, $title = 'Blocs', $open = false, $tree = true) {
     $form[$name] = [
       '#type' => 'details',
@@ -190,7 +196,7 @@ class ThemeUtility {
       '#tree' => $tree
     ];
   }
-
+  
   public function addSelectTree($name, array &$form, array $options, $title, $default) {
     $form[$name] = [
       '#type' => 'select',
@@ -200,7 +206,7 @@ class ThemeUtility {
       '#empty_value' => ''
     ];
   }
-
+  
   public function addSelectBtnVariantTree($name, array &$form, $title, $default) {
     $options = $this->typeButton();
     $form[$name] = [
@@ -211,7 +217,7 @@ class ThemeUtility {
       '#empty_value' => ''
     ];
   }
-
+  
   public function addCheckboxTree($name, &$form, $title = 'Affiche ce block', $default = 0) {
     $form[$name] = [
       '#type' => 'checkbox',
@@ -219,7 +225,7 @@ class ThemeUtility {
       '#default_value' => $default
     ];
   }
-
+  
   /**
    *
    * @param string $name
@@ -231,23 +237,23 @@ class ThemeUtility {
    */
   public function AddAjaxTree($name, &$form, $callback, $wrapper, $event = 'change', $message = 'Verifying entry...') {
     $form[$name]['#ajax'] = [ // 'callback' => '::' . $callback, // cette
-      // methode est utilisé si le
-      // formulaire provient d'une classe.
+                               // methode est utilisé si le
+                               // formulaire provient d'une classe.
       'callback' => $callback, // on va lire la fonction de return dans le
-      // THEMENAME.theme
+                                // THEMENAME.theme
       'disable-refocus' => FALSE, // Or TRUE to prevent re-focusing on the
-      // triggering element.
+                                   // triggering element.
       'event' => $event,
       'wrapper' => $wrapper, // This element is updated with
-      // this AJAX
-      // callback.
+                              // this AJAX
+                              // callback.
       'progress' => [
         'type' => 'throbber',
         'message' => $message
       ]
     ];
   }
-
+  
   /**
    * Add textarea
    */
@@ -286,7 +292,7 @@ class ThemeUtility {
     // . $name . '"><iframe ></iframe></div>'
     // );
   }
-
+  
   public function addTextareaSimpleTree($name, &$form, $title, $default) {
     $form[$name] = [
       '#type' => 'textarea',
@@ -294,7 +300,7 @@ class ThemeUtility {
       '#default_value' => $default
     ];
   }
-
+  
   /**
    * add textfield
    */
@@ -307,7 +313,7 @@ class ThemeUtility {
       '#default_value' => (isset($value)) ? $value : $default
     ];
   }
-
+  
   /**
    * add textarea
    */
@@ -329,7 +335,7 @@ class ThemeUtility {
     ];
     return $form;
   }
-
+  
   /**
    * add textarea with formater
    */
@@ -350,7 +356,7 @@ class ThemeUtility {
     ];
     return $form;
   }
-
+  
   /**
    * Add textarea
    */
@@ -386,7 +392,7 @@ class ThemeUtility {
     );
     return $form;
   }
-
+  
   /**
    * add textfield
    */
@@ -400,11 +406,11 @@ class ThemeUtility {
       '#options' => $options
     ];
   }
-
+  
   public function AddRequire($name, $group, &$form) {
     $form[$group . $name]['#required'] = true;
   }
-
+  
   /**
    * Api AJAX : https://api.drupal.org/api/drupal/core%21core.api.php/group/ajax
    *
@@ -415,23 +421,23 @@ class ThemeUtility {
    */
   public function AddAjax($name, $group, &$form, $callback, $wrapper, $event = 'change', $message = 'Verifying entry...') {
     $form[$group . $name]['#ajax'] = [ // 'callback' => '::' . $callback, //
-      // cette methode est utilisé si le
-      // formulaire provient d'une classe.
+                                        // cette methode est utilisé si le
+                                        // formulaire provient d'une classe.
       'callback' => $callback, // on va lire la fonction de return dans le
-      // THEMENAME.theme
+                                // THEMENAME.theme
       'disable-refocus' => FALSE, // Or TRUE to prevent re-focusing on the
-      // triggering element.
+                                   // triggering element.
       'event' => $event,
       'wrapper' => $wrapper, // This element is updated with
-      // this AJAX
-      // callback.
+                              // this AJAX
+                              // callback.
       'progress' => [
         'type' => 'throbber',
         'message' => $message
       ]
     ];
   }
-
+  
   /**
    * add image
    */
@@ -444,7 +450,7 @@ class ThemeUtility {
     ];
     return $form;
   }
-
+  
   /**
    * add image
    */
@@ -456,7 +462,7 @@ class ThemeUtility {
     }
     return $form;
   }
-
+  
   /**
    */
   public function image_texte($group, $form, $i) {
@@ -483,7 +489,7 @@ class ThemeUtility {
     // //
     return $form;
   }
-
+  
   /**
    */
   public function list_service($group, $form, $i, $nombreBlock = 2, $title = "bloc") {
@@ -510,7 +516,7 @@ class ThemeUtility {
     }
     return $form;
   }
-
+  
   /**
    */
   public function typeButton() {
@@ -527,7 +533,7 @@ class ThemeUtility {
       'btn' => 'btn'
     ];
   }
-
+  
   public function fontAwasone() {
     return [
       'fas fa-map-marker-alt' => 'fas fa-map-marker-alt',
@@ -540,7 +546,7 @@ class ThemeUtility {
       'fab fa-youtube' => 'fab fa-youtube'
     ];
   }
-
+  
   /**
    * load demo file
    *
@@ -559,7 +565,7 @@ class ThemeUtility {
     }
     return 'not default content Available ';
   }
-
+  
   /**
    *
    * @deprecated
@@ -589,18 +595,19 @@ class ThemeUtility {
     }
     return \json_encode($images, $image_style = null);
   }
-
+  
   function getImageUrlByFid(int $fid, $image_style = null) {
     $file = \Drupal\file\Entity\File::load($fid);
     if ($file) {
       if ($image_style) {
         return ImageStyle::load($image_style)->buildUrl($file->getFileUri());
-      } else {
+      }
+      else {
         return $file->createFileUrl();
       }
     }
   }
-
+  
   public function listAnimationCSS() {
     return [
       'fadeIn' => 'fadeIn',
@@ -610,7 +617,7 @@ class ThemeUtility {
       'fadeInUp' => 'fadeInUp'
     ];
   }
-
+  
   /**
    *
    * @param string $image_style_name
@@ -638,7 +645,7 @@ class ThemeUtility {
     $style->addImageEffect($effect->getConfiguration());
     $style->save();
   }
-
+  
   /**
    * Return config layout
    *
@@ -666,7 +673,7 @@ class ThemeUtility {
     ];
     return $layout;
   }
-
+  
   /**
    *
    * @return string
@@ -692,13 +699,13 @@ class ThemeUtility {
       </ul>
     ';
   }
-
+  
   /**
    */
   public function get_regions() {
     return system_region_list($this->themeName, $show = REGIONS_VISIBLE);
   }
-
+  
   // **** Manage DATE
   /**
    * Get D-day
@@ -709,7 +716,8 @@ class ThemeUtility {
   public function JourJ($dateFin, $dateDebut = false) {
     if ($dateDebut) {
       $date1 = new \DateTime();
-    } else {
+    }
+    else {
       $date1 = new \DateTime($dateDebut);
     }
     $date2 = new \DateTime($dateFin);
@@ -721,18 +729,21 @@ class ThemeUtility {
     if ($interval->m > 0) {
       if ($interval->d > 1) {
         return $prefixe . ' ' . ($interval->m + ($interval->y * 12)) . ' ' . \t('Month') . ' ' . $interval->d . ' ' . \t('days');
-      } else {
+      }
+      else {
         return $prefixe . ' ' . ($interval->m + ($interval->y * 12)) . ' ' . \t('Month') . ' ' . $interval->d . ' ' . \t('day');
       }
-    } else {
+    }
+    else {
       if ($interval->d > 0) {
         return $prefixe . ' ' . $interval->d . \t('days') . ' ' . $interval->h . ' H';
-      } else {
+      }
+      else {
         return $prefixe . ' ' . $interval->d . \t('day') . ' ' . $interval->h . ' H' . ' ' . $interval->i . ' mn';
       }
     }
   }
-
+  
   /**
    * Add button
    */
@@ -765,7 +776,7 @@ class ThemeUtility {
     //
     return $form;
   }
-
+  
   /**
    * add textfield
    */
@@ -778,4 +789,5 @@ class ThemeUtility {
       '#default_value' => (isset($value) && $value != '') ? $value : $default
     ];
   }
+  
 }

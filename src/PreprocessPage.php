@@ -11,6 +11,12 @@ use Stephane888\HtmlBootstrap\ThemeUtility;
 use PhpParser\Node\Stmt\Foreach_;
 use Stephane888\HtmlBootstrap\LoaderDrupal;
 
+/**
+ *
+ * @deprecated delete in 4x wb_universe.
+ * @author stephane
+ *        
+ */
 class PreprocessPage {
   protected $is_front = false;
   protected static $theme_name;
